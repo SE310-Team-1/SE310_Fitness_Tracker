@@ -1,0 +1,15 @@
+{
+  "name": "se310_fitness_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "vitest": "^2.0.4"
+  }
+}
