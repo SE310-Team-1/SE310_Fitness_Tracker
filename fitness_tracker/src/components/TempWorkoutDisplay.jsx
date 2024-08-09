@@ -1,6 +1,7 @@
 const TempWorkoutDisplay = ({ data }) => {
     return (
       <div>
+        <h1>Below is TempWorkoutDisplay.jxs</h1>
         {data.map((item) => (
           <div key={item.id}>
             <h3>{item.name}</h3>
