@@ -66,7 +66,8 @@ const createWorkout = (req, res) => {
 const deleteWorkout = (req, res) => {
   const workoutDate = req.params.date
   
-  knex('workouts').where('date', workoutDate)
+  knex('workouts')
+      .where('date', workoutDate).del();
 
   /*knex('workouts')
       .insert({

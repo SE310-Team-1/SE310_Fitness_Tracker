@@ -15,4 +15,6 @@ router.get('/:date', workoutsController.workoutByDate)
 
 router.post('/create/:date', workoutsController.createWorkout)
 
+router.delete('/delete/:date', workoutsController.deleteWorkout)
+
 module.exports = router;
