@@ -62,6 +62,31 @@ const createWorkout = (req, res) => {
         });
 }
 
+//deletes an existing workout
+const deleteWorkout = (req, res) => {
+  const workoutDate = req.params.date
+  
+  knex('workouts').where('date', workoutDate)
+
+  /*knex('workouts')
+      .insert({
+          'date': date
+      })
+      //if error occurs then drops insert apon error
+      .onConflict('date').ignore()
+      .returning('date')
+      .then(date => {
+          if (date.length > 0) {
+              res.status(201).json({ message: 'workout added successfully'});
+          } else {
+              res.status(200).json({ message: 'workout already exists, no new entry created' });
+          }
+      })
+      .catch(error => {
+          res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
+      });*/
+}
+
 module.exports = {
   workoutsAll,
   workoutByDate,
