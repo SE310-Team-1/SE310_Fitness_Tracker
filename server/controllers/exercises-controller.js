@@ -49,6 +49,35 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 }
 
+const getScoreByDate = (req, res) => {
+    const {date} = req.params
+
+    knex
+        .select('exercises.muscle_group','exercises_history.date').sum('exercises_history.score')
+        .from('exercises_history')
+
+       
+        // Join with exercises table to get muscle group
+        .join('exercises', 'exercises_history.name', 'exercises.name')
+        .where('exercises_history.date', date)
+        .groupBy('exercises_history.date','exercises.muscle_group')
+
+        .then(userData => {
+            if (userData.length > 0) {
+                res.json(userData)
+            } else {
+                res.status(404).json({ message: `Workout on date: ${date} not found.` })
+            }
+        })
+
+        .catch(err => {
+            res.status(500).json({ message: `There was an error retrieving exercise: ${err}` })
+        }
+        )
+
+
+}
+
 
 //creates a new exercise
 const createExercise = (req, res) => {
@@ -109,5 +138,6 @@ module.exports = {
     exercisesAll,
     exerciseByNameDateAndSets,
     createExercise,
-    logExerciseSet
+    logExerciseSet,
+    getScoreByDate
   };
