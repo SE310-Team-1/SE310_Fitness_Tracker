@@ -105,7 +105,7 @@ const logExerciseSet = (req, res) => {
         });
 }
 
-//deletes an existing workout
+//deletes an existing exercise
 const deleteExercise = (req, res) => {
     const {name} = req.params
   
@@ -123,7 +123,7 @@ const deleteExercise = (req, res) => {
         res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
       });
   
-  }
+}
 
 module.exports = {
     exercisesAll,
@@ -131,4 +131,4 @@ module.exports = {
     createExercise,
     logExerciseSet,
     deleteExercise
-  };
+};

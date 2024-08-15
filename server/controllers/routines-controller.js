@@ -71,8 +71,32 @@ const createRoutine = (req, res) => {
         });
 }
 
+//deletes an existing routine
+const deleteRoutine = (req, res) => {
+    const {name} = req.params
+    const {date} = req.params
+    console.log('Deleting routine:', name);
+
+    knex('routines')
+    .where('name', name)
+    .where('date', date)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Routine deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Routine not found' });
+        }
+    })
+        .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting an routine', error: error.message });
+    });
+  
+}
+
 module.exports = {
     routinesAll,
     routineByNameAndDate,
-    createRoutine
+    createRoutine,
+    deleteRoutine
 };
