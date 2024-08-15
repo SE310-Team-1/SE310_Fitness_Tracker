@@ -18,5 +18,8 @@ router.post('/create', exercisesController.createExercise)
 //Log a set
 router.post('/Log/:name/:date/:set/:weight/:rep/:score', exercisesController.logExerciseSet)
 
+//Delete an existing exercise
+router.delete('/delete/:name', exercisesController.deleteExercise)
+
 
 module.exports = router;

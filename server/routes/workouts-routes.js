@@ -7,8 +7,6 @@ const workoutsController = require('../controllers/workouts-controller')
 
 const router = express.Router()
 
-console.log(workoutsController);
-
 // Get all workouts
 router.get('/all', workoutsController.workoutsAll)
 

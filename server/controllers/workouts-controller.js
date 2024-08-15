@@ -77,7 +77,7 @@ const deleteWorkout = (req, res) => {
       }
     })
     .catch(error => {
-      res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
+      res.status(500).json({ message: 'An error occurred while deleting a workout', error: error.message });
     });
 
 }

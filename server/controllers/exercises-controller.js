@@ -105,9 +105,30 @@ const logExerciseSet = (req, res) => {
         });
 }
 
+//deletes an existing workout
+const deleteExercise = (req, res) => {
+    const {name} = req.params
+  
+    knex('exercises')
+    .where('name', name)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Exercise deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Exercise not found' });
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
+      });
+  
+  }
+
 module.exports = {
     exercisesAll,
     exerciseByNameDateAndSets,
     createExercise,
-    logExerciseSet
+    logExerciseSet,
+    deleteExercise
   };
