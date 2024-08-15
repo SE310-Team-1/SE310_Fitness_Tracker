@@ -49,9 +49,9 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 }
 
+
 const getScoreByDate = (req, res) => {
     const {date} = req.params
-
     knex
         .select('exercises.muscle_group','exercises_history.date').sum('exercises_history.score')
         .from('exercises_history')
@@ -74,16 +74,12 @@ const getScoreByDate = (req, res) => {
             res.status(500).json({ message: `There was an error retrieving exercise: ${err}` })
         }
         )
-
-
 }
 
 
 //creates a new exercise
 const createExercise = (req, res) => {
     const {name,muscleGroup} = req.params
-
-
     knex('exercises')
         .insert({
             'name': name,
@@ -134,10 +130,65 @@ const logExerciseSet = (req, res) => {
         });
 }
 
+const editExercise = (req, res) => {
+    const name = req.params.name
+    let newName = req.params.newname
+    let result = req.params.muscle_group;
+
+    knex('exercises').where('exercises.name', name)
+        .update({
+            'name': newName,
+            'muscle_group': result
+            },['name'])
+
+        .debug(true)
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Exercise was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no exercise with name ${name}` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+        });
+}
+
+const editSetLog = (req, res) => {
+    const name = req.params.name
+    let newName = req.params.newname
+    let result = req.params.muscle_group;
+
+    knex('exercises').where('exercises.name', name)
+        .update({
+            'name': newName,
+            'muscle_group': result
+            },['name'])
+
+        .debug(true)
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Exercise was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no exercise with name ${name}` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+        });
+}
+
 module.exports = {
     exercisesAll,
     exerciseByNameDateAndSets,
     createExercise,
     logExerciseSet,
-    getScoreByDate
+    getScoreByDate,
+    editExercise
   };
