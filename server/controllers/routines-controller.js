@@ -71,6 +71,7 @@ const createRoutine = (req, res) => {
         });
 }
 
+//edit a routine allowing its name and date to change
 const editRoutine = (req, res) => {
     const name = req.params.name
     let date = req.params.date
@@ -82,7 +83,7 @@ const editRoutine = (req, res) => {
     })
         .update({
             'name': newName,
-            'muscle_group': newDate
+            'date': newDate
             },['name'])
 
         .then(data => {

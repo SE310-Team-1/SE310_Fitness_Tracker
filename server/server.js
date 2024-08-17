@@ -6,6 +6,7 @@ const helmet = require('helmet')
 
 const workoutsRouter = require('./routes/workouts-routes')
 const exercisesRouter = require('./routes/exercises-routes')
+const routineRouter =  require('./routes/routines-routes')
 
 const PORT = 4001
 
@@ -32,6 +33,8 @@ app.use(bodyParser.json())
 app.use('/workouts', workoutsRouter)
 
 app.use('/exercises', exercisesRouter)
+
+app.use('/routines', routineRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');
