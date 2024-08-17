@@ -23,4 +23,7 @@ router.post('/Log/:name/:date/:set/:weight/:rep/:score', exercisesController.log
 //edit a exercise
 router.put('/edit/:name/:newname/:muscle_group',exercisesController.editExercise)
 
+//edit a logged set of an exercise
+router.put('/edit/log/:name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score',exercisesController.editSet)
+
 module.exports = router;

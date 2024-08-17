@@ -141,8 +141,6 @@ const editExercise = (req, res) => {
             'muscle_group': result
             },['name'])
 
-        .debug(true)
-
         .then(data => {
             if (data.length > 0) {
                 res.status(200).json({ message: 'Exercise was edited successfully'});
@@ -157,15 +155,32 @@ const editExercise = (req, res) => {
         });
 }
 
-const editSetLog = (req, res) => {
-    const name = req.params.name
-    let newName = req.params.newname
-    let result = req.params.muscle_group;
+const editSet = (req, res) => {
+    let name = req.params.name
+    let date= req.params.date
+    let set= req.params.set
+    let newName = req.params.newName
+    let newDate= req.params.newDate
+    let newSet= req.params.newSet
+    let weight= req.params.weight
+    let rep= req.params.rep
+    let score= req.params.score
 
-    knex('exercises').where('exercises.name', name)
+    knex('exercises_history')
+
+        .where({
+        'name': name,
+        'date': date,
+        'set':set
+        })
+
         .update({
             'name': newName,
-            'muscle_group': result
+            'date': newDate,
+            'set': newSet,
+            'weight': weight,
+            'rep':rep,
+            'score':score
             },['name'])
 
         .debug(true)
@@ -174,7 +189,7 @@ const editSetLog = (req, res) => {
             if (data.length > 0) {
                 res.status(200).json({ message: 'Exercise was edited successfully'});
             } else {
-                res.status(404).json({ message: `no exercise with name ${name}` });
+                res.status(404).json({ message: `no set with name: ${name},date: ${date},and set number: ${set} ` });
             }
         })
 
@@ -190,5 +205,6 @@ module.exports = {
     createExercise,
     logExerciseSet,
     getScoreByDate,
-    editExercise
+    editExercise,
+    editSet
   };

@@ -71,8 +71,37 @@ const createRoutine = (req, res) => {
         });
 }
 
+const editRoutine = (req, res) => {
+    const name = req.params.name
+    let date = req.params.date
+    let newName = req.params.newName
+    let newDate = req.params.newDate;
+
+    knex('routines').where({'name': name,
+        'date': date
+    })
+        .update({
+            'name': newName,
+            'muscle_group': newDate
+            },['name'])
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Routine was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no Routine with name: ${name} on date: ${date}` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+        });
+}
+
 module.exports = {
     routinesAll,
     routineByNameAndDate,
-    createRoutine
+    createRoutine,
+    editRoutine
 };
