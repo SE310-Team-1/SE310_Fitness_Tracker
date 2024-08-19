@@ -1,28 +1,29 @@
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Brush, Legend, Tooltip } from 'recharts';
+import GenerateGraph from './GraphGenerator';
 
-function GraphDisplay({ data }) {
-    
-    var today = new Date();
-    var day = String(today.getDate()).padStart(2, '0');
-    /* NOTE: Month indexes from 0, hence we add 1 to the month. */
-    var month = String(today.getMonth() + 1).padStart(2, '0');
-    var year = today.getFullYear();
-    today = year + "-" + month + "-" + day;
+const tempData = [{date: 'Monday', volume1: 400, volume2: 900, amt: 2400}, 
+    {date: 'Tuesday', volume1: 200, volume2: 2400, amt: 2400},
+    {date: 'Wednesday', volume1: 300, volume2: 1100, amt: 2400},
+    {date: 'Thursday', volume1: 100, volume2: 800, amt: 2400},
+    {date: 'Friday', volume1: 100, volume2: 600, amt: 2400}];
+
+function GraphDisplay() {
+    var today = DateToString(new Date());
 
     return (
-        <div>
-            <LineChart width={400} height={400} data={data}>
-                <Line type="monotone" dataKey="volume1" stroke="#8884d8" strokeWidth={3} />
-                <Line type="monotone" dataKey="volume2" stroke="#afafaf" strokeWidth={3} />
-                <CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="date" />
-                <YAxis/>
-                <Tooltip />
-            </LineChart>
-            <input id="dateSelector" type="date" max={ today }></input>
+        <div>        
+            <GenerateGraph data={tempData}/>
+            <input id="dateSelector" type="date" max={today}></input>
             <button onClick={() => RefreshGraph(document.getElementById('dateSelector').value)}>CLICK ME</button>
         </div>
     )
+}
+
+function DateToString(date) {
+    var day = String(date.getDate()).padStart(2, '0');
+    /* NOTE: Month indexes from 0, hence we add 1 to the month. */
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var year = date.getFullYear();
+    return year + "-" + month + "-" + day;
 }
 
 function RefreshGraph(endDate) {
