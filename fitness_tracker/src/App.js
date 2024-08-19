@@ -4,11 +4,11 @@ import TempWorkoutDisplay from './components/TempWorkoutDisplay';
 import TabDisplay from './components/TabDisplay';
 import GraphDisplay from './components/GraphDisplay';
 
-const data = [{name: 'Monday', volume1: 400, volume2: 900, amt: 2400}, 
-  {name: 'Tuesday', volume1: 200, volume2: 2400, amt: 2400},
-  {name: 'Wednesday', volume1: 300, volume2: 1100, amt: 2400},
-  {name: 'Thursday', volume1: 100, volume2: 800, amt: 2400},
-  {name: 'Friday', volume1: 100, volume2: 600, amt: 2400}];
+const data = [{date: 'Monday', volume1: 400, volume2: 900, amt: 2400}, 
+  {date: 'Tuesday', volume1: 200, volume2: 2400, amt: 2400},
+  {date: 'Wednesday', volume1: 300, volume2: 1100, amt: 2400},
+  {date: 'Thursday', volume1: 100, volume2: 800, amt: 2400},
+  {date: 'Friday', volume1: 100, volume2: 600, amt: 2400}];
 
 
 function App() {
