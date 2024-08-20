@@ -21,5 +21,8 @@ router.post('/Log/:name/:date/:set/:weight/:rep/:score', exercisesController.log
 //Delete an existing exercise
 router.delete('/delete/:name', exercisesController.deleteExercise)
 
+//Delete an existing set from exercise history
+router.delete('/delete/:name/:date/:set', exercisesController.deleteExerciseHistory)
+
 
 module.exports = router;

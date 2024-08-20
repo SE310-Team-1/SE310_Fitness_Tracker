@@ -125,10 +125,33 @@ const deleteExercise = (req, res) => {
   
 }
 
+//deletes an existing set from exercise history
+const deleteExerciseHistory = (req, res) => {
+    const {name, date, set} = req.params
+  
+    knex('exercises_history')
+    .where('name', name)
+    .where('date', date)
+    .where('set', set)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Set deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Set not found' });
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting a set', error: error.message });
+      });
+  
+}
+
 module.exports = {
     exercisesAll,
     exerciseByNameDateAndSets,
     createExercise,
     logExerciseSet,
-    deleteExercise
+    deleteExercise,
+    deleteExerciseHistory
 };
