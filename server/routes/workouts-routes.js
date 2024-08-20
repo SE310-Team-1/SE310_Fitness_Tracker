@@ -1,9 +1,8 @@
 // The routes for workouts
 // What are routes? Routes are used to determine the structure of the URL. 
 
-const express = require('express')
-
-const workoutsController = require('../controllers/workouts-controller')
+import express from 'express';
+import * as workoutsController from '../controllers/workouts-controller.js';
 
 const router = express.Router()
 
@@ -17,4 +16,6 @@ router.post('/create/:date', workoutsController.createWorkout)
 
 router.delete('/delete/:date', workoutsController.deleteWorkout)
 
-module.exports = router;
+router.put('/edit/:date/:newDate',workoutsController.editWorkout);
+
+export default router;

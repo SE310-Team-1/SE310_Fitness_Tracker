@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders Routines', () => {
+test('rendersRoutines', () => {
   render(<App />);
   const rountinesElement = screen.getByText("Routines");
   expect(rountinesElement).toBeInTheDocument();

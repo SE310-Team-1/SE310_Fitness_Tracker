@@ -1,8 +1,6 @@
 // The routes for the routines
-
-const express = require('express');
-
-const routinesController = require('../controllers/routines-controller');
+import express from 'express';
+import * as routinesController from '../controllers/routines-controller.js';
 
 const router = express.Router();
 
@@ -17,5 +15,8 @@ router.post('/:name/:date', routinesController.createRoutine);
 
 router.delete('/delete/:name/:date', routinesController.deleteRoutine);
 
+//edit a routine
+router.put('/edit/:name/:date/:newName/:newDate',routinesController.editRoutine);
 
-module.exports = router;
+
+export default router;

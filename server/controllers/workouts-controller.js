@@ -1,5 +1,5 @@
 // This is the controller for the workouts route. The controller is responsible for handling the request and response.
-const knex = require('./../db')
+import knex from './../db.js';
 
 // Retrieve all workouts
 const workoutsAll = (req, res) => {
@@ -36,7 +36,6 @@ const workoutByDate = (req, res) => {
       res.json({ message: `There was an error retrieving workout: ${err}` })
     })
 }
-
 
 //creates a new workout
 const createWorkout = (req, res) => {
@@ -82,10 +81,34 @@ const deleteWorkout = (req, res) => {
 
 }
 
-module.exports = {
+
+const editWorkout = (req, res) => {
+  let date = req.params.date
+  let newDate = req.params.newDate
+
+  knex('workouts').where({'date': date})
+      .update({
+          'date': newDate
+          },['date'])
+
+      .then(data => {
+          if (data.length > 0) {
+              res.status(200).json({ message: 'Workout was edited successfully'});
+          } else {
+              res.status(404).json({ message: `No workout on date: ${date}` });
+          }
+      })
+
+      .catch(error => {
+          // Error: Something went wrong
+          res.status(500).json({ message: `An error occurred while editing Workout`, error: error.message });
+      });
+}
+
+export {
   workoutsAll,
   workoutByDate,
   createWorkout,
+  editWorkout,
   deleteWorkout
-
-};
+}
