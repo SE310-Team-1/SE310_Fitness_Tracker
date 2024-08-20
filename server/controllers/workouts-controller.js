@@ -40,7 +40,7 @@ const workoutByDate = (req, res) => {
 
 //creates a new workout
 const createWorkout = (req, res) => {
-  const {date} = req.params
+    const {date} = req.params
 
 
     knex('workouts')
