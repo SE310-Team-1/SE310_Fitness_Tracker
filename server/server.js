@@ -36,6 +36,8 @@ app.use('/routines', routinesRouter)
 
 app.use('/exercises', exercisesRouter)
 
+app.use('/routines', routinesRouter)
+
 app.get('/', (req, res) => {
     res.send('Hello, world!');
 });

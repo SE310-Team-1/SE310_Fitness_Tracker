@@ -1,6 +1,7 @@
 // The routes for exercises
 import express from 'express';
-import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet } from '../controllers/exercises-controller.js';
+import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet, getScoreByDate,editExercise,editSet } from '../controllers/exercises-controller.js';
+
 
 const router = express.Router()
 
@@ -16,10 +17,18 @@ router.get('/:date', exercisesDay)
 // Get exercise by name, date and sets
 router.get('/:name/:date/:sets', exerciseByNameDateAndSets)
 
+router.get('/score/:date', getScoreByDate)
+
 //Create a new exercise
-router.post('/create', createExercise)
+router.post('/create/:name/:muscle_group', createExercise)
 
 //Log a set
 router.post('/Log/:name/:date/:set/:weight/:rep/:score', logExerciseSet)
+
+//edit a exercise
+router.put('/edit/:name/:newname/:muscle_group',editExercise)
+
+//edit a logged set of an exercise
+router.put('/edit/log/:name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score',editSet)
 
 export default router;
