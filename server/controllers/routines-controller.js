@@ -57,7 +57,7 @@ const createRoutine = (req, res) => {
             'date': date
         })
         //if error occurs then drops insert apon error
-        .onConflict('name').ignore()
+        .onConflict(['name','date']).ignore()
         .returning('name')
         .then(name => {
             if (name.length > 0) {
@@ -65,14 +65,44 @@ const createRoutine = (req, res) => {
             } else {
                 res.status(200).json({ message: 'routine already exists, no new entry created' });
             }
-        })
+        })        
         .catch(error => {
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
+            res.status(500).json({ message: `An error occurred while creating a new routine`, error: error.message });
+        });
+}
+
+//edit a routine allowing its name and date to change
+const editRoutine = (req, res) => {
+    const name = req.params.name
+    let date = req.params.date
+    let newName = req.params.newName
+    let newDate = req.params.newDate;
+
+    knex('routines').where({'name': name,
+        'date': date
+    })
+        .update({
+            'name': newName,
+            'date': newDate
+            },['name'])
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Routine was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no Routine with name: ${name} on date: ${date}` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
         });
 }
 
 export {
     routinesAll,
     routineByNameAndDate,
-    createRoutine
+    createRoutine,
+    editRoutine
 }

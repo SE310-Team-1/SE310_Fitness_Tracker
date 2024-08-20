@@ -77,6 +77,33 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 }
 
+
+const getScoreByDate = (req, res) => {
+    const {date} = req.params
+    knex
+        .select('exercises.muscle_group','exercises_history.date').sum('exercises_history.score')
+        .from('exercises_history')
+
+       
+        // Join with exercises table to get muscle group
+        .join('exercises', 'exercises_history.name', 'exercises.name')
+        .where('exercises_history.date', date)
+        .groupBy('exercises_history.date','exercises.muscle_group')
+
+        .then(userData => {
+            if (userData.length > 0) {
+                res.json(userData)
+            } else {
+                res.status(404).json({ message: `Workout on date: ${date} not found.` })
+            }
+        })
+
+        .catch(err => {
+            res.status(500).json({ message: `There was an error retrieving exercise: ${err}` })
+        }
+        )
+}
+
 //creates a new exercise
 const createExercise = (req, res) => {
     const { name, muscleGroup } = req.params
@@ -111,9 +138,9 @@ const logExerciseSet = (req, res) => {
         .insert({
             'name': name,
             'date': date,
-            'set': set,
+            'sets': set,
             'weight': weight,
-            'rep': rep,
+            'reps': rep,
             'score': score
         })
         //if conflict occurs then drops current insert apon error
@@ -132,11 +159,83 @@ const logExerciseSet = (req, res) => {
         });
 }
 
-export {
+const editExercise = (req, res) => {
+    const name = req.params.name
+    let newName = req.params.newname
+    let result = req.params.muscle_group;
+
+    knex('exercises').where('exercises.name', name)
+        .update({
+            'name': newName,
+            'muscle_group': result
+            },['name'])
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Exercise was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no exercise with name ${name}` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+        });
+}
+
+const editSet = (req, res) => {
+    let name = req.params.name
+    let date= req.params.date
+    let set= req.params.set
+    let newName = req.params.newName
+    let newDate= req.params.newDate
+    let newSet= req.params.newSet
+    let weight= req.params.weight
+    let rep= req.params.rep
+    let score= req.params.score
+
+    knex('exercises_history')
+
+        .where({
+        'name': name,
+        'date': date,
+        'sets':set
+        })
+
+        .update({
+            'name': newName,
+            'date': newDate,
+            'sets': newSet,
+            'weight': weight,
+            'reps':rep,
+            'score':score
+            },['name'])
+
+        
+
+        .then(data => {
+            if (data.length > 0) {
+                res.status(200).json({ message: 'Exercise was edited successfully'});
+            } else {
+                res.status(404).json({ message: `no set with name: ${name},date: ${date},and set number: ${set} ` });
+            }
+        })
+
+        .catch(error => {
+            // Error: Something went wrong
+            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+        });
+}
+
+export{
     exercisesAll,
     exercisesAllHistory,
     exercisesDay,
     exerciseByNameDateAndSets,
     createExercise,
-    logExerciseSet
-}
+    logExerciseSet,
+    editExercise,
+    editSet,
+    getScoreByDate
+  };

@@ -1,0 +1,11 @@
+/* import this file and can use like var(--primary-bg-color) in other css files */
+:root {
+    --dark-bg-color: #000000;
+    --primary-bg-color: #333333;
+    --input-bg-color: #4A4A4A;
+    --primary-text-color: #ffffff;
+    --button-bg-color: #E10000;
+    --button-hover-bg-color: #b71c1c;
+    --cancel-button-bg-color: #757575;
+    --cancel-button-hover-bg-color: #616161;
+}
