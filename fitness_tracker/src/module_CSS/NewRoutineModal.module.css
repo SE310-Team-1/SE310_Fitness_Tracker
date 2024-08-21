@@ -1,0 +1,123 @@
+@import './colours.module.css';
+.modalContainer {
+    background-color: var(--primary-bg-color); /* Dark background for the modal */
+    color: var(--primary-text-color); /* Light text color */
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 4px;
+  }
+  
+  .modalContainer:hover {
+    transform: translateY(-4px);
+    /* Subtle lift effect on hover */
+}
+
+  .modalTitle {
+    font-size: 1.8em;
+    color: var(--button-bg-color); /* Brand color for the title */
+    margin-bottom: 16px;
+  }
+  
+  .inputField {
+    width: calc(100% - 60px); /* Adjust width to leave space for suffix */
+    background-color: var(--input-bg-color);
+    color: var(--primary-text-color);
+    border: none;
+    padding: 10px;
+    padding-right: 40px; /* Add padding on the right to avoid overlapping with suffix */
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  .inputField:focus {
+    outline: none;
+    border: 1px solid var(--button-bg-color); /* Highlight input on focus with brand color */
+  }
+  
+  .dateDisplay {
+    margin-bottom: 16px;
+  }
+  
+  .exerciseContainer {
+    background-color: var(--primary-bg-color);
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .button:hover {
+    background-color: var(--button-hover-bg-color);
+    border: 1px solid;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+    outline-color: rgba(255, 255, 255, 0);
+    outline-offset: 1px;
+}
+  
+  .addButton {
+    background-color: var(--button-bg-color); /* Brand color for add button */
+    color: var(--primary-text-color);
+  }
+  
+  .addButton:hover {
+    background-color: var(--button-hover-bg-color);
+  }
+
+  .cancelButton {
+    background-color: var(--cancel-button-bg-color); /* Grey cancel button */
+    color: var(--primary-text-color);
+  }
+  
+  .cancelButton:hover {
+    background-color: var(--cancel-button-hover-bg-color);
+  }
+  
+  .saveButton {
+    background-color: var(--button-bg-color); /* Green save button */
+    color: var(--primary-text-color);
+  }
+  
+  .saveButton:hover {
+    background-color: var(--button-hover-bg-color);
+  }
+  
+  .deleteButton {
+    background-color: var(--cancel-button-bg-color); /* Grey delete button */
+    color: var(--primary-text-color);
+  }
+  
+  .deleteButton:hover {
+    background-color: var(--cancel-button-hover-bg-color);
+  }
+  
+
+  /* suffix */
+  .inputWithSuffix {
+    position: relative;
+  }
+  
+  .suffix {
+    position: absolute;
+    right: 20px; /* Position the suffix inside the input field */
+    top: 20%;
+    color: #B0B0B0; /* Light gray for the suffix text */
+    pointer-events: none;
+  }

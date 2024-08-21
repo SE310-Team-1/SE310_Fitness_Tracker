@@ -28,6 +28,12 @@ router.post('/Log/:name/:date/:set/:weight/:rep/:score', logExerciseSet)
 //edit a exercise
 router.put('/edit/:name/:newname/:muscle_group',editExercise)
 
+//Delete an existing exercise
+router.delete('/delete/:name', exercisesController.deleteExercise)
+
+//Delete an existing set from exercise history
+router.delete('/delete/:name/:date/:set', exercisesController.deleteExerciseHistory)
+
 //edit a logged set of an exercise
 router.put('/edit/log/:name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score',editSet)
 

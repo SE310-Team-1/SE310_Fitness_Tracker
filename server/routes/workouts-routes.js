@@ -14,6 +14,10 @@ router.get('/:date', workoutsController.workoutByDate)
 
 router.post('/create/:date', workoutsController.createWorkout)
 
+<<<<<<< HEAD
+=======
+router.delete('/delete/:date', workoutsController.deleteWorkout)
+>>>>>>> upstream/main
 
 router.put('/edit/:date/:newDate',workoutsController.editWorkout);
 
