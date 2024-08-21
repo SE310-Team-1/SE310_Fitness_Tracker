@@ -121,10 +121,26 @@ const deleteRoutine = (req, res) => {
   
 }
 
+const getAllRoutineInfo = (req, res) => {
+    
+    knex('exercises_history')
+        .join('exercises', function() {
+        this.on('exercises_history.name', '=', 'exercises.name');
+    })
+        .join('routines', function() {
+        this.on('exercises_history.date', '=', 'routines.date');
+    })
+        .select('routines.name', 'routines.date', 'exercises_history.set', 'exercises.name', 'exercises_history.weight', 'exercises.muscle_group')
+        .whereRaw('exercises_history.date = routines.date');
+
+  
+}
+
 export {
     routinesAll,
     routineByNameAndDate,
     createRoutine,
     deleteRoutine,
-    editRoutine
+    editRoutine,
+    getAllRoutineInfo
 }
