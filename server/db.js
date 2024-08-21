@@ -76,6 +76,7 @@ knex.schema
 
         // Define composite primary key
         table.primary(['name', 'date'])
+        table.foreign('date').references('workouts.date');
       })
         .then(() => {
           // Log success message

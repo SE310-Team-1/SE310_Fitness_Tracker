@@ -32,6 +32,7 @@ const exercisesAllHistory = (req, res) => {
         )
 }
 
+
 // Retrieve all exercises in one day
 const exercisesDay = (req, res) => {
     const date = req.params.date
@@ -106,13 +107,13 @@ const getScoreByDate = (req, res) => {
 
 //creates a new exercise
 const createExercise = (req, res) => {
-    const { name, muscleGroup } = req.params
+    const { name, muscle_group } = req.params
 
 
     knex('exercises')
         .insert({
             'name': name,
-            'muscle_group': muscleGroup
+            'muscle_group': muscle_group
         })
         //if error occurs then drops insert apon error
         .onConflict('name').ignore()
@@ -157,6 +158,49 @@ const logExerciseSet = (req, res) => {
             // Error: Something went wrong
             res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
         });
+}
+
+
+//deletes an existing exercise
+const deleteExercise = (req, res) => {
+    const {name} = req.params
+  
+    knex('exercises')
+    .where('name', name)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Exercise deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Exercise not found' });
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
+      });
+  
+}
+
+//deletes an existing set from exercise history
+const deleteExerciseHistory = (req, res) => {
+    const {name, date, set} = req.params
+  
+    knex('exercises_history')
+    .where('name', name)
+    .where('date', date)
+    .where('set', set)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Set deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Set not found' });
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting a set', error: error.message });
+      });
+  
 }
 
 const editExercise = (req, res) => {
@@ -228,6 +272,8 @@ const editSet = (req, res) => {
         });
 }
 
+
+
 export{
     exercisesAll,
     exercisesAllHistory,
@@ -235,7 +281,9 @@ export{
     exerciseByNameDateAndSets,
     createExercise,
     logExerciseSet,
+    deleteExercise,
+    deleteExerciseHistory,
     editExercise,
     editSet,
     getScoreByDate
-  };
+ };
