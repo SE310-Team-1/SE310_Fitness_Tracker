@@ -19,7 +19,7 @@ router.delete('/delete/:name/:date', routinesController.deleteRoutine);
 router.put('/edit/:name/:date/:newName/:newDate',routinesController.editRoutine);
 
 //get all routine information
-router.get('/all/:name/:date', routinesController.getAllRoutineInfo);
+router.get('/all', routinesController.getAllRoutineInfo);
 
 
 export default router;
