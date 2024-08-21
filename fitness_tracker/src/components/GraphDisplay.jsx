@@ -1,5 +1,6 @@
 import GenerateGraph from "./GraphGenerator";
 import { Fragment, useState } from "react";
+import getData from "../utils/dataUtils";
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -99,6 +100,9 @@ function UpdateGraph(startDate, endDate, setData) {
         endDate:    A JavaScript Date object corresponding with the period end date.
 */
 function FetchPeriod(startDate, endDate) {
+
+    console.log(getData("/score/10-10-2024", "GET"));
+
     let data = [];
     for (
         let nextDate = startDate;
@@ -110,6 +114,7 @@ function FetchPeriod(startDate, endDate) {
             score: Math.floor(Math.random() * 2400)
         });
     }
+    console.log(data);
     return data;
 }
 
