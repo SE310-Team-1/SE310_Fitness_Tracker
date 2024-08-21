@@ -61,8 +61,28 @@ const createWorkout = (req, res) => {
         });
 }
 
+//deletes an existing workout
+const deleteWorkout = (req, res) => {
+  const {date} = req.params
+
+  knex('workouts')
+  .where('date', date)
+    .del()
+    .then(result => {
+      if (result) {
+        res.status(200).json({ message: 'Workout deleted successfully' });
+      } else {
+        res.status(404).json({ message: 'Workout not found' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'An error occurred while deleting a workout', error: error.message });
+    });
+
+}
+
+
 const editWorkout = (req, res) => {
- 
   let date = req.params.date
   let newDate = req.params.newDate
 
@@ -89,5 +109,6 @@ export {
   workoutsAll,
   workoutByDate,
   createWorkout,
-  editWorkout
+  editWorkout,
+  deleteWorkout
 }

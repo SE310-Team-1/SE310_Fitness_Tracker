@@ -100,9 +100,51 @@ const editRoutine = (req, res) => {
         });
 }
 
+//deletes an existing routine
+const deleteRoutine = (req, res) => {
+    const {name, date} = req.params
+  
+    knex('routines')
+    .where('name', name)
+    .where('date', date)
+      .del()
+      .then(result => {
+        if (result) {
+          res.status(200).json({ message: 'Routine deleted successfully' });
+        } else {
+          res.status(404).json({ message: 'Routine not found' });
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ message: 'An error occurred while deleting a routine', error: error.message });
+      });
+  
+}
+
+const getAllRoutineInfo = (req, res) => {
+    
+    knex('exercises_history')
+        .join('exercises', 'exercises_history.name', '=', 'exercises.name')
+        .join('routines', 'exercises_history.date', '=', 'routines.date')
+        .select('routines.name as routine_name', 'routines.date', 'exercises_history.set', 'exercises.name as exercise_name', 'exercises_history.weight', 'exercises.muscle_group')
+        .whereRaw('exercises_history.date = routines.date')
+        .then(result => {
+            // Send the query result back as a JSON response
+            res.json(result);
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the query
+            console.error('Error fetching routine information:', error);
+            res.status(500).json({ error: 'An error occurred while fetching routine information' });
+        });
+};
+
+
 export {
     routinesAll,
     routineByNameAndDate,
     createRoutine,
-    editRoutine
+    deleteRoutine,
+    editRoutine,
+    getAllRoutineInfo
 }

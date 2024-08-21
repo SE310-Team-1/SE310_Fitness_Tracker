@@ -13,8 +13,15 @@ router.get('/:name/:date', routinesController.routineByNameAndDate);
 // create a new routine
 router.post('/:name/:date', routinesController.createRoutine);
 
+
+router.delete('/delete/:name/:date', routinesController.deleteRoutine);
+
+
 //edit a routine
 router.put('/edit/:name/:date/:newName/:newDate',routinesController.editRoutine);
+
+//get all routine information
+router.get('/all', routinesController.getAllRoutineInfo);
 
 
 export default router;

@@ -1,6 +1,6 @@
 // The routes for exercises
 import express from 'express';
-import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet, getScoreByDate,editExercise,editSet } from '../controllers/exercises-controller.js';
+import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet, getScoreByDate,editExercise,editSet,deleteExercise,deleteExerciseHistory } from '../controllers/exercises-controller.js';
 
 
 const router = express.Router()
@@ -27,6 +27,12 @@ router.post('/Log/:name/:date/:set/:weight/:rep/:score', logExerciseSet)
 
 //edit a exercise
 router.put('/edit/:name/:newname/:muscle_group',editExercise)
+
+//Delete an existing exercise
+router.delete('/delete/:name', deleteExercise)
+
+//Delete an existing set from exercise history
+router.delete('/delete/:name/:date/:set', deleteExerciseHistory)
 
 //edit a logged set of an exercise
 router.put('/edit/log/:name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score',editSet)
