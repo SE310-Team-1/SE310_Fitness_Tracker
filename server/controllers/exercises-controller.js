@@ -64,11 +64,7 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 
         .then(userData => {
-            if (userData.length > 0) {
-                res.json(userData)
-            } else {
-                res.status(404).json({ message: `Exercise with name ${name} and date ${date} not found.` })
-            }
+            res.json(userData)   
         })
 
         .catch(err => {
@@ -89,14 +85,12 @@ const getScoreByDate = (req, res) => {
         // Join with exercises table to get muscle group
         .join('exercises', 'exercises_history.name', 'exercises.name')
         .where('exercises_history.date', date)
-        .groupBy('exercises_history.date','exercises.muscle_group')
+        .groupBy('exercises.muscle_group')
 
         .then(userData => {
-            if (userData.length > 0) {
-                res.json(userData)
-            } else {
-                res.status(404).json({ message: `Workout on date: ${date} not found.` })
-            }
+            
+            res.json(userData)
+
         })
 
         .catch(err => {
