@@ -17,4 +17,20 @@ function formatDate(date) {
     return `${day}${suffix} ${month} ${year}`;
 };
 
-export default formatDate;
+/* 
+    DateToString() returns a formatted string in yyyy-mm-dd format corresponding with the
+    date parameter. This format is complient with the HTML <input type="date"> element.
+
+    params:
+        date:   The JavaScript Date object which should be formatted.
+*/
+function dateToString(date) {
+    let day = String(date.getDate()).padStart(2, "0");
+    /* NOTE: Month indexes from 0, hence we add 1 to the month. */
+    let month = String(date.getMonth() + 1).padStart(2, "0");
+    let year = date.getFullYear();
+    return year + "-" + month + "-" + day;
+}
+
+export {formatDate, 
+    dateToString};

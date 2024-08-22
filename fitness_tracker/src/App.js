@@ -36,7 +36,7 @@ function App() {
 
       <TabDisplay/>
 
-      <TempWorkoutDisplay data={workouts}/>
+      {/* <TempWorkoutDisplay data={workouts}/> */}
 
     </div>
   );

@@ -1,35 +1,39 @@
 import React, { Fragment, useState, useEffect, useCallback } from "react"
+import { dateToString } from "../utils/dateUtils"
 import ExerciseLogger from "./ExerciseLogger"
 import ExerciseEditor from "./ExerciseEditor"
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExercisesDisplay.module.css'
 
-const ExercisesDisplay = () => {
+const ExercisesDisplay = ({ exercises: initialExercises }) => {
 
     const [completedSets, setCompletedSets] = useState([])
 
     const [exerciseList, setExerciseList] = useState({})
+
+    // initialExercises when user clicks add to today's workout in the routines
+    const [exercises, setExercises] = useState(initialExercises);
     
-    const [exercises, setExercises] = useState([
-        {
-            id: 0,
-            name: "Lat Raise",
-            weight: 20,
-            reps: 10,
-            setsGoal: 4,
-            setsLogged: 2,
-            editMode: false
-        },
-        {
-            id: 1,
-            name: "Squat",
-            weight: 50,
-            reps: 10,
-            setsGoal: 5,
-            setsLogged: 0,
-            editMode: false
-        }
-    ])
+    // const [exercises, setExercises] = useState([
+    //     {
+    //         id: 0,
+    //         name: "Lat Raise",
+    //         weight: 20,
+    //         reps: 10,
+    //         setsGoal: 4,
+    //         setsLogged: 2,
+    //         editMode: false
+    //     },
+    //     {
+    //         id: 1,
+    //         name: "Squat",
+    //         weight: 50,
+    //         reps: 10,
+    //         setsGoal: 5,
+    //         setsLogged: 0,
+    //         editMode: false
+    //     }
+    // ])
 
     const [isEditing, setIsEditing] = useState(false)
 
@@ -70,7 +74,7 @@ const ExercisesDisplay = () => {
         setCompletedSets(completedSets => (
             [...completedSets, {
                 name: updatedExercise.name,
-                date: getTodaysDateAsString(),
+                date: dateToString(new Date()),
                 set: updatedExercise.setsLogged,
                 weight: updatedExercise.weight,
                 rep: updatedExercise.reps,
@@ -91,13 +95,6 @@ const ExercisesDisplay = () => {
 
     }, [])
 
-    const getTodaysDateAsString = () => {
-        const today = new Date()
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
-        var yyyy = today.getFullYear();
-        return dd + '-' + mm + '-' + yyyy;
-    }
 
     const addExercise = async () => {
 

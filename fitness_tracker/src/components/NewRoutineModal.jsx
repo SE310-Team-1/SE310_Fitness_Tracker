@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import styles from '../module_CSS/NewRoutineModal.module.css';
-import formatDate from '../utils/dateUtils.js'
+import { formatDate } from '../utils/dateUtils.js'
 
 const NewRoutineModal = ({ onSave, onClose }) => {
     const today = new Date();
     const formattedDate = formatDate(today); // 14 Aug 2024
+    var id=0;
 
     const [routine, setRoutine] = useState({
+        id: id++,
         name: '',
         date: formattedDate,
         muscles: '',
-        exercises: [{ name: '', reps: '', sets: '', weight: '' }]
+        exercises: [{ name: '', reps: '', setsGoal: '', setsLogged: 0, weight: '' }]
     });
 
     const handleExerciseChange = (index, field, value) => {
@@ -20,7 +22,7 @@ const NewRoutineModal = ({ onSave, onClose }) => {
     };
 
     const handleAddExercise = () => {
-        setRoutine({ ...routine, exercises: [...routine.exercises, { name: '', sets: '', reps: '', weight: '' }] });
+        setRoutine({ ...routine, exercises: [...routine.exercises, {id: id++, name: '', setsGoal: '', setsLogged:0, reps: '', weight: '' }] });
     };
 
     const handleDeleteExercise = (index) => {
@@ -67,7 +69,7 @@ const NewRoutineModal = ({ onSave, onClose }) => {
                             className={styles.inputField}
                             placeholder="Sets"
                             value={exercise.sets}
-                            onChange={(e) => handleExerciseChange(index, 'sets', e.target.value)}
+                            onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)}
                         />
                         <span className={styles.suffix}>sets</span>
                     </div>

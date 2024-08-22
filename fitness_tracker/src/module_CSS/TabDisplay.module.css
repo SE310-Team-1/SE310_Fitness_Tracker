@@ -1,0 +1,22 @@
+@import './colours.module.css';
+
+.tabRoot {
+    color: #ffffff;
+    transition: color 0.1s ease;
+}
+
+.selectedTab {
+    color: #E10000 !important;
+}
+
+.unselectedTab {
+    color: var(--primary-text-color) !important;
+}
+
+.hoverTab:hover {
+    color: white !important;
+}
+
+.tabIndicator {
+    background-color: #E10000 !important;
+}

@@ -15,7 +15,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
     const handleAddExercise = () => {
         setEditedRoutine({ 
             ...editedRoutine, 
-            exercises: [...editedRoutine.exercises, { name: '', sets: '', reps: '', weight: '' }] 
+            exercises: [...editedRoutine.exercises, { name: '', setsGoal: '', setsLogged: 0, reps: '', weight: '' }] 
         });
     };
 
@@ -76,8 +76,8 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                                     type="number" 
                                     className={styles.inputField}
                                     placeholder="Sets" 
-                                    value={exercise.sets} 
-                                    onChange={(e) => handleExerciseChange(index, 'sets', e.target.value)} 
+                                    value={exercise.setsGoal} 
+                                    onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)} 
                                 />
                                 <span className={styles.suffix}>sets</span>
                             </div>          
@@ -151,7 +151,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                     <div>
                         {routine.exercises.map((exercise, index) => (
                         <div key={index} className={styles.exercise}>
-                            <span>{exercise.name}</span> {exercise.sets} sets {exercise.reps} reps {exercise.weight} kg
+                            <span>{exercise.name}</span> {exercise.setsGoal} sets {exercise.reps} reps {exercise.weight} kg
                         </div>
                     ))} 
                     </div>

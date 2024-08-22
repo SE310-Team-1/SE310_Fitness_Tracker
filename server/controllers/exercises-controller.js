@@ -64,11 +64,7 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 
         .then(userData => {
-            if (userData.length > 0) {
-                res.json(userData)
-            } else {
-                res.status(404).json({ message: `Exercise with name ${name} and date ${date} not found.` })
-            }
+            res.json(userData)   
         })
 
         .catch(err => {
@@ -80,23 +76,22 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 
 const getScoreByDate = (req, res) => {
-    const {date} = req.params
+    const { date } = req.params
     knex
-        .select('exercises.muscle_group','exercises_history.date').sum('exercises_history.score')
+        .select('exercises.muscle_group', 'exercises_history.date').sum('exercises_history.score')
         .from('exercises_history')
 
-       
+
         // Join with exercises table to get muscle group
         .join('exercises', 'exercises_history.name', 'exercises.name')
         .where('exercises_history.date', date)
-        .groupBy('exercises_history.date','exercises.muscle_group')
+        .groupBy('exercises.muscle_group')
+
 
         .then(userData => {
-            if (userData.length > 0) {
-                res.json(userData)
-            } else {
-                res.status(404).json({ message: `Workout on date: ${date} not found.` })
-            }
+            
+            res.json(userData)
+
         })
 
         .catch(err => {
@@ -163,44 +158,44 @@ const logExerciseSet = (req, res) => {
 
 //deletes an existing exercise
 const deleteExercise = (req, res) => {
-    const {name} = req.params
-  
+    const { name } = req.params
+
     knex('exercises')
-    .where('name', name)
-      .del()
-      .then(result => {
-        if (result) {
-          res.status(200).json({ message: 'Exercise deleted successfully' });
-        } else {
-          res.status(404).json({ message: 'Exercise not found' });
-        }
-      })
-      .catch(error => {
-        res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
-      });
-  
+        .where('name', name)
+        .del()
+        .then(result => {
+            if (result) {
+                res.status(200).json({ message: 'Exercise deleted successfully' });
+            } else {
+                res.status(404).json({ message: 'Exercise not found' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
+        });
+
 }
 
 //deletes an existing set from exercise history
 const deleteExerciseHistory = (req, res) => {
-    const {name, date, set} = req.params
-  
+    const { name, date, set } = req.params
+
     knex('exercises_history')
-    .where('name', name)
-    .where('date', date)
-    .where('set', set)
-      .del()
-      .then(result => {
-        if (result) {
-          res.status(200).json({ message: 'Set deleted successfully' });
-        } else {
-          res.status(404).json({ message: 'Set not found' });
-        }
-      })
-      .catch(error => {
-        res.status(500).json({ message: 'An error occurred while deleting a set', error: error.message });
-      });
-  
+        .where('name', name)
+        .where('date', date)
+        .where('set', set)
+        .del()
+        .then(result => {
+            if (result) {
+                res.status(200).json({ message: 'Set deleted successfully' });
+            } else {
+                res.status(404).json({ message: 'Set not found' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'An error occurred while deleting a set', error: error.message });
+        });
+
 }
 
 const editExercise = (req, res) => {
@@ -212,11 +207,11 @@ const editExercise = (req, res) => {
         .update({
             'name': newName,
             'muscle_group': result
-            },['name'])
+        }, ['name'])
 
         .then(data => {
             if (data.length > 0) {
-                res.status(200).json({ message: 'Exercise was edited successfully'});
+                res.status(200).json({ message: 'Exercise was edited successfully' });
             } else {
                 res.status(404).json({ message: `no exercise with name ${name}` });
             }
@@ -230,21 +225,21 @@ const editExercise = (req, res) => {
 
 const editSet = (req, res) => {
     let name = req.params.name
-    let date= req.params.date
-    let set= req.params.set
+    let date = req.params.date
+    let set = req.params.set
     let newName = req.params.newName
-    let newDate= req.params.newDate
-    let newSet= req.params.newSet
-    let weight= req.params.weight
-    let rep= req.params.rep
-    let score= req.params.score
+    let newDate = req.params.newDate
+    let newSet = req.params.newSet
+    let weight = req.params.weight
+    let rep = req.params.rep
+    let score = req.params.score
 
     knex('exercises_history')
 
         .where({
-        'name': name,
-        'date': date,
-        'sets':set
+            'name': name,
+            'date': date,
+            'sets': set
         })
 
         .update({
@@ -252,15 +247,15 @@ const editSet = (req, res) => {
             'date': newDate,
             'sets': newSet,
             'weight': weight,
-            'reps':rep,
-            'score':score
-            },['name'])
+            'reps': rep,
+            'score': score
+        }, ['name'])
 
-        
+
 
         .then(data => {
             if (data.length > 0) {
-                res.status(200).json({ message: 'Exercise was edited successfully'});
+                res.status(200).json({ message: 'Exercise was edited successfully' });
             } else {
                 res.status(404).json({ message: `no set with name: ${name},date: ${date},and set number: ${set} ` });
             }
@@ -286,4 +281,4 @@ export{
     editExercise,
     editSet,
     getScoreByDate
- };
+};

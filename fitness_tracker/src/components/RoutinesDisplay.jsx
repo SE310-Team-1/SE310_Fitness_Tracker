@@ -3,7 +3,7 @@ import Routine from './Routine';
 import NewRoutineModal from './NewRoutineModal';
 import styles from '../module_CSS/RoutinesDisplay.module.css'
 
-const RoutinesDisplay = () => {
+const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     // data should come from the backend
     const [routines, setRoutines] = useState([
         {
@@ -11,9 +11,9 @@ const RoutinesDisplay = () => {
           date: "14th Aug",
           muscles: "Quads, Hamstring, Calves",
           exercises: [
-            { name: "Squat", sets: 4, reps: 10, weight: 30 },
-            { name: "Lunge", sets: 3, reps: 12, weight: 40 },
-            { name: "Leg Press", sets: 4, reps: 8, weight: 50 }
+            { id:0, name: "Squat", setsGoal: 4, setsLogged: 0, reps: 10, weight: 30 },
+            { id:1, name: "Lunge", setsGoal: 3, setsLogged: 0, reps: 12, weight: 40 },
+            { id:2, name: "Leg Press", setsGoal: 4, setsLogged: 0, reps: 8, weight: 50 }
           ]
         },
         {
@@ -21,9 +21,9 @@ const RoutinesDisplay = () => {
           date: "14th Aug",
           muscles: "Biceps, Triceps, Deltoids",
           exercises: [
-            { name: "Bicep Curl", sets: 4, reps: 12, weight: 30 },
-            { name: "Tricep Extension", sets: 3, reps: 10, weight: 40 },
-            { name: "Shoulder Press", sets: 4, reps: 8, weight: 50 }
+            { id:0, name: "Bicep Curl", setsGoal: 4, setsLogged: 0, reps: 12, weight: 30 },
+            { id:1, name: "Tricep Extension", setsGoal: 3, setsLogged: 0, reps: 10, weight: 40 },
+            { id:2, name: "Shoulder Press", setsGoal: 4, setsLogged: 0, reps: 8, weight: 50 }
           ]
         },
         {
@@ -31,9 +31,9 @@ const RoutinesDisplay = () => {
           date: "14th Aug",
           muscles: "Abs",
           exercises: [
-            { name: "Crunch", sets: 4, reps: 15, weight: 30 },
-            { name: "Plank", sets: 3, reps: 1, weight: 40 },
-            { name: "Leg Raise", sets: 3, reps: 12, weight: 50 }
+            { id:0, name: "Crunch", setsGoal: 4, setsLogged: 0, reps: 15, weight: 30 },
+            { id:1, name: "Plank", setsGoal: 3, setsLogged: 0, reps: 1, weight: 40 },
+            { id:2, name: "Leg Raise", setsGoal: 3, setsLogged: 0, reps: 12, weight: 50 }
           ]
         }
       ]);
@@ -54,14 +54,8 @@ const RoutinesDisplay = () => {
         console.log("routines:", routines); // Debug log
         console.log("Updated routine:", updatedRoutine); // Debug log
         setRoutines(routines.map((routine, i) => i === index ? updatedRoutine : routine));
-        // routines have to be saved to the backend
+        // edited routines have to be saved to the backend
     };
-
-    const handleAddTodayWorkout = (routine) => {
-        console.log(routine); // Debug log
-        // the routine information can go to today's workout component
-    }
-    
 
     return (
         <div className={styles.container}>
@@ -86,7 +80,7 @@ const RoutinesDisplay = () => {
                     routine={routine} 
                     onSave={(updatedRoutine) => handleEditRoutine(updatedRoutine, index)} 
                     onDelete={() => handleDeleteRoutine(routine)}
-                    onAddToToday={() => handleAddTodayWorkout(routine)} 
+                    onAddToToday={() => onAddToTodayWorkout(routine)}
                 />
             ))}
         </div>
