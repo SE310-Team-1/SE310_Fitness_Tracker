@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect, useCallback } from "react"
+import { dateToString } from "../utils/dateUtils"
 import ExerciseLogger from "./ExerciseLogger"
 import ExerciseEditor from "./ExerciseEditor"
 import buttons from '../module_CSS/buttons.module.css'
@@ -73,7 +74,7 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
         setCompletedSets(completedSets => (
             [...completedSets, {
                 name: updatedExercise.name,
-                date: getTodaysDateAsString(),
+                date: dateToString(new Date()),
                 set: updatedExercise.setsLogged,
                 weight: updatedExercise.weight,
                 rep: updatedExercise.reps,
@@ -94,13 +95,6 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
 
     }, [])
 
-    const getTodaysDateAsString = () => {
-        const today = new Date()
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
-        var yyyy = today.getFullYear();
-        return dd + '-' + mm + '-' + yyyy;
-    }
 
     const addExercise = async () => {
 

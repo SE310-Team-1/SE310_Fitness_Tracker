@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../module_CSS/NewRoutineModal.module.css';
-import formatDate from '../utils/dateUtils.js'
+import { formatDate } from '../utils/dateUtils.js'
 
 const NewRoutineModal = ({ onSave, onClose }) => {
     const today = new Date();

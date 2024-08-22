@@ -1,5 +1,6 @@
 import GenerateGraph from "./GraphGenerator";
 import { Fragment, useState } from "react";
+import { dateToString } from "../utils/dateUtils"
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -9,7 +10,7 @@ import { Fragment, useState } from "react";
             parameters passed to this function.
 */
 function GraphDisplay() {
-    let endDate = DateToString(new Date());
+    let endDate = dateToString(new Date());
     let startDate = new Date();
     startDate.setDate(startDate.getDate() - 6);
     const [data, setData] = useState(FetchPeriod(startDate, new Date()));
@@ -34,21 +35,6 @@ function GraphDisplay() {
             </button>
         </Fragment>
     );
-}
-
-/* 
-    DateToString() returns a formatted string in yyyy-mm-dd format corresponding with the
-    date parameter. This format is complient with the HTML <input type="date"> element.
-
-    params:
-        date:   The JavaScript Date object which should be formatted.
-*/
-function DateToString(date) {
-    let day = String(date.getDate()).padStart(2, "0");
-    /* NOTE: Month indexes from 0, hence we add 1 to the month. */
-    let month = String(date.getMonth() + 1).padStart(2, "0");
-    let year = date.getFullYear();
-    return year + "-" + month + "-" + day;
 }
 
 function UpdateGraphFromInputs(setData) {
@@ -110,7 +96,7 @@ function FetchPeriod(startDate, endDate) {
         nextDate.setDate(nextDate.getDate() + 1)
     ) {
         data.push({
-            date: DateToString(nextDate),
+            date: dateToString(nextDate),
             /* Temp score, to be connected to database */
             score: Math.floor(Math.random() * 2000)
         });
