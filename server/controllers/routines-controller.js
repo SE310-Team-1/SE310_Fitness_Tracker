@@ -123,11 +123,10 @@ const deleteRoutine = (req, res) => {
 
 const getAllRoutineInfo = (req, res) => {
     
-    knex('exercises_history')
+    knex('routines')
+        .join('exercises_history', 'routines.date', '=', 'exercises_history.date')
         .join('exercises', 'exercises_history.name', '=', 'exercises.name')
-        .join('routines', 'exercises_history.date', '=', 'routines.date')
         .select('routines.name as routine_name', 'routines.date', 'exercises_history.sets', 'exercises.name as exercise_name', 'exercises_history.weight', 'exercises.muscle_group')
-        .whereRaw('exercises_history.date = routines.date')
         .then(result => {
             // Send the query result back as a JSON response
             res.status(200).json(result);
@@ -137,6 +136,7 @@ const getAllRoutineInfo = (req, res) => {
             console.error('Error fetching routine information:', error);
             res.status(500).json({ error: 'An error occurred while fetching routine information' });
         });
+
 };
 
 
