@@ -6,16 +6,10 @@
     color: var(--primary-text-color);
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .header h1 {
-    font-size: 24px;
-    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-text-color);
 }
 
 .button {

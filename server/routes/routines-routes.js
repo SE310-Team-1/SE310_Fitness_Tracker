@@ -20,5 +20,8 @@ router.delete('/delete/:name/:date', routinesController.deleteRoutine);
 //edit a routine
 router.put('/edit/:name/:date/:newName/:newDate',routinesController.editRoutine);
 
+//get all routine information
+router.get('/all', routinesController.getAllRoutineInfo);
+
 
 export default router;

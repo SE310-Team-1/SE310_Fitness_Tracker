@@ -1,0 +1,121 @@
+@import '../module_CSS/colours.module.css';
+
+.container {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: var(--dark-bg-color);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-text-color);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    text-align: left;
+}
+
+.table thead {
+    background-color: var(--table-dark-bg-color);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--table-border-color);
+}
+
+.table th {
+    background-color: var(--table-header-bg-color);
+    color: var(--primary-text-color);
+    text-align: center;
+}
+
+.table tbody tr:last-child {
+    border-bottom: 2px solid var(--table-border-color);
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: var(--table-even-rows-color);
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: var(--table-odd-rows-color);
+}
+
+.table td {
+    text-align: center;
+    color: var(--table-text-color);
+}
+
+/* Hover effect for table rows */
+.table tbody tr:hover {
+    background-color: var(--table-row-hover-bg-color);
+    border: 1px;
+}
+
+/* buttons */
+.buttonContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logWorkoutButton:hover {
+    color: var(--primary-text-color);
+}
+
+/* mobile responsive */
+@media (max-width: 768px) {
+    .table {
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        margin: 0 auto;  
+    }
+
+    .table thead {
+        display: none;
+    }    
+
+    .table tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        border: 1px solid var(--table-border-color);
+        border-radius: 5px;
+        padding: 10px;
+        background-color: var(--table-dark-bg-color);
+    }
+
+    .table td {
+        text-align: right;
+        font-weight: bold;
+        font-size: larger;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        float: left;
+        padding-right: 64px;
+        font-weight: normal;
+    }
+
+    .table tbody tr:hover {
+        background-color: var(--table-header-bg-color);
+        border: 1px;
+    }
+
+    .buttonContainer {
+        margin-top: 20px;
+        display: flex;
+    }
+}
+
+

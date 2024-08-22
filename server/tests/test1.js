@@ -116,3 +116,13 @@ describe('Workout API Endpoint Tests', () => {
         expect(res.body.length).to.equal(1);
     });
 });
+
+describe('Routines API Endpoint Tests', () => {
+    it('should return all routines', async () => {
+        const res = await request(app)
+            .get('/routines/all')
+            .expect(200);
+
+        expect(res.body).to.be.an('array');
+    });
+});
