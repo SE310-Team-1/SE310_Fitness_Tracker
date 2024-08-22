@@ -145,7 +145,7 @@ const logExerciseSet = (req, res) => {
             'score': score
         })
         //if conflict occurs then drops current insert apon error
-        .onConflict(['name', 'date', 'set']).ignore()
+        .onConflict(['name', 'date', 'sets']).ignore()
         .returning('name')
         .then(name => {
             if (name.length > 0) {

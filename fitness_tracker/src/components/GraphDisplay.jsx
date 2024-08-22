@@ -18,11 +18,11 @@ function GraphDisplay() {
         <Fragment>
             <GenerateGraph data={data} />
             <input id="dateSelector" type="date" max={endDate} />
-            <select id="exercise">
-                <option>Exercise 1</option>
-                <option>Exercise 2</option>
-                <option>Exercise 3</option>
-                <option>Exercise 4</option>
+            <select id="muscleGroup">
+                <option>Muscle Group 1</option>
+                <option>Muscle Group 2</option>
+                <option>Muscle Group 3</option>
+                <option>Muscle Group 4</option>
             </select>
             <select id="periodDropDown">
                 <option value="7">Week</option>
@@ -99,6 +99,10 @@ function UpdateGraph(startDate, endDate, setData) {
         endDate:    A JavaScript Date object corresponding with the period end date.
 */
 function FetchPeriod(startDate, endDate) {
+
+    /* Temporary get request */
+    console.log(getData('/exercises/score/' + '2022-01-01', 'GET'));
+
     let data = [];
     for (
         let nextDate = startDate;
@@ -107,10 +111,15 @@ function FetchPeriod(startDate, endDate) {
     ) {
         data.push({
             date: DateToString(nextDate),
-            score: Math.floor(Math.random() * 2400)
+            /* Temp score, to be connected to database */
+            score: Math.floor(Math.random() * 2000)
         });
     }
     return data;
+}
+
+async function getData(path, method) {
+    return await fetch('http://localhost:4001' + path,  {method: method});
 }
 
 export default GraphDisplay;
