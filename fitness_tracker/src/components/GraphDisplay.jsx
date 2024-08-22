@@ -1,6 +1,5 @@
 import GenerateGraph from "./GraphGenerator";
 import { Fragment, useState } from "react";
-import getData from "../utils/dataUtils";
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -19,11 +18,11 @@ function GraphDisplay() {
         <Fragment>
             <GenerateGraph data={data} />
             <input id="dateSelector" type="date" max={endDate} />
-            <select id="exercise">
-                <option>Exercise 1</option>
-                <option>Exercise 2</option>
-                <option>Exercise 3</option>
-                <option>Exercise 4</option>
+            <select id="muscleGroup">
+                <option>Muscle Group 1</option>
+                <option>Muscle Group 2</option>
+                <option>Muscle Group 3</option>
+                <option>Muscle Group 4</option>
             </select>
             <select id="periodDropDown">
                 <option value="7">Week</option>
@@ -101,7 +100,8 @@ function UpdateGraph(startDate, endDate, setData) {
 */
 function FetchPeriod(startDate, endDate) {
 
-    console.log(getData("/score/10-10-2024", "GET"));
+    /* Temporary get request */
+    console.log(getData('/exercises/score/' + '2022-01-01', 'GET'));
 
     let data = [];
     for (
@@ -111,11 +111,15 @@ function FetchPeriod(startDate, endDate) {
     ) {
         data.push({
             date: DateToString(nextDate),
-            score: Math.floor(Math.random() * 2400)
+            /* Temp score, to be connected to database */
+            score: Math.floor(Math.random() * 2000)
         });
     }
-    console.log(data);
     return data;
+}
+
+async function getData(path, method) {
+    return await fetch('http://localhost:4001' + path,  {method: method});
 }
 
 export default GraphDisplay;
