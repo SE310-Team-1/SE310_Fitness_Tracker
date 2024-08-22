@@ -25,18 +25,25 @@ async function populateExercises() {
         await knex('exercises').del();
         await knex('exercises_history').del();
         await knex('workouts').del();
+        await knex('routines').del();
         await knex('exercises').insert([
-            { name: 'Thingimajigs', muscle_group: 'Biceps' },
+            { name: 'Thingies', muscle_group: 'Biceps' },
             { name: 'Pullies', muscle_group: 'Triceps' },
             { name: 'Pushies', muscle_group: 'Quadriceps' },
             { name: 'Workies', muscle_group: 'Quinticeps' }
         ]);
         await knex('workouts').insert([
-            { date: '2021-01-01' }]);
+            { date: '2021-01-01' },
+            { date: '2021-01-02' }]);
         await knex('exercises_history').insert([
-            { name: 'Thingimajigs', date: '2021-01-01', sets: 3, weight: 20, reps: 10, score: 300 },
+            { name: 'Thingies', date: '2021-01-01', sets: 3, weight: 20, reps: 10, score: 300 },
             { name: 'Pullies', date: '2021-01-01', sets: 3, weight: 20, reps: 10, score: 300 },
             { name: 'Pushies', date: '2021-01-01', sets: 3, weight: 20, reps: 10, score: 300 },
+            { name: 'Thingies', date: '2021-01-02', sets: 3, weight: 20, reps: 10, score: 300 },
+        ])
+        await knex('routines').insert([
+            //{ name: 'pull', date: '2021-01-01' },
+            { name: 'push', date: '2021-01-02' },
         ])
         console.log('Data inserted successfully');
     } catch (error) {
@@ -103,12 +110,12 @@ describe('Exercise API Endpoint Tests', () => {
             .expect(200);
 
         expect(res.body).to.be.an('array');
-        expect(res.body.length).to.equal(3);
+        expect(res.body.length).to.equal(4);
     });
 
     it('should edit an exercise', async () => {
         const res = await request(app)
-            .put('/exercises/edit/Thingimajigs/Thingies/Biceps')
+            .put('/exercises/edit/Thingies/Thingimajigs/Biceps')
             .expect(200);
 
         expect(res.body.message).to.equal('Exercise was edited successfully');
@@ -149,15 +156,17 @@ describe('Exercise API Endpoint Tests', () => {
 
     });
 
-    describe('Workout API Endpoint Tests', () => {
-        it('should return all workouts', async () => {
-            const res = await request(app)
-                .get('/workouts/all')
-                .expect(200);
 
-            expect(res.body).to.be.an('array');
-            expect(res.body.length).to.equal(1);
-        });
+});
+
+describe('Workout API Endpoint Tests', () => {
+    it('should return all workouts', async () => {
+        const res = await request(app)
+            .get('/workouts/all')
+            .expect(200);
+
+        expect(res.body).to.be.an('array');
+        expect(res.body.length).to.equal(2);
     });
 });
 
@@ -168,5 +177,6 @@ describe('Routines API Endpoint Tests', () => {
             .expect(200);
 
         expect(res.body).to.be.an('array');
+        console.log(res.body);
     });
 });

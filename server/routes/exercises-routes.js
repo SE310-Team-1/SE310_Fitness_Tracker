@@ -1,6 +1,6 @@
 // The routes for exercises
 import express from 'express';
-import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet, getScoreByDate, editExercise, editSet } from '../controllers/exercises-controller.js';
+import { exercisesAll, exercisesAllHistory, exercisesDay, exerciseByNameDateAndSets, createExercise, logExerciseSet, getScoreByDate, editExercise, editSet, deleteExercise, deleteExerciseHistory } from '../controllers/exercises-controller.js';
 
 
 const router = express.Router()
