@@ -1,6 +1,8 @@
 import GenerateGraph from "./GraphGenerator";
 import { Fragment, useState } from "react";
 import { dateToString } from "../utils/dateUtils"
+import styles from '../module_CSS/GraphDisplay.module.css'
+import buttons from '../module_CSS/buttons.module.css'
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -17,22 +19,27 @@ function GraphDisplay() {
 
     return (
         <Fragment>
-            <GenerateGraph data={data} />
-            <input id="dateSelector" type="date" max={endDate} />
-            <select id="muscleGroup">
-                <option>Muscle Group 1</option>
-                <option>Muscle Group 2</option>
-                <option>Muscle Group 3</option>
-                <option>Muscle Group 4</option>
-            </select>
-            <select id="periodDropDown">
-                <option value="7">Week</option>
-                <option value="14">Fortnite</option>
-                <option value="28">Month</option>
-            </select>
-            <button onClick={() => UpdateGraphFromInputs(setData)}>
-                CLICK ME
-            </button>
+            <div className={styles.graphContainer}>
+                <GenerateGraph data={data} />
+
+                <div className={styles.inputContainer}>
+                    <input id="dateSelector" type="date" max={endDate} className={styles.inputField} />
+                    <select id="muscleGroup" className={styles.selectField}>
+                        <option>Muscle Group 1</option>
+                        <option>Muscle Group 2</option>
+                        <option>Muscle Group 3</option>
+                        <option>Muscle Group 4</option>
+                    </select>
+                    <select id="periodDropDown" className={styles.selectField}>
+                        <option value="7">Week</option>
+                        <option value="14">Fortnite</option>
+                        <option value="28">Month</option>
+                    </select>
+                    <button className={`${buttons.button} ${buttons.saveButton}`} onClick={() => UpdateGraphFromInputs(setData)}>
+                        CLICK ME
+                    </button>
+                </div>
+            </div>
         </Fragment>
     );
 }

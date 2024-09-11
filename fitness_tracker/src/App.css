@@ -1,5 +1,7 @@
+@import './module_CSS/colours.module.css';
 .App {
   text-align: center;
+  background-color: var(--primary-bg-color);
 }
 
 .App-logo {
@@ -14,14 +16,15 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 20vh;
+  background-color: #121212;
+  min-height: 8vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: calc(12px + 2vmin);
+  font-weight: bold;
+  color: #F00000;
 }
 
 .App-link {

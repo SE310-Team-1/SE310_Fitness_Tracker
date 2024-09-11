@@ -30,7 +30,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        what to add in the app header
+        FiTrack
       </header>
       <GraphDisplay />
 

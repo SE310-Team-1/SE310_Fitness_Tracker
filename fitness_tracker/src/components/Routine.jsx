@@ -13,9 +13,9 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
     };
 
     const handleAddExercise = () => {
-        setEditedRoutine({ 
-            ...editedRoutine, 
-            exercises: [...editedRoutine.exercises, { name: '', setsGoal: '', setsLogged: 0, reps: '', weight: '' }] 
+        setEditedRoutine({
+            ...editedRoutine,
+            exercises: [...editedRoutine.exercises, { name: '', setsGoal: '', setsLogged: 0, reps: '', weight: '' }]
         });
     };
 
@@ -39,95 +39,95 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
             {isEditing ? (
                 // When editing a routine
                 <>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         className={styles.inputField}
-                        placeholder="Routine Name" 
-                        value={editedRoutine.name} 
-                        onChange={(e) => setEditedRoutine({ ...editedRoutine, name: e.target.value })} 
+                        placeholder="Routine Name"
+                        value={editedRoutine.name}
+                        onChange={(e) => setEditedRoutine({ ...editedRoutine, name: e.target.value })}
                     />
 
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         className={styles.inputField}
-                        placeholder="Muscle Groups" 
-                        value={editedRoutine.muscles} 
-                        onChange={(e) => setEditedRoutine({ ...editedRoutine, muscles: e.target.value })} 
+                        placeholder="Muscle Groups"
+                        value={editedRoutine.muscles}
+                        onChange={(e) => setEditedRoutine({ ...editedRoutine, muscles: e.target.value })}
                     />
 
                     <p className={styles.routineDetails}>Date: {editedRoutine.date}</p>
 
                     {editedRoutine.exercises.map((exercise, index) => (
-                        <div key={index} className={styles.exercise}>  
+                        <div key={index} className={styles.exercise}>
 
                             <div className={styles.inputWithSuffix}>
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     className={styles.inputField}
-                                    placeholder="Exercise Name" 
-                                    value={exercise.name} 
-                                    onChange={(e) => handleExerciseChange(index, 'name', e.target.value)} 
+                                    placeholder="Exercise Name"
+                                    value={exercise.name}
+                                    onChange={(e) => handleExerciseChange(index, 'name', e.target.value)}
                                 />
                                 <span className={styles.suffix}>Name</span>
-                            </div>       
+                            </div>
 
                             <div className={styles.inputWithSuffix}>
-                                <input 
-                                    type="number" 
+                                <input
+                                    type="number"
                                     className={styles.inputField}
-                                    placeholder="Sets" 
-                                    value={exercise.setsGoal} 
-                                    onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)} 
+                                    placeholder="Sets"
+                                    value={exercise.setsGoal}
+                                    onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)}
                                 />
                                 <span className={styles.suffix}>sets</span>
-                            </div>          
-                            
+                            </div>
+
 
                             <div className={styles.inputWithSuffix}>
-                                <input 
-                                    type="number" 
+                                <input
+                                    type="number"
                                     className={styles.inputField}
-                                    placeholder="Reps" 
-                                    value={exercise.reps} 
-                                    onChange={(e) => handleExerciseChange(index, 'reps', e.target.value)} 
+                                    placeholder="Reps"
+                                    value={exercise.reps}
+                                    onChange={(e) => handleExerciseChange(index, 'reps', e.target.value)}
                                 />
                                 <span className={styles.suffix}>reps</span>
                             </div>
-                            
+
                             <div className={styles.inputWithSuffix}>
-                                <input 
-                                    type="number" 
+                                <input
+                                    type="number"
                                     className={styles.inputField}
-                                    placeholder="Weight" 
-                                    value={exercise.weight} 
-                                    onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)} 
+                                    placeholder="Weight"
+                                    value={exercise.weight}
+                                    onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)}
                                 />
                                 <span className={styles.suffix}>kg</span>
                             </div>
-                            
-                            <button 
-                                className={`${styles.button} ${styles.deleteButton}`} 
+
+                            <button
+                                className={`${styles.button} ${styles.deleteButton}`}
                                 onClick={() => handleDeleteExercise(index)}
                             >
                                 Delete
                             </button>
                         </div>
                     ))}
-                    <button 
-                        className={`${styles.button} ${styles.addButton}`} 
+                    <button
+                        className={`${styles.button} ${styles.addButton}`}
                         onClick={handleAddExercise}
                     >
                         Add Exercise
                     </button>
                     <div className={styles.buttonContainer}>
-                        <button 
-                            className={`${styles.button} ${styles.cancelButton}`} 
+                        <button
+                            className={`${styles.button} ${styles.cancelButton}`}
                             onClick={() => setIsEditing(false)}
                         >
                             Cancel
                         </button>
-                        <button 
-                            className={`${styles.button} ${styles.saveButton}`} 
+                        <button
+                            className={`${styles.button} ${styles.saveButton}`}
                             onClick={handleSave}
                         >
                             Save
@@ -144,36 +144,39 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                             <span className={styles.expandIcon}>
                                 {isExercisesVisible ? '↑' : '↓'}
                             </span>
-                        </p>   
+                        </p>
                     </div>
 
-                    {isExercisesVisible && 
-                    <div>
-                        {routine.exercises.map((exercise, index) => (
-                        <div key={index} className={styles.exercise}>
-                            <span>{exercise.name}</span> {exercise.setsGoal} sets {exercise.reps} reps {exercise.weight} kg
+                    {isExercisesVisible &&
+                        <div>
+                            {routine.exercises.map((exercise, index) => (
+                                <div key={index} className={styles.exercise}>
+                                    <span className={styles.exerciseName}>{exercise.name}</span>
+                                    <span className={styles.sets}>{exercise.setsGoal} </span>sets
+                                    <span className={styles.reps}>{exercise.reps} </span>reps
+                                    <span className={styles.weight}>{exercise.weight} </span>kg
+                                </div>
+                            ))}
                         </div>
-                    ))} 
-                    </div>
                     }
-                    
+
                     <div className={styles.buttonContainer}>
-                        <button 
-                            className={`${styles.button} ${styles.deleteButton}`} 
+                        <button
+                            className={`${styles.button} ${styles.deleteButton}`}
                             onClick={onDelete}
                         >
                             Delete Routine
                         </button>
 
-                        <button 
-                            className={`${styles.button} ${styles.saveButton}`} 
+                        <button
+                            className={`${styles.button} ${styles.saveButton}`}
                             onClick={() => setIsEditing(true)}
                         >
                             Edit Routine
                         </button>
 
-                        <button 
-                            className={`${styles.button} ${styles.addToTodayButton}`} 
+                        <button
+                            className={`${styles.button} ${styles.addToTodayButton}`}
                             onClick={() => onAddToToday(routine)}
                         >
                             Add to Today's Workout

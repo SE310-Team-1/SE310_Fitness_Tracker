@@ -7,6 +7,7 @@ import {
     YAxis,
     Tooltip,
 } from "recharts";
+import styles from '../module_CSS/GraphGenerator.module.css';
 
 /* 
     GenerateGraph() returns a Recharts ResponsiveContainer wrapping a line chart representing the
@@ -22,18 +23,27 @@ import {
 */
 function GenerateGraph({ data }) {
     return (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={300} className={styles.rechartWrapper}>
             <LineChart data={data}>
                 <Line
                     type="monotone"
                     dataKey="score"
-                    stroke="#8884d8"
-                    strokeWidth={3}
+                    stroke="#E10000"
+                    strokeWidth={2}
+                    dot={{ stroke: "#fff", strokeWidth: 1, r: 4}}
                 />
-                <CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
+                <CartesianGrid className={styles["rechartsCartesianGrid"]}/>
+                <XAxis dataKey="date" className={styles["recharts-cartesian-axis-tick"]}/>
+                <YAxis className={styles["recharts-cartesian-axis-tick"]}/>
+                <Tooltip 
+                    contentStyle={{
+                        backgroundColor: "#333333",  // Dark background for tooltip
+                        borderRadius: "4px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                    }}
+                    labelStyle={{ color: "#fff" }} // White text for the date label
+                    itemStyle={{ color: "#fff", fontWeight: "bold" }} // Red text for the score value
+                />
             </LineChart>
         </ResponsiveContainer>
     );

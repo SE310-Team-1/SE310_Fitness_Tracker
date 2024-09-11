@@ -5,6 +5,7 @@
     --input-bg-color: #4A4A4A;
     --primary-text-color: #ffffff;
     --secondary-text-color: #000000;
+    --tertiary-text-color: #A1A1A1;
     --button-bg-color: #E10000;
     --button-hover-bg-color: #b71c1c;
     --cancel-button-bg-color: #757575;
@@ -20,4 +21,8 @@
     --table-row-hover-bg-color: #333333;
     --table-border-color: #333333;
     --table-text-color: #FFFFFF;
+
+    /* Graph */
+    --graph-bg-color: #1e1e1e;
+    
 }

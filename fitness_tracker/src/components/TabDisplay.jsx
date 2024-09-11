@@ -53,36 +53,38 @@ function TabDisplay() {
   };
 
   return (
-    <Box sx={{ width: '100%', backgroundColor: '#121212' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          classes={{ indicator: styles.tabIndicator }}
-          aria-label="Routines and Today's Workout Tab"
-          centered={true}
-        >
-          <Tab
-            className={`${styles.tabRoot} ${value === 0 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
-            label="Routines"
-            {...a11yProps(0)}
-          />
-          <Tab
-            className={`${styles.tabRoot} ${value === 1 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
-            label="Today's Workout"
-            {...a11yProps(1)}
-          />
-        </Tabs>
+    <div className={styles.tabContainer}>
+      <Box sx={{ width: '100%', backgroundColor: '#121212' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            classes={{ indicator: styles.tabIndicator }}
+            aria-label="Routines and Today's Workout Tab"
+            centered={true}
+          >
+            <Tab
+              className={`${styles.tabRoot} ${value === 0 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              label="Routines"
+              {...a11yProps(0)}
+            />
+            <Tab
+              className={`${styles.tabRoot} ${value === 1 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              label="Today's Workout"
+              {...a11yProps(1)}
+            />
+          </Tabs>
+        </Box>
+
+        <CustomTabPanel value={value} index={0}>
+          <RoutinesDisplay onAddToTodayWorkout={handleAddToTodayWorkout} />
+        </CustomTabPanel>
+
+        <CustomTabPanel value={value} index={1}>
+          <ExercisesDisplay exercises={todayWorkout} />
+        </CustomTabPanel>
       </Box>
-
-      <CustomTabPanel value={value} index={0}>
-        <RoutinesDisplay onAddToTodayWorkout={handleAddToTodayWorkout} />
-      </CustomTabPanel>
-
-      <CustomTabPanel value={value} index={1}>
-        <ExercisesDisplay exercises={todayWorkout} />
-      </CustomTabPanel>
-    </Box>
+    </div>
   );
 }
 

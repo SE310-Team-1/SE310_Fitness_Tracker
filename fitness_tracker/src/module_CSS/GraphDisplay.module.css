@@ -1,0 +1,46 @@
+@import './colours.module.css';
+
+.graphContainer {
+    margin: 0 auto;
+    margin: 16px;
+    background-color: #121212;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.inputContainer {   
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* General input and select styles */
+.inputField,
+.selectField {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #000;
+    background-color: #f9f9f9;
+    margin: 8px;
+    margin-top: 0;
+
+}
+
+.inputField:focus,
+.selectField:focus {
+    border-color: #E10000;
+    outline: none;
+}
+
+/* Date input specific styles */
+#dateSelector {
+    width: 180px;
+}
+
+/* Select fields specific styles */
+#muscleGroup,
+#periodDropDown {
+    width: 160px;
+}

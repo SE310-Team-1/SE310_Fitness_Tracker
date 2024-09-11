@@ -1,0 +1,24 @@
+@import './colours.module.css';
+
+.rechartWrapper {
+  margin: 0 auto;
+  background-color: var(--graph-bg-color);
+}
+
+.rechartWrapper:hover {
+  box-shadow: 8px 4px 8px #333333;
+  transition: box-shadow .2s ease-in;
+}
+
+.rechartsCartesianGrid {
+  stroke: #4A4A4A;
+}
+
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick line {
+  stroke: #fff;
+}
+
+.recharts-cartesian-axis-tick text {
+  fill: #fff;
+}
