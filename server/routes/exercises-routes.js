@@ -32,9 +32,9 @@ router.put('/edit/:name/:newname/:muscle_group', editExercise)
 router.delete('/delete/:name', deleteExercise)
 
 //Delete an existing set from exercise history
-router.delete('/delete/:name/:date/:set', deleteExerciseHistory)
+router.delete('/:name/:date/:set', deleteExerciseHistory)
 
-//edit a logged set of an exercise
-router.put('/edit/log/:name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score', editSet)
+//edit a logged set of an exercise pass the params must have atleast one and it will just change that one :name/:date/:set/:newName/:newDate/:newSet/:weight/:rep/:score
+router.put('/log', editSet)
 
 export default router;

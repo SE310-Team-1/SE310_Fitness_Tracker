@@ -35,7 +35,7 @@ const exercisesAllHistory = (req, res) => {
 
 // Retrieve all exercises in one day
 const exercisesDay = (req, res) => {
-    const date = req.params.date
+    const date = req.body.date
 
     knex
         .select('*')
@@ -53,7 +53,7 @@ const exercisesDay = (req, res) => {
 // Retrieve one exercise by name, date and sets
 const exerciseByNameDateAndSets = (req, res) => {
 
-    const { name, date, sets } = req.params
+    const { name, date, sets } = req.body
 
     knex
         .select('name', 'date', 'sets', 'reps', 'weight', 'score')
@@ -76,7 +76,7 @@ const exerciseByNameDateAndSets = (req, res) => {
 
 
 const getScoreByDate = (req, res) => {
-    const { date } = req.params
+    const { date } = req.body
     knex
         .select('exercises.muscle_group', 'exercises_history.date').sum('exercises_history.score')
         .from('exercises_history')
@@ -102,7 +102,7 @@ const getScoreByDate = (req, res) => {
 
 //creates a new exercise
 const createExercise = (req, res) => {
-    const { name, muscle_group } = req.params
+    const { name, muscle_group } = req.body
 
 
     knex('exercises')
@@ -127,7 +127,7 @@ const createExercise = (req, res) => {
 
 //logs new exercise Set
 const logExerciseSet = (req, res) => {
-    const { name, date, set, weight, rep, score } = req.params
+    const { name, date, set, weight, rep, score } = req.body
 
 
     knex('exercises_history')
@@ -158,7 +158,7 @@ const logExerciseSet = (req, res) => {
 
 //deletes an existing exercise
 const deleteExercise = (req, res) => {
-    const { name } = req.params
+    const { name } = req.body
 
     knex('exercises')
         .where('name', name)
@@ -178,7 +178,7 @@ const deleteExercise = (req, res) => {
 
 //deletes an existing set from exercise history
 const deleteExerciseHistory = (req, res) => {
-    const { name, date, set } = req.params
+    const { name, date, set } = req.body
 
     knex('exercises_history')
         .where('name', name)
@@ -199,9 +199,9 @@ const deleteExerciseHistory = (req, res) => {
 }
 
 const editExercise = (req, res) => {
-    const name = req.params.name
-    let newName = req.params.newname
-    let result = req.params.muscle_group;
+    const name = req.body.name
+    let newName = req.body.newname
+    let result = req.body.muscle_group;
 
     knex('exercises').where('exercises.name', name)
         .update({
@@ -224,15 +224,7 @@ const editExercise = (req, res) => {
 }
 
 const editSet = (req, res) => {
-    let name = req.params.name
-    let date = req.params.date
-    let set = req.params.set
-    let newName = req.params.newName
-    let newDate = req.params.newDate
-    let newSet = req.params.newSet
-    let weight = req.params.weight
-    let rep = req.params.rep
-    let score = req.params.score
+    const { name, date, set, newName, newDate, newSet, weight, rep, score } = req.body;
 
     knex('exercises_history')
 

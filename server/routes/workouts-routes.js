@@ -6,17 +6,29 @@ import * as workoutsController from '../controllers/workouts-controller.js';
 
 const router = express.Router()
 
-// Get all workouts
-router.get('/all', workoutsController.workoutsAll)
+// Get all workouts of a user
+router.get('/workouts', workoutsController.workoutsAll);
 
-// Get workout by date, in format 'YYYY-MM-DD'
-router.get('/:date', workoutsController.workoutByDate)
+// Get workout by id
+router.get('/:id', workoutsController.workoutByDate);
 
-router.post('/create/:date', workoutsController.createWorkout)
+//create a workout with a given date.
+router.post('/', workoutsController.createWorkout);
 
-router.delete('/delete/:date', workoutsController.deleteWorkout)
+//delete workout of a given id 
+router.delete('/', workoutsController.deleteWorkout);
 
-router.put('/edit/:date/:newDate',workoutsController.editWorkout);
+//edit existing workout of an id 
+router.put('/',workoutsController.editWorkout);
+
+//add a list of routines to the workout of a given id:
+router.put('/routines' , workoutsController.addRoutines );
+
+//gets the list of the routines for the specified user 
+router.get('/routines' , workoutsController.getRoutines);
+//takes in a list of routine ids and removes those from the workout
+router.delete('/routines' , workoutsController.deleteRoutines)
+
 
 export default router;
 

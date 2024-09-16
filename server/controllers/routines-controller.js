@@ -2,11 +2,12 @@
 import knex from './../db.js';
 
 // Retrieve all routines
-const routinesAll = (req, res) => {
+const getRoutines = (req, res) => {
     // Get all routines from database
     knex
         .select('*') // select all routines
-        .from('routines') // from 'routines' table
+        .from('routines')// from 'routines' table
+        .where('user_id' , req.session.user.id) //that matches our users id 
         .then(userData => {
             // Send routines extracted from database in response
             res.json(userData)
@@ -19,17 +20,16 @@ const routinesAll = (req, res) => {
 }
 
 // Retrieve one routine by name and date
-const routineByNameAndDate = (req, res) => {
-    // Get name and date values from URL
-    const name = req.params.name
-    const date = req.params.date
+const getRoutine = (req, res) => {
+    //get the id from the params
+    const id = req.params.id;
 
     // Get routine from database
     knex
         .select('*') // select all records
         .from('routines') // from 'routines' table
-        .where('name', name) // where name is equal to name
-        .where('date', date) // where date is equal to date
+        .where('id', id) // where name is equal to name
+        .where('user_id', req.session.user.id) // where date is equal to date
         .then(userData => {
             if (userData.length > 0) {
                 // Send routine extracted from database in response
@@ -47,17 +47,21 @@ const routineByNameAndDate = (req, res) => {
 }
 
 //creates a new routine
-const createRoutine = (req, res) => {
-    const {name,date} = req.params
+const createRoutine = async (req, res) => {
+    const {name} = req.body
+    const user_id = req.session.user.id
 
+    const workout = await knex('workouts').select('id').where('id', req.body.workout_id).first();
 
     knex('routines')
         .insert({
             'name': name,
-            'date': date
+            // 'date': date,
+            'user_id' : user_id ,
+            // 'workout_id' : workout
         })
         //if error occurs then drops insert apon error
-        .onConflict(['name','date']).ignore()
+        // .onConflict(['name','date']).ignore()
         .returning('name')
         .then(name => {
             if (name.length > 0) {
@@ -73,40 +77,44 @@ const createRoutine = (req, res) => {
 
 //edit a routine allowing its name and date to change
 const editRoutine = (req, res) => {
-    const name = req.params.name
-    let date = req.params.date
-    let newName = req.params.newName
-    let newDate = req.params.newDate;
+    const { id } = req.params; // Get routine ID from the request params
+    const { name } = req.body; // Fields that might be updated
 
-    knex('routines').where({'name': name,
-        'date': date
-    })
-        .update({
-            'name': newName,
-            'date': newDate
-            },['name'])
+    // Build the update object with only the fields that are provided
+    let updateFields = {};
 
+    if (name) updateFields.name = name; // Add new name if provided
+
+    // Check if there is something to update
+    if (Object.keys(updateFields).length === 0) {
+        return res.status(400).json({ message: 'No fields to update' });
+    }
+
+    // Update the routine only with the fields provided
+    knex('routines')
+        .where({ 'id': id, 'user_id': req.session.user.id }) // Make sure we update the right routine and user
+        .update(updateFields, ['id', 'name']) // Return the updated fields
         .then(data => {
             if (data.length > 0) {
-                res.status(200).json({ message: 'Routine was edited successfully'});
+                res.status(200).json({ message: 'Routine updated successfully', routine: data[0] });
             } else {
-                res.status(404).json({ message: `no Routine with name: ${name} on date: ${date}` });
+                res.status(404).json({ message: `Routine with ID ${id} not found or you do not have permission to edit it` });
             }
         })
-
         .catch(error => {
-            // Error: Something went wrong
-            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
+            // Handle errors
+            res.status(500).json({ message: 'An error occurred while editing the routine', error: error.message });
         });
-}
+};
 
 //deletes an existing routine
 const deleteRoutine = (req, res) => {
-    const {name, date} = req.params
+    const { id } = req.params;
+
   
     knex('routines')
-    .where('name', name)
-    .where('date', date)
+    .where('id' , id)
+    .where('user_id', req.session.user.id)
       .del()
       .then(result => {
         if (result) {
@@ -127,6 +135,7 @@ const getAllRoutineInfo = (req, res) => {
         .join('exercises_history', 'routines.date', '=', 'exercises_history.date')
         .join('exercises', 'exercises_history.name', '=', 'exercises.name')
         .select('routines.name as routine_name', 'routines.date', 'exercises_history.sets', 'exercises.name as exercise_name', 'exercises_history.weight', 'exercises.muscle_group')
+        .where('user_id', req.session.user.id)
         .then(result => {
             // Send the query result back as a JSON response
             res.status(200).json(result);
@@ -141,8 +150,8 @@ const getAllRoutineInfo = (req, res) => {
 
 
 export {
-    routinesAll,
-    routineByNameAndDate,
+    getRoutines,
+    getRoutine,
     createRoutine,
     deleteRoutine,
     editRoutine,
