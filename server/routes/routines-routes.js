@@ -1,7 +1,6 @@
 // The routes for the routines
 import express from 'express';
 import * as routinesController from '../controllers/routines-controller.js';
-import { isAuthenticated } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -37,4 +37,15 @@ const signUserUp = async (req, res) => {
     }
 };
 
-export default { logUserIn, signUserUp }
+const logUserOut = (req, res) => {
+    req.session.destroy((err)=> {
+        if(err){
+            return res.status(500).json({ error: 'An error occurred while logging out.' });
+        }
+        res.clearCookie('connect.sid');
+        res.status(200).json({ message: 'Logout successful.' });
+    })
+    
+}
+
+export default { logUserIn, signUserUp ,logUserOut}

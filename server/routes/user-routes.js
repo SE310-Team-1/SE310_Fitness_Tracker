@@ -7,5 +7,7 @@ router.post("/login" , userController.logUserIn);
 
 router.post("/signup" , userController.signUserUp);
 
+router.post('/logout' , userController.logUserOut);
+
 
 export default router
