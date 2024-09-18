@@ -9,5 +9,4 @@ router.post("/signup" , userController.signUserUp);
 
 router.post('/logout' , userController.logUserOut);
 
-
 export default router

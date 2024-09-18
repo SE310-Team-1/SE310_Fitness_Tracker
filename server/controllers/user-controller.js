@@ -5,7 +5,8 @@ const logUserIn = async (req, res) => {
     
     try {
         if (await userService.validateCredentials(username, password)) {
-            const user_id = userService.getUserId(username);
+            const user_id = await userService.getUserId(username);
+            console.log("id returned from function was " + user_id);
             req.session.user = { user_id: user_id }; // Store user info in session
             res.status(200).json({ message: 'Login successful' }); 
         } else {

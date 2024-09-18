@@ -25,6 +25,9 @@ router.put('/:id',routinesController.editRoutine);
 //get all routine information for the specified user
 router.get('/info-list', routinesController.getAllRoutineInfo);
 
+// Get all exercise IDs for a routine
+router.get('/:id/exercises', routinesController.getExerciseIdsForRoutine);
+
 
 
 export default router;

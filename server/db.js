@@ -45,8 +45,11 @@ knex.schema
         table.increments('id').primary();
         table.string('name')
         table.string('muscle_group')
+        table.integer('Sets')
+        table.float('weight')
         table.integer('user_id').unsigned().notNullable()
         table.integer('routine_id').unsigned().notNullable(),
+        
 
         table.foreign('user_id').references('users.id');
         table.foreign('routine_id').references('routine.id');
@@ -77,9 +80,10 @@ knex.schema
       // If no "workouts" table exists
       // create new, with only "date" as a column and primary key. this is because we will be storing the exercises in a separate table
       return knex.schema.createTable('workouts', (table) => {
-        // table.increments('id').primary();
+        table.increments('id').primary();
         table.date('date');
-        table.integer('user_id').unsigned().notNullable().primary();
+        table.integer('user_id').unsigned().notNullable();
+        table.integer('score').defaultTo(0);
 
         // Set up foreign key relationship to "users"
         table.foreign('user_id').references('users.id');
@@ -112,11 +116,10 @@ knex.schema
         table.string('name').notNullable();
         // table.date('date').notNullable();
         table.integer('user_id').unsigned().notNullable();
-        // table.integer('workout_id').unsigned().notNullable();
 
         //foreign key relationships
         table.foreign('user_id').references('users.id');
-        table.foreign('workout_id').references('workouts.id');
+
       })
         .then(() => {
           // Log success message
@@ -135,60 +138,25 @@ knex.schema
   })
 
 
-// Create a table in the database called "exercises_history"
-knex.schema
-  .hasTable('exercises_history')
-  .then((exists) => {
-    if (!exists) {
-      return knex.schema.createTable('exercises_history', (table) => {
-        table.increments('id').primary();
-        table.string('name').notNullable();
-        table.integer('workout_id').unsigned().notNullable();
-        table.date('date').notNullable();
-        table.integer('sets').notNullable();
-        table.float('weight');
-        table.integer('reps');
-        table.integer('score');
-        table.integer('user_id').unsigned().notNullable();
-        
-        // Define foreign keys
-        table.foreign('name').references('exercises.name');
-        table.foreign('workout_id').references('workouts.id');
-        table.foreign('user_id').references('users.id');
-      })
-        .then(() => {
-          // Log success message
-          console.log('Table \'exercises_history\' created')
-        })
-        .catch((error) => {
-          console.error(`There was an error creating table: ${error}`)
-        })
-    }
-  })
-  .then(() => {
-    // Log success message
-    console.log('created exercises_history table')
-  })
-  .catch((error) => {
-    console.error(`There was an error setting up the database: ${error}`)
-  })
 
-  // Create a join table between "workouts" and "routines"
 knex.schema
-.hasTable('workout_routines')
+.hasTable('workout_exercises')
 .then((exists) => {
   if (!exists) {
-    return knex.schema.createTable('workout_routines', (table) => {
-      table.increments('id').primary(); // Primary key for the join table
+    return knex.schema.createTable('workout_exercises', (table) => {
+      table.increments('id').primary();
       table.integer('workout_id').unsigned().notNullable();
-      table.integer('routine_id').unsigned().notNullable();
-
+      table.integer('exercise_id').unsigned().notNullable();
+      table.integer('user_id').unsigned().notNullable();
+      table.integer('sets_completed').defaultTo(0)
+      
+      // Define the composite primary key
+      // table.primary(['workout_id', 'exercise_id', 'user_id']);
       // Foreign key relationships
+      table.foreign('user_id').references('users.id');
       table.foreign('workout_id').references('workouts.id');
-      table.foreign('routine_id').references('routines.id');
 
-      // Ensure a unique combination of workout and routine
-      table.unique(['workout_id', 'routine_id']);
+      
     })
       .then(() => {
         console.log('Table \'workout_routines\' created');
@@ -204,6 +172,9 @@ knex.schema
 .catch((error) => {
   console.error(`There was an error setting up the database: ${error}`);
 });
+
+
+
 
 
 

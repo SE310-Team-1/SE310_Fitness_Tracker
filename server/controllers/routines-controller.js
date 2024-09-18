@@ -7,7 +7,7 @@ const getRoutines = (req, res) => {
     knex
         .select('*') // select all routines
         .from('routines')// from 'routines' table
-        .where('user_id' , req.session.user.id) //that matches our users id 
+        .where('user_id' , req.session.user.user_id) //that matches our users id 
         .then(userData => {
             // Send routines extracted from database in response
             res.json(userData)
@@ -22,14 +22,14 @@ const getRoutines = (req, res) => {
 // Retrieve one routine by name and date
 const getRoutine = (req, res) => {
     //get the id from the params
-    const id = req.params.id;
+    const id = req.params.user_id;
 
     // Get routine from database
     knex
         .select('*') // select all records
         .from('routines') // from 'routines' table
         .where('id', id) // where name is equal to name
-        .where('user_id', req.session.user.id) // where date is equal to date
+        .where('user_id', req.session.user.user_id) // where date is equal to date
         .then(userData => {
             if (userData.length > 0) {
                 // Send routine extracted from database in response
@@ -48,10 +48,10 @@ const getRoutine = (req, res) => {
 
 //creates a new routine
 const createRoutine = async (req, res) => {
-    const {name} = req.body
-    const user_id = req.session.user.id
+    const {name , workout_id} = req.body
+    const user_id = req.session.user.user_id
 
-    const workout = await knex('workouts').select('id').where('id', req.body.workout_id).first();
+    // const workout = await knex('workouts').select('id').where('id', workout_id).first();
 
     knex('routines')
         .insert({
@@ -92,7 +92,7 @@ const editRoutine = (req, res) => {
 
     // Update the routine only with the fields provided
     knex('routines')
-        .where({ 'id': id, 'user_id': req.session.user.id }) // Make sure we update the right routine and user
+        .where({ 'id': id, 'user_id': req.session.user.user_id }) // Make sure we update the right routine and user
         .update(updateFields, ['id', 'name']) // Return the updated fields
         .then(data => {
             if (data.length > 0) {
@@ -114,7 +114,7 @@ const deleteRoutine = (req, res) => {
   
     knex('routines')
     .where('id' , id)
-    .where('user_id', req.session.user.id)
+    .where('user_id', req.session.user.user_id)
       .del()
       .then(result => {
         if (result) {
@@ -135,7 +135,7 @@ const getAllRoutineInfo = (req, res) => {
         .join('exercises_history', 'routines.date', '=', 'exercises_history.date')
         .join('exercises', 'exercises_history.name', '=', 'exercises.name')
         .select('routines.name as routine_name', 'routines.date', 'exercises_history.sets', 'exercises.name as exercise_name', 'exercises_history.weight', 'exercises.muscle_group')
-        .where('user_id', req.session.user.id)
+        .where('user_id', req.session.user.user_id)
         .then(result => {
             // Send the query result back as a JSON response
             res.status(200).json(result);
@@ -147,6 +147,28 @@ const getAllRoutineInfo = (req, res) => {
         });
 
 };
+// Get all exercise IDs for a specific routine
+const getExerciseIdsForRoutine = (req, res) => {
+    const { id } = req.params; // Routine ID
+    const user_id = req.session.user.user_id;
+
+    knex('exercises')
+        .select('id')
+        .where({
+            routine_id: id,
+            user_id: user_id
+        })
+        .then(exercises => {
+            if (exercises.length > 0) {
+                res.status(200).json({ exerciseIds: exercises.map(exercise => exercise.id) });
+            } else {
+                res.status(404).json({ message: 'No exercises found for this routine or you do not have access.' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Error retrieving exercises', error: error.message });
+        });
+};
 
 
 export {
@@ -155,5 +177,6 @@ export {
     createRoutine,
     deleteRoutine,
     editRoutine,
-    getAllRoutineInfo
+    getAllRoutineInfo,
+    getExerciseIdsForRoutine
 }
