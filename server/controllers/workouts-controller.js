@@ -155,7 +155,7 @@ const addExercises = async (req, res) => {
 
 
 const getExercises = async (req, res) => {
-  const { id } = req.params; // Expecting workoutId in the URL parameters
+  const { id } = req.params; 
   console.log("id is " + id)
   if (!id) {
     return res.status(400).json({ error: 'Workout ID is required.' });
@@ -165,8 +165,8 @@ const getExercises = async (req, res) => {
     const exercises = await knex('workout_exercises as we')
       .join('exercises as e', 'e.id', 'we.exercise_id')
       .where('we.workout_id', id)
-      .andWhere('we.user_id', req.session.user.user_id) // Use session user ID for filtering
-      .select('e.id', 'e.name', 'e.muscle_group', 'e.Sets', 'e.weight', 'we.sets_completed'); // Including sets_completed from workout_exercises
+      .andWhere('we.user_id', req.session.user.user_id) 
+      .select('e.id', 'e.name', 'e.muscle_group', 'e.Sets', 'e.weight', 'we.sets_completed');
 
     if (exercises.length === 0) {
       return res.status(404).json({ message: 'No exercises found for this workout.' });
@@ -240,5 +240,6 @@ export {
   deleteWorkout,
   addExercises,
   deleteExercises,
-  deleteExercise
+  deleteExercise,
+  setScore
 }

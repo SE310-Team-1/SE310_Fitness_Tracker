@@ -12,6 +12,8 @@ router.get('/workouts', workoutsController.workoutsAll);
 // Get workout by id
 router.get('/:id', workoutsController.workoutByDate);
 
+router.patch('/score' , workoutsController.setScore);
+
 //create a workout with a given date.
 router.post('/', workoutsController.createWorkout);
 
