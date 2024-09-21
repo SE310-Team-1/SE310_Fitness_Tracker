@@ -1,284 +1,71 @@
-// This is the controller for the routines route. The controller is responsible for handling the request and response.
 import knex from './../db.js';
 
-// Retrieve all exercises
-const exercisesAll = (req, res) => {
-    knex
-        .select('*')
-        .from('exercises')
-        .then(userData => {
-
-            res.json(userData)
-        })
-        .catch(err => {
-            // Send a error message in response
-            res.json({ message: `There was an error retrieving exercises: ${err}` })
-        }
-        )
-}
-
-// Retrieve all exercises in history
-const exercisesAllHistory = (req, res) => {
-    knex
-        .select('*')
-        .from('exercises_history')
-        .orderBy('date', 'asc')
-        .then(userData => {
-            res.json(userData)
-        })
-        .catch(err => {
-            res.json({ message: `There was an error retrieving exercises: ${err}` })
-        }
-        )
-}
-
-
-// Retrieve all exercises in one day
-const exercisesDay = (req, res) => {
-    const date = req.params.date
-
-    knex
-        .select('*')
-        .from('exercises_history')
-        .where('date', date)
-        .then(userData => {
-            res.json(userData)
-        })
-        .catch(err => {
-            res.json({ message: `There was an error retrieving exercises: ${err}` })
-        }
-        )
-}
-
-// Retrieve one exercise by name, date and sets
-const exerciseByNameDateAndSets = (req, res) => {
-
-    const { name, date, sets } = req.params
-
-    knex
-        .select('name', 'date', 'sets', 'reps', 'weight', 'score')
-        .from('exercises_history')
-        .where('name', name)
-        .where('date', date)
-        .where('sets', sets)
-
-
-        .then(userData => {
-            res.json(userData)   
-        })
-
-        .catch(err => {
-            res.status(500).json({ message: `There was an error retrieving exercise: ${err}` })
-        }
-        )
-
-}
-
-
-const getScoreByDate = (req, res) => {
-    const { date } = req.params
-    knex
-        .select('exercises.muscle_group', 'exercises_history.date').sum('exercises_history.score')
-        .from('exercises_history')
-
-
-        // Join with exercises table to get muscle group
-        .join('exercises', 'exercises_history.name', 'exercises.name')
-        .where('exercises_history.date', date)
-        .groupBy('exercises.muscle_group')
-
-
-        .then(userData => {
-            
-            res.json(userData)
-
-        })
-
-        .catch(err => {
-            res.status(500).json({ message: `There was an error retrieving exercise: ${err}` })
-        }
-        )
-}
-
-//creates a new exercise
+// Create a new exercise
 const createExercise = (req, res) => {
-    const { name, muscle_group } = req.params
-
+    const { name, muscle_group, routine_id } = req.body;
+    const user_id = req.session.user.user_id;
 
     knex('exercises')
         .insert({
-            'name': name,
-            'muscle_group': muscle_group
+            name,
+            muscle_group,
+            routine_id,
+            user_id
         })
-        //if error occurs then drops insert apon error
-        .onConflict('name').ignore()
-        .returning('name')
-        .then(name => {
-            if (name.length > 0) {
-                res.status(201).json({ message: 'Exercise added successfully' });
+        .then(() => {
+            res.status(201).json({ message: 'Exercise created successfully' });
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Error creating exercise', error: error.message });
+        });
+};
+
+// Update an existing exercise
+const updateExercise = (req, res) => {
+    const { id, name, muscle_group, routine_id } = req.body;
+    const user_id = req.session.user.user_id;
+
+    knex('exercises')
+        .where({ id, user_id }) 
+        .update({
+            name,
+            muscle_group,
+            routine_id
+        })
+        .then(result => {
+            if (result) {
+                res.status(200).json({ message: 'Exercise updated successfully' });
             } else {
-                res.status(200).json({ message: 'Exercise already exists, no new entry created' });
+                res.status(404).json({ message: 'Exercise not found or unauthorized' });
             }
         })
         .catch(error => {
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
+            res.status(500).json({ message: 'Error updating exercise', error: error.message });
         });
-}
+};
 
-//logs new exercise Set
-const logExerciseSet = (req, res) => {
-    const { name, date, set, weight, rep, score } = req.params
-
-
-    knex('exercises_history')
-        .insert({
-            'name': name,
-            'date': date,
-            'sets': set,
-            'weight': weight,
-            'reps': rep,
-            'score': score
-        })
-        //if conflict occurs then drops current insert apon error
-        .onConflict(['name', 'date', 'sets']).ignore()
-        .returning('name')
-        .then(name => {
-            if (name.length > 0) {
-                res.status(201).json({ message: 'Exercise set added successfully' });
-            } else {
-                res.status(200).json({ message: 'Conflicting exercise name, date of completion, or set number. no new entry created' });
-            }
-        })
-        .catch(error => {
-            // Error: Something went wrong
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
-        });
-}
-
-
-//deletes an existing exercise
+// Delete an exercise
 const deleteExercise = (req, res) => {
-    const { name } = req.params
+    const { name } = req.body;
+    const user_id = req.session.user.user_id;
 
     knex('exercises')
-        .where('name', name)
+        .where({ name, user_id }) 
         .del()
         .then(result => {
             if (result) {
                 res.status(200).json({ message: 'Exercise deleted successfully' });
             } else {
-                res.status(404).json({ message: 'Exercise not found' });
+                res.status(404).json({ message: 'Exercise not found or unauthorized' });
             }
         })
         .catch(error => {
-            res.status(500).json({ message: 'An error occurred while deleting an exercise', error: error.message });
+            res.status(500).json({ message: 'Error deleting exercise', error: error.message });
         });
+};
 
-}
-
-//deletes an existing set from exercise history
-const deleteExerciseHistory = (req, res) => {
-    const { name, date, set } = req.params
-
-    knex('exercises_history')
-        .where('name', name)
-        .where('date', date)
-        .where('set', set)
-        .del()
-        .then(result => {
-            if (result) {
-                res.status(200).json({ message: 'Set deleted successfully' });
-            } else {
-                res.status(404).json({ message: 'Set not found' });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'An error occurred while deleting a set', error: error.message });
-        });
-
-}
-
-const editExercise = (req, res) => {
-    const name = req.params.name
-    let newName = req.params.newname
-    let result = req.params.muscle_group;
-
-    knex('exercises').where('exercises.name', name)
-        .update({
-            'name': newName,
-            'muscle_group': result
-        }, ['name'])
-
-        .then(data => {
-            if (data.length > 0) {
-                res.status(200).json({ message: 'Exercise was edited successfully' });
-            } else {
-                res.status(404).json({ message: `no exercise with name ${name}` });
-            }
-        })
-
-        .catch(error => {
-            // Error: Something went wrong
-            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
-        });
-}
-
-const editSet = (req, res) => {
-    let name = req.params.name
-    let date = req.params.date
-    let set = req.params.set
-    let newName = req.params.newName
-    let newDate = req.params.newDate
-    let newSet = req.params.newSet
-    let weight = req.params.weight
-    let rep = req.params.rep
-    let score = req.params.score
-
-    knex('exercises_history')
-
-        .where({
-            'name': name,
-            'date': date,
-            'sets': set
-        })
-
-        .update({
-            'name': newName,
-            'date': newDate,
-            'sets': newSet,
-            'weight': weight,
-            'reps': rep,
-            'score': score
-        }, ['name'])
-
-
-
-        .then(data => {
-            if (data.length > 0) {
-                res.status(200).json({ message: 'Exercise was edited successfully' });
-            } else {
-                res.status(404).json({ message: `no set with name: ${name},date: ${date},and set number: ${set} ` });
-            }
-        })
-
-        .catch(error => {
-            // Error: Something went wrong
-            res.status(500).json({ message: `An error occurred while editing exercises`, error: error.message });
-        });
-}
-
-
-
-export{
-    exercisesAll,
-    exercisesAllHistory,
-    exercisesDay,
-    exerciseByNameDateAndSets,
+export {
     createExercise,
-    logExerciseSet,
-    deleteExercise,
-    deleteExerciseHistory,
-    editExercise,
-    editSet,
-    getScoreByDate
+    updateExercise,
+    deleteExercise
 };
