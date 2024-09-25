@@ -16,14 +16,32 @@ const PORT = 4001
 const app = express()
 
 // The following middleware ensures that the server is secure and can handle different types of requests
-app.use(session({
-    secret: 'your-secret-key', 
-    resave: false,
-    saveUninitialized: true, 
-    cookie: { secure: false } 
-}));
+// app.use(session({
+//     secret: 'your-secret-key', 
+//     resave: false,
+//     saveUninitialized: true, 
+//     cookie: { secure: false } 
+// }));
 // This is needed to handle requests from different origins. For React, this is needed because the React app runs on a different port than the server.
-app.use(cors())
+// app.use(cors())
+import dotenv from 'dotenv';
+dotenv.config();
+
+app.use(session({
+    secret: process.env.SESSION_SECRET, // Read from .env file
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+    }
+}));
+
+// CORS configuration
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow only the React app's origin
+    credentials: true,               // Allow cookies/sessions to be sent
+}));
+
 
 // This is needed to secure the server by setting various HTTP headers. It gives us some security enhancements by default.
 app.use(helmet())
