@@ -19,12 +19,14 @@
   background-color: #121212;
   min-height: 8vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   font-size: calc(12px + 2vmin);
   font-weight: bold;
   color: #F00000;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 
 .App-link {

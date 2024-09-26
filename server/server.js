@@ -33,6 +33,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
+        httpOnly: true  // Ensure cookies are inaccessible to JavaScript
     }
 }));
 
