@@ -1,4 +1,5 @@
 .form {
+    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,7 +15,7 @@
 
 .title {
     font-size: 2rem;
-    align-self: flex-start;
+    justify-self: flex-start;
     margin-top: -20px;
 }
 
@@ -58,5 +59,5 @@
 .link {
     color: var(--button-bg-color);
     text-decoration: none;
-    margin-top: 10px;
+    margin-top: -15px;
 }
