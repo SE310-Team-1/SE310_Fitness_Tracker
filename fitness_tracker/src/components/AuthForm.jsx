@@ -39,19 +39,19 @@ export default function AuthForm({ endpoint, title, buttonText, redirectTitleTex
     }
 
     return (
-        <form className={}>
-            <h2 className={}>{title}</h2>
-            <div className={}>
-                <label className={} htmlFor="username">Username</label>
-                <input className={} required type="username" onChange={(e) => { setUsername(e.target.value) }} value={username} />
+        <form className={styles.form}>
+            <h2 className={styles.title}>{title}</h2>
+            <div className={styles.inputdiv}>
+                <label className={styles.label} htmlFor="username">Username</label>
+                <input className={styles.input} required type="username" onChange={(e) => { setUsername(e.target.value) }} value={username} />
             </div>
-            <div className={}>
-                <label className={} htmlFor="password">Password</label>
-                <input className={} required type="password" onChange={(e) => { setPassword(e.target.value) }} value={password} />
+            <div className={styles.inputdiv}>
+                <label className={styles.label} htmlFor="password">Password</label>
+                <input className={styles.input} required type="password" onChange={(e) => { setPassword(e.target.value) }} value={password} />
             </div>
-            <button className={} onClick={(e) => handleSubmit(e)}>{buttonText}</button>
-            <p className={}>{redirectTitleText}</p>
-            <Link to={redirectLink} className={}>{redirectText}</Link>
+            <button className={styles.button} onClick={(e) => handleSubmit(e)}>{buttonText}</button>
+            <p>{redirectTitleText}</p>
+            <Link to={redirectLink} className={styles.link}>{redirectText}</Link>
         </form>
     );
 }

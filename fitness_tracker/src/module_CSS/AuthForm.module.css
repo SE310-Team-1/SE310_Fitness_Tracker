@@ -1,0 +1,62 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    border-radius: 20px;
+    background-color: var(--primary-bg-color);
+    color: var(--primary-text-color);
+    border-width: 2px;
+    border-color: red;
+    border-style: solid;
+}
+
+.title {
+    font-size: 2rem;
+    align-self: flex-start;
+    margin-top: -20px;
+}
+
+.input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--input-bg-color);
+    color: var(--primary-text-color);
+    border: none;
+}
+
+.label {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.inputdiv {
+    display: flex;
+    flex-direction: column;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--primary-text-color);
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+.link {
+    color: var(--button-bg-color);
+    text-decoration: none;
+    margin-top: 10px;
+}
