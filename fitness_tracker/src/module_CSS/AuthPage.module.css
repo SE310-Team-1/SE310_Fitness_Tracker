@@ -1,0 +1,9 @@
+@import '../module_CSS/colours.module.css';
+
+.background {
+    background-color: var(--dark-bg-color);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
