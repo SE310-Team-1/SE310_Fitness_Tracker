@@ -10,7 +10,7 @@ const Dashboard = () => {
     useEffect(() => {
         console.log("useEffect called");
         axios
-            .get("http://localhost:4001/workout/workouts", { withCredentials: true, })
+            .get("http://localhost:4001/workout", { withCredentials: true, })
             .then((response) => {
 
                 setWorkouts(response.data);
