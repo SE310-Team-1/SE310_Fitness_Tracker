@@ -2,18 +2,21 @@ import knex from './../db.js';
 
 // Create a new exercise
 const createExercise = (req, res) => {
-    const { name, muscle_group, routine_id } = req.body;
+    const { name, muscle_group, sets, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
     knex('exercises')
         .insert({
-            name,
-            muscle_group,
-            routine_id,
-            user_id
+            "name": name,
+            "muscle_group": muscle_group,
+            "sets": sets,
+            "weight": weight,
+            "user_id": user_id,
+            "routine_id": routine_id 
         })
-        .then(() => {
-            res.status(201).json({ message: 'Exercise created successfully' });
+        .returning('id')
+        .then((id) => {
+            res.status(201).json({ message: 'Exercise created successfully', id: id });
         })
         .catch(error => {
             res.status(500).json({ message: 'Error creating exercise', error: error.message });
