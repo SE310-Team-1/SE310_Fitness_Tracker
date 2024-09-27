@@ -45,7 +45,7 @@ knex.schema
         table.increments('id').primary();
         table.string('name')
         table.string('muscle_group')
-        table.integer('Sets')
+        table.integer('sets')
         table.float('weight')
         table.integer('user_id').unsigned().notNullable()
         table.integer('routine_id').unsigned().notNullable(),
@@ -159,7 +159,7 @@ knex.schema
       
     })
       .then(() => {
-        console.log('Table \'workout_routines\' created');
+        console.log('Table \'workout_exercises\' created');
       })
       .catch((error) => {
         console.error(`There was an error creating table: ${error}`);
@@ -167,7 +167,7 @@ knex.schema
   }
 })
 .then(() => {
-  console.log('created workout_routines table');
+  console.log('created workout_exercises table');
 })
 .catch((error) => {
   console.error(`There was an error setting up the database: ${error}`);
