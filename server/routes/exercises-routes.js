@@ -9,10 +9,10 @@ router.post('/', createExercise);
 // Retrive an exercise by id
 router.get('/:id', getExercise);
 
-// Update an existing exercise
-router.patch('/', updateExercise);
+// Update an existing exercise by id
+router.patch('/:id', updateExercise);
 
 // Delete an existing exercise by id
-router.delete('/delete/:id', deleteExercise);
+router.delete('/:id', deleteExercise);
 
 export default router;

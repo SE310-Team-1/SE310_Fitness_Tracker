@@ -23,18 +23,22 @@ const createExercise = (req, res) => {
         });
 };
 
-// Retrive an exercise by id
+// Retrive an exercise by id. To facilitate getting multiple exercises, the id can be a comma separated list of IDs
 const getExercise = (req, res) => {
     const { id } = req.params;
     const user_id = req.session.user.user_id;
 
+    // If the id is a comma separated list of IDs, split it into an array
+    const ids = id.split(',');
+
     knex('exercises')
-        .where({ id, user_id })
+        .whereIn('id', ids)
+        .where('user_id', user_id)
         .then(exercise => {
             if (exercise.length > 0) {
                 res.status(200).json(exercise);
             } else {
-                res.status(404).json({ message: 'Exercise not found or unauthorized' });
+                res.status(404).json({ message: 'Exercises not found or unauthorized' });
             }
         })
         .catch(error => {
@@ -44,6 +48,7 @@ const getExercise = (req, res) => {
 
 // Update an existing exercise
 const updateExercise = (req, res) => {
+    const { id } = req.params;
     const { name, muscle_group, sets, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
