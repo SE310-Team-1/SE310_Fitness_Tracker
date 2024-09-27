@@ -1,15 +1,18 @@
 import express from 'express';
-import { createExercise, updateExercise, deleteExercise } from '../controllers/exercises-controller.js';
+import { createExercise, getExercise, updateExercise, deleteExercise } from '../controllers/exercises-controller.js';
 
 const router = express.Router();
 
 // Create a new exercise
 router.post('/', createExercise);
 
-// Update an existing exercise
-router.patch('/', updateExercise);
+// Retrive an exercise by id
+router.get('/:id', getExercise);
 
-// Delete an existing exercise by name
-router.delete('/delete/:name', deleteExercise);
+// Update an existing exercise by id
+router.patch('/:id', updateExercise);
+
+// Delete an existing exercise by id
+router.delete('/:id', deleteExercise);
 
 export default router;

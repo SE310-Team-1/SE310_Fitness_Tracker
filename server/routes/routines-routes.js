@@ -4,7 +4,7 @@ import * as routinesController from '../controllers/routines-controller.js';
 
 const router = express.Router();
 
-// route path : /routines
+// route path : /routine
 
 // Get all routines
 router.get('/', routinesController.getRoutines);
@@ -12,18 +12,14 @@ router.get('/', routinesController.getRoutines);
 // Get a routine by routine id
 router.get('/:id', routinesController.getRoutine);
 
-// create a new routine with name and date
+// create a new routine with name
 router.post('/', routinesController.createRoutine);
 
 //delete a routine by id
 router.delete('/:id', routinesController.deleteRoutine);
 
-
 //edit a routine / must provide atleast one request body value alongside the id of the routine to edit
 router.put('/:id',routinesController.editRoutine);
-
-//get all routine information for the specified user
-router.get('/info-list', routinesController.getAllRoutineInfo);
 
 // Get all exercise IDs for a routine
 router.get('/:id/exercises', routinesController.getExerciseIdsForRoutine);

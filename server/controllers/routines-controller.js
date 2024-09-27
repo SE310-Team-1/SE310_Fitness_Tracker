@@ -19,24 +19,25 @@ const getRoutines = (req, res) => {
         )
 }
 
-// Retrieve one routine by name and date
+// Retrieve routine by id. 
 const getRoutine = (req, res) => {
-    //get the id from the params
-    const id = req.params.user_id;
+    // Get exercise ID from request
+    const { id } = req.params;
+
 
     // Get routine from database
     knex
         .select('*') // select all records
         .from('routines') // from 'routines' table
-        .where('id', id) // where name is equal to name
-        .where('user_id', req.session.user.user_id) // where date is equal to date
+        .where('id', id) // where id is equal to routine ID
+        .where('user_id', req.session.user.user_id) // where user_id is equal to the user's ID
         .then(userData => {
             if (userData.length > 0) {
                 // Send routine extracted from database in response
                 res.json(userData)
             } else {
                 // Send a error message in response
-                res.status(404).json({ message: `Routine with name ${name} and date ${date} not found.` })
+                res.status(404).json({ message: `Routine with IDs ${ids} not found or unauthorised` })
             }
         })
         .catch(err => {
@@ -46,36 +47,26 @@ const getRoutine = (req, res) => {
         )
 }
 
-//creates a new routine
+// Creates a new routine
 const createRoutine = async (req, res) => {
-    const {name , workout_id} = req.body
+    const {name} = req.body
     const user_id = req.session.user.user_id
-
-    // const workout = await knex('workouts').select('id').where('id', workout_id).first();
 
     knex('routines')
         .insert({
             'name': name,
-            // 'date': date,
             'user_id' : user_id ,
-            // 'workout_id' : workout
         })
-        //if error occurs then drops insert apon error
-        // .onConflict(['name','date']).ignore()
-        .returning('name')
-        .then(name => {
-            if (name.length > 0) {
-                res.status(201).json({ message: 'routine added successfully'});
-            } else {
-                res.status(200).json({ message: 'routine already exists, no new entry created' });
-            }
+        .returning('id')
+        .then(id => {
+            res.status(201).json({ message: `Routine created successfullys`, id: id[0] });
         })        
         .catch(error => {
             res.status(500).json({ message: `An error occurred while creating a new routine`, error: error.message });
         });
 }
 
-//edit a routine allowing its name and date to change
+// Edit a routine allowing its name to be updated
 const editRoutine = (req, res) => {
     const { id } = req.params; // Get routine ID from the request params
     const { name } = req.body; // Fields that might be updated
@@ -107,46 +98,38 @@ const editRoutine = (req, res) => {
         });
 };
 
-//deletes an existing routine
+// Deletes an existing routine
 const deleteRoutine = (req, res) => {
     const { id } = req.params;
 
-  
+    // Delete the routine and all exercises associated with it
     knex('routines')
-    .where('id' , id)
-    .where('user_id', req.session.user.user_id)
-      .del()
-      .then(result => {
-        if (result) {
-          res.status(200).json({ message: 'Routine deleted successfully' });
-        } else {
-          res.status(404).json({ message: 'Routine not found' });
-        }
-      })
-      .catch(error => {
-        res.status(500).json({ message: 'An error occurred while deleting a routine', error: error.message });
-      });
+        .where({ 'id': id, 'user_id': req.session.user.user_id }) // Make sure we delete the right routine and user
+        .del()
+        .then(data => {
+            if (data) {
+                knex('exercises')
+                    .where({ 'routine_id': id, 'user_id': req.session.user.user_id }) // Make sure we delete the right exercises and user
+                    .del()
+                    .then(() => {
+                        res.status(200).json({ message: 'Routine and associated exercises deleted successfully' });
+                    })
+                    .catch(error => {
+                        res.status(500).json({ message: 'An error occurred while deleting the exercises associated with the routine', error: error.message });
+                    });
+            } else {
+                res.status(404).json({ message: `Routine with ID ${id} not found or you do not have permission to delete it` });
+            }
+        })
+        .catch(error => {
+            // Handle errors
+            res.status(500).json({ message: 'An error occurred while deleting the routine', error: error.message });
+        });
+
+    
   
 }
 
-const getAllRoutineInfo = (req, res) => {
-    
-    knex('routines')
-        .join('exercises_history', 'routines.date', '=', 'exercises_history.date')
-        .join('exercises', 'exercises_history.name', '=', 'exercises.name')
-        .select('routines.name as routine_name', 'routines.date', 'exercises_history.sets', 'exercises.name as exercise_name', 'exercises_history.weight', 'exercises.muscle_group')
-        .where('user_id', req.session.user.user_id)
-        .then(result => {
-            // Send the query result back as a JSON response
-            res.status(200).json(result);
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the query
-            console.error('Error fetching routine information:', error);
-            res.status(500).json({ error: 'An error occurred while fetching routine information' });
-        });
-
-};
 // Get all exercise IDs for a specific routine
 const getExerciseIdsForRoutine = (req, res) => {
     const { id } = req.params; // Routine ID
@@ -177,6 +160,5 @@ export {
     createRoutine,
     deleteRoutine,
     editRoutine,
-    getAllRoutineInfo,
     getExerciseIdsForRoutine
 }
