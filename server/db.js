@@ -114,7 +114,6 @@ knex.schema
       return knex.schema.createTable('routines', (table) => {
         table.increments('id').primary();
         table.string('name').notNullable();
-        // table.date('date').notNullable();
         table.integer('user_id').unsigned().notNullable();
 
         //foreign key relationships

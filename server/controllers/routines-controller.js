@@ -48,27 +48,17 @@ const getRoutine = (req, res) => {
 
 //creates a new routine
 const createRoutine = async (req, res) => {
-    const {name , workout_id} = req.body
+    const {name} = req.body
     const user_id = req.session.user.user_id
-
-    // const workout = await knex('workouts').select('id').where('id', workout_id).first();
 
     knex('routines')
         .insert({
             'name': name,
-            // 'date': date,
             'user_id' : user_id ,
-            // 'workout_id' : workout
         })
-        //if error occurs then drops insert apon error
-        // .onConflict(['name','date']).ignore()
-        .returning('name')
-        .then(name => {
-            if (name.length > 0) {
-                res.status(201).json({ message: 'routine added successfully'});
-            } else {
-                res.status(200).json({ message: 'routine already exists, no new entry created' });
-            }
+        .returning('id')
+        .then(id => {
+            res.status(201).json({ message: `Routine created successfullys`, id: id[0] });
         })        
         .catch(error => {
             res.status(500).json({ message: `An error occurred while creating a new routine`, error: error.message });
