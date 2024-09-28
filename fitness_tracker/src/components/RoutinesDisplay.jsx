@@ -1,49 +1,85 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Routine from './Routine';
 import NewRoutineModal from './NewRoutineModal';
 import styles from '../module_CSS/RoutinesDisplay.module.css'
+import axios from 'axios';
 
 const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
-    // data should come from the backend
-    const [routines, setRoutines] = useState([
-        {
+    const [routines, setRoutines] = useState([]);
+
+    /*
+    {
           name: "Leg Routine",
           date: "14th Aug",
-          muscles: "Quads, Hamstring, Calves",
+          muscle_group: "Quads, Hamstring, Calves",
           exercises: [
             { id:0, name: "Squat", setsGoal: 4, setsLogged: 0, reps: 10, weight: 30 },
             { id:1, name: "Lunge", setsGoal: 3, setsLogged: 0, reps: 12, weight: 40 },
             { id:2, name: "Leg Press", setsGoal: 4, setsLogged: 0, reps: 8, weight: 50 }
           ]
-        },
-        {
-          name: "Arm Routine",
-          date: "14th Aug",
-          muscles: "Biceps, Triceps, Deltoids",
-          exercises: [
-            { id:0, name: "Bicep Curl", setsGoal: 4, setsLogged: 0, reps: 12, weight: 30 },
-            { id:1, name: "Tricep Extension", setsGoal: 3, setsLogged: 0, reps: 10, weight: 40 },
-            { id:2, name: "Shoulder Press", setsGoal: 4, setsLogged: 0, reps: 8, weight: 50 }
-          ]
-        },
-        {
-          name: "Core Routine",
-          date: "14th Aug",
-          muscles: "Abs",
-          exercises: [
-            { id:0, name: "Crunch", setsGoal: 4, setsLogged: 0, reps: 15, weight: 30 },
-            { id:1, name: "Plank", setsGoal: 3, setsLogged: 0, reps: 1, weight: 40 },
-            { id:2, name: "Leg Raise", setsGoal: 3, setsLogged: 0, reps: 12, weight: 50 }
-          ]
         }
-      ]);
+    */
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // Get routines from the backend
+    useEffect(() => {
+      axios.get("http://localhost:4001/routine", { withCredentials: true, })
+        .then((response) => {
+          setRoutines(response.data);
+          console.log("Routines are:", response.data);
+        })
+        .catch((error) => {
+          console.error("An error occured while fetching routines:", error);
+        });
+    } , []);
+
     const handleSaveRoutine = (newRoutine) => {
-        setRoutines([...routines, newRoutine]);
         setIsModalOpen(false);
         // routines have to be saved to the backend
+
+        console.log("New routine:", newRoutine); // Debug log
+
+        // Extract routine only data
+        const { name, muscle_group, date} = newRoutine;
+
+        // Extract exercises only data
+        const exercises = newRoutine.exercises.map(({ name, setsGoal, reps, weight }) => ({ name, setsGoal, reps, weight }));
+
+        // Create new routine object with no exercises
+        axios.post("http://localhost:4001/routine", {"name": name, "muscle_group": muscle_group, "date": date}, { withCredentials: true, })
+        .then((response) => {
+          // Get the routine ID
+            const routineId = response.data.id;
+            newRoutine.id = routineId;
+
+            // Add exercises to the routine
+            exercises.forEach((exercise) => {
+              axios.post("http://localhost:4001/exercise", { "routine_id": routineId, ...exercise }, { withCredentials: true, })
+              .then((response) => {
+                console.log("Exercise added successfully:", response.data); // Debug log
+
+                // Get the exercise ID
+                const exerciseId = response.data.id;
+
+                // Add the exercise ID to the newRoutine object
+                newRoutine.exercises.forEach((exercise) => {
+                  if (exercise.name === response.data.name) {
+                    exercise.id = exerciseId;
+                  }
+                })   
+              })
+              .catch((error) => {
+                console.error("An error occured while adding exercises:", error);
+              });
+            });
+        }
+        )
+        .catch((error) => {
+          console.error("An error occured while adding routine:", error);
+          });
+
+        setRoutines([...routines, newRoutine]);
     };
 
     const handleDeleteRoutine = (routineToDelete) => {

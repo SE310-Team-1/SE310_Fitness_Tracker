@@ -44,7 +44,8 @@ knex.schema
       return knex.schema.createTable('exercises', (table) => {
         table.increments('id').primary();
         table.string('name')
-        table.integer('sets')
+        table.integer('reps')
+        table.integer('setsGoal')
         table.float('weight')
         table.integer('user_id').unsigned().notNullable()
         table.integer('routine_id').unsigned().notNullable(),

@@ -2,13 +2,13 @@ import knex from './../db.js';
 
 // Create a new exercise
 const createExercise = (req, res) => {
-    const { name, sets, weight, routine_id } = req.body;
+    const { name, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
     knex('exercises')
         .insert({
             "name": name,
-            "sets": sets,
+            "setsGoal": setsGoal,
             "weight": weight,
             "user_id": user_id,
             "routine_id": routine_id 
@@ -48,14 +48,14 @@ const getExercise = (req, res) => {
 // Update an existing exercise
 const updateExercise = (req, res) => {
     const { id } = req.params;
-    const { name, sets, weight, routine_id } = req.body;
+    const { name, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
     knex('exercises')
         .where({ id, user_id }) 
         .update({
             "name": name,
-            "sets": sets,
+            "setsGoal": setsGoal,
             "weight": weight,
             "user_id": user_id,
             "routine_id": routine_id 

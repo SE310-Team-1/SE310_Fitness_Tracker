@@ -48,7 +48,7 @@ const NewRoutineModal = ({ onSave, onClose }) => {
                 type="text"
                 className={styles.inputField}
                 placeholder="Muscle Groups"
-                value={routine.muscles}
+                value={routine.muscle_group}
                 onChange={(e) => setRoutine({ ...routine, muscles: e.target.value })}
             />
             <p className={styles.dateDisplay}>Date: {routine.date}</p>
