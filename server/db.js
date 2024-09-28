@@ -114,7 +114,7 @@ knex.schema
       return knex.schema.createTable('routines', (table) => {
         table.increments('id').primary();
         table.string('name').notNullable();
-        table.string('muscle_group');
+        table.string('muscles');
         table.date('date').defaultTo(knex.fn.now());
         table.integer('user_id').unsigned().notNullable();
 

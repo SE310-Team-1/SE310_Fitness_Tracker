@@ -10,6 +10,7 @@ const getRoutines = (req, res) => {
         .where('user_id' , req.session.user.user_id) //that matches our users id 
         .then(userData => {
             // Send routines extracted from database in response
+            console.log(userData)
             res.json(userData)
         })
         .catch(err => {
@@ -49,13 +50,14 @@ const getRoutine = (req, res) => {
 
 // Creates a new routine
 const createRoutine = async (req, res) => {
-    const {name, muscle_group, date} = req.body
+    console.log(req.body)
+    const {name, muscles, date} = req.body
     const user_id = req.session.user.user_id
 
     knex('routines')
         .insert({
             'name': name,
-            'muscle_group': muscle_group,
+            'muscles': muscles,
             'date': date,
             'user_id' : user_id ,
         })
@@ -71,13 +73,13 @@ const createRoutine = async (req, res) => {
 // Edit a routine allowing its name to be updated
 const editRoutine = (req, res) => {
     const { id } = req.params; // Get routine ID from the request params
-    const { name, muscle_group, date } = req.body; // Fields that might be updated
+    const { name, muscles, date } = req.body; // Fields that might be updated
 
     // Build the update object with only the fields that are provided
     let updateFields = {};
 
     if (name) updateFields.name = name; // Add new name if provided
-    if (muscle_group) updateFields.muscle_group = muscle_group; // Add new muscle_group if provided
+    if (muscle_group) updateFields.muscles = muscles; // Add new muscle_group if provided
     if (date) updateFields.date = date; // Add new date if provided
 
     // Check if there is something to update

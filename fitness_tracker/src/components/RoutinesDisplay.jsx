@@ -11,7 +11,7 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     {
           name: "Leg Routine",
           date: "14th Aug",
-          muscle_group: "Quads, Hamstring, Calves",
+          muscles: "Quads, Hamstring, Calves",
           exercises: [
             { id:0, name: "Squat", setsGoal: 4, setsLogged: 0, reps: 10, weight: 30 },
             { id:1, name: "Lunge", setsGoal: 3, setsLogged: 0, reps: 12, weight: 40 },
@@ -38,17 +38,17 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
         setIsModalOpen(false);
         // routines have to be saved to the backend
 
-        console.log("New routine:", newRoutine); // Debug log
-
         // Extract routine only data
-        const { name, muscle_group, date} = newRoutine;
+        const { name, muscles, date} = newRoutine;
 
         // Extract exercises only data
         const exercises = newRoutine.exercises.map(({ name, setsGoal, reps, weight }) => ({ name, setsGoal, reps, weight }));
 
         // Create new routine object with no exercises
-        axios.post("http://localhost:4001/routine", {"name": name, "muscle_group": muscle_group, "date": date}, { withCredentials: true, })
+        axios.post("http://localhost:4001/routine", {"name": name, "muscles": muscles, "date": date}, { withCredentials: true, })
         .then((response) => {
+            console.log("Routine added successfully:", response.data); // Debug log
+
           // Get the routine ID
             const routineId = response.data.id;
             newRoutine.id = routineId;
@@ -73,13 +73,13 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
                 console.error("An error occured while adding exercises:", error);
               });
             });
+
+            setRoutines([...routines, newRoutine]);
         }
         )
         .catch((error) => {
           console.error("An error occured while adding routine:", error);
-          });
-
-        setRoutines([...routines, newRoutine]);
+          });  
     };
 
     const handleDeleteRoutine = (routineToDelete) => {

@@ -5,10 +5,10 @@ import { formatDate } from '../utils/dateUtils.js'
 const NewRoutineModal = ({ onSave, onClose }) => {
     const today = new Date();
     const formattedDate = formatDate(today); // 14 Aug 2024
-    var id=0;
+    var id=-1;
 
     const [routine, setRoutine] = useState({
-        id: id++,
+        id: id--,
         name: '',
         date: formattedDate,
         muscles: '',
@@ -22,7 +22,7 @@ const NewRoutineModal = ({ onSave, onClose }) => {
     };
 
     const handleAddExercise = () => {
-        setRoutine({ ...routine, exercises: [...routine.exercises, {id: id++, name: '', setsGoal: '', setsLogged:0, reps: '', weight: '' }] });
+        setRoutine({ ...routine, exercises: [...routine.exercises, {id: id--, name: '', setsGoal: '', setsLogged:0, reps: '', weight: '' }] });
     };
 
     const handleDeleteExercise = (index) => {

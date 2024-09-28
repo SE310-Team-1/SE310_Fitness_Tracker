@@ -2,12 +2,15 @@ import knex from './../db.js';
 
 // Create a new exercise
 const createExercise = (req, res) => {
-    const { name, setsGoal, weight, routine_id } = req.body;
+    const { name, reps, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
+
+    console.log(req.body);
 
     knex('exercises')
         .insert({
             "name": name,
+            "reps": reps,
             "setsGoal": setsGoal,
             "weight": weight,
             "user_id": user_id,
