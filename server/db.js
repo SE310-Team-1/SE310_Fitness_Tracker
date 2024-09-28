@@ -48,7 +48,7 @@ knex.schema
         table.integer('setsGoal')
         table.float('weight')
         table.integer('user_id').unsigned().notNullable()
-        table.integer('routine_id').unsigned().notNullable(),
+        table.integer('routine_id').unsigned().notNullable();
         
 
         table.foreign('user_id').references('users.id');
