@@ -50,7 +50,6 @@ const getRoutine = (req, res) => {
 
 // Creates a new routine
 const createRoutine = async (req, res) => {
-    console.log(req.body)
     const {name, muscles, date} = req.body
     const user_id = req.session.user.user_id
 

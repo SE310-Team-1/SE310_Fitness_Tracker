@@ -5,8 +5,6 @@ const createExercise = (req, res) => {
     const { name, reps, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
-    console.log(req.body);
-
     knex('exercises')
         .insert({
             "name": name,
