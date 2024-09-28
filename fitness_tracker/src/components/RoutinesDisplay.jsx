@@ -70,6 +70,10 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
                 })   
               })
               .catch((error) => {
+                if (error.response.status === 401) {
+                  alert("Not logged in (Or an error has occured), cannot access dashboard ");
+                  window.location.href = "/login";
+                }
                 console.error("An error occured while adding exercises:", error);
               });
             });
@@ -78,6 +82,10 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
         }
         )
         .catch((error) => {
+          if (error.response.status === 401) {
+            alert("Not logged in (Or an error has occured), cannot access dashboard ");
+            window.location.href = "/login";
+          }
           console.error("An error occured while adding routine:", error);
           });  
     };
