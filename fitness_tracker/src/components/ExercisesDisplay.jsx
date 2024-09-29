@@ -71,7 +71,7 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
                 const exercisesToLog = exercises.map((exercise, index) => ({ exercise_id: exercise.id, sets_completed: setsLogged[index] }))
 
                 // Add the exercises to the workout
-                axios.post(`http://localhost:4001/workout/${workoutId}/exercises`, exercisesToLog, { withCredentials: true })
+                axios.post(`http://localhost:4001/workout/${workoutId}/exercises`, {exercises:exercisesToLog}, { withCredentials: true })
                     .then((response) => {
                         console.log("Exercises added to workout", response.data)
                         setExercises([])
