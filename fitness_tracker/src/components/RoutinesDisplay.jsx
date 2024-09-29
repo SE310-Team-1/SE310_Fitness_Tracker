@@ -26,36 +26,37 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     useEffect(() => {
       axios.get("http://localhost:4001/routine", { withCredentials: true, })
         .then((response) => {
-          
-          // Fetch exercise ids for each routine
           response.data.forEach((routine) => {
-            axios.get(`http://localhost:4001/routine/${routine.id}/exercises`, { withCredentials: true, })
-            .then((response) => {
-
-              // Fetch exercise details for each exercise ID
-              const exerciseIds = response.data.exerciseIds.join(","); // Make comma separated string of exercise IDs
-
-              axios.get(`http://localhost:4001/exercise/${exerciseIds}`, { withCredentials: true, })
-              .then((response) => {
-
-                // Add exercises to the routine
-                routine.exercises = response.data;
-                setRoutines([...routines, routine]);
-              })
-              .catch((error) => {
-                console.error("An error occured while fetching exercises:", error);
-              });
-
-            })
-            .catch((error) => {
-              console.error("An error occured while fetching exercise ids:", error);
-            });
+            fetchExercises(routine);
           });
+
+          // Routine exercises are added in the fetchExercises function, so we can just set the routines here
+          setRoutines(response.data);
+          
         })
         .catch((error) => {
           console.error("An error occured while fetching routines:", error);
         });
     } , []);
+
+    // Get exercises for a routine, and add them to the routine object
+    const fetchExercises = (routine) => {
+      axios.get(`http://localhost:4001/routine/${routine.id}/exercises`, { withCredentials: true, })
+      .then((response) => {
+        const exerciseIds = response.data.exerciseIds.join(","); // Make comma separated string of exercise IDs
+
+        axios.get(`http://localhost:4001/exercise/${exerciseIds}`, { withCredentials: true, })
+        .then((response) => {
+          routine.exercises = response.data;
+        })
+        .catch((error) => {
+          console.error("An error occured while fetching exercises:", error);
+        });
+      })
+      .catch((error) => {
+        console.error("An error occured while fetching exercise ids:", error);
+      });
+    };
 
     const handleSaveRoutine = (newRoutine) => {
         setIsModalOpen(false);
