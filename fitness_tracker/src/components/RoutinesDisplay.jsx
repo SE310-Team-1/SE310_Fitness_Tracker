@@ -26,8 +26,31 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     useEffect(() => {
       axios.get("http://localhost:4001/routine", { withCredentials: true, })
         .then((response) => {
-          setRoutines(response.data);
-          console.log("Routines are:", response.data);
+          
+          // Fetch exercise ids for each routine
+          response.data.forEach((routine) => {
+            axios.get(`http://localhost:4001/routine/${routine.id}/exercises`, { withCredentials: true, })
+            .then((response) => {
+
+              // Fetch exercise details for each exercise ID
+              const exerciseIds = response.data.exerciseIds.join(","); // Make comma separated string of exercise IDs
+
+              axios.get(`http://localhost:4001/exercise/${exerciseIds}`, { withCredentials: true, })
+              .then((response) => {
+
+                // Add exercises to the routine
+                routine.exercises = response.data;
+                setRoutines([...routines, routine]);
+              })
+              .catch((error) => {
+                console.error("An error occured while fetching exercises:", error);
+              });
+
+            })
+            .catch((error) => {
+              console.error("An error occured while fetching exercise ids:", error);
+            });
+          });
         })
         .catch((error) => {
           console.error("An error occured while fetching routines:", error);
@@ -50,7 +73,7 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
             console.log("Routine added successfully:", response.data); // Debug log
 
           // Get the routine ID
-            const routineId = response.data.id;
+            const routineId = response.data.id.id;
             newRoutine.id = routineId;
 
             // Add exercises to the routine
