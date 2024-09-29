@@ -78,7 +78,7 @@ const editRoutine = (req, res) => {
     let updateFields = {};
 
     if (name) updateFields.name = name; // Add new name if provided
-    if (muscle_group) updateFields.muscles = muscles; // Add new muscle_group if provided
+    if (muscles) updateFields.muscles = muscles; // Add new muscle_group if provided
     if (date) updateFields.date = date; // Add new date if provided
 
     // Check if there is something to update

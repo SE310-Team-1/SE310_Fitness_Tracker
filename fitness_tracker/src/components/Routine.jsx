@@ -51,7 +51,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                         type="text"
                         className={styles.inputField}
                         placeholder="Muscle Groups"
-                        value={editedRoutine.muscle_group}
+                        value={editedRoutine.muscles}
                         onChange={(e) => setEditedRoutine({ ...editedRoutine, muscles: e.target.value })}
                     />
 

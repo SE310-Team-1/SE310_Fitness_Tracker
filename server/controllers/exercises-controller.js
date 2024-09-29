@@ -65,7 +65,16 @@ const updateExercise = (req, res) => {
             if (result) {
                 res.status(200).json({ message: 'Exercise updated successfully' });
             } else {
-                res.status(404).json({ message: 'Exercise not found or unauthorized' });
+                // Send back different status code if the exercise was not found compared to if it was unauthorized
+                knex('exercises')
+                    .where('id', id)
+                    .then(exercise => {
+                        if (exercise.length === 0) {
+                            res.status(404).json({ message: 'Exercise not found' });
+                        } else {
+                            res.status(401).json({ message: 'Unauthorized' });
+                        }
+                    });
             }
         })
         .catch(error => {
