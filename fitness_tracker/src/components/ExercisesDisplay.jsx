@@ -6,14 +6,12 @@ import ExerciseAdder from "./ExerciseAdder"
 import axios from "axios"
 
 const ExercisesDisplay = ({ exercises: initialExercises }) => {
-    // List of all exercises. Used when adding an exercise to the workout
-    const [exerciseList, setExerciseList] = useState([])
+
+    const [exerciseList, setExerciseList] = useState({})
     const [addExerciseMode, setAddExerciseMode] = useState(false)
 
     // initialExercises when user clicks add to today's workout in the routines
     const [exercises, setExercises] = useState(initialExercises);
-
-
     useEffect(() => {
         axios.get("http://localhost:4001/exercise", { withCredentials: true })
             .then((response) => {
@@ -38,7 +36,6 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
         console.log("Workout logged")
     }
 
-    
     return (
         <Fragment>
             <div className={styles.container}>
@@ -57,13 +54,11 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
                     </thead>
                     <tbody>
                         {exercises.map(exercise => (
-                            <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise(exercise)} />
-                        ))}
+                                <ExerciseLogger exercise={exercise} />
+                        ))
+                        }
 
-                        {/* Add a row to add an exercise */}
-                        {addExerciseMode && (
-                            <ExerciseAdder exerciseList={exerciseList}/>
-                        )}
+                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={setExercises} />}
                     </tbody>
                 </table>
 
@@ -77,4 +72,4 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
     )
 }
 
-export default ExercisesDisplay
+export default ExercisesDisplay 
