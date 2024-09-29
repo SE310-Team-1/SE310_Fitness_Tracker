@@ -45,23 +45,18 @@ const createWorkout = (req, res) => {
     const {date, score} = req.body
 
     knex('workouts')
-        .insert({
-          'score': score,
-          'date': date ,
-          'user_id' : req.session.user.user_id
-        })
-        //if error occurs then drops insert apon error
-        .returning('id')
-        .then(date => {
-            if (date.length > 0) {
-                res.status(201).json({ message: 'workout added successfully', id:id[0]});
-            } else {
-                res.status(200).json({ message: 'workout already exists, no new entry created' });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
-        });
+    .insert({
+      date: date,
+      score: score,
+      user_id : req.session.user.user_id
+    })
+    .returning('id')
+    .then(() => {
+      res.status(200).json({ message: 'Workout created successfully', id: id });
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'An error occurred while creating a workout', error: error.message });
+    });
 }
 
 //deletes an existing workout

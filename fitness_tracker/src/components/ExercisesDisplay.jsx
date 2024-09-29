@@ -10,6 +10,9 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
     const [exerciseList, setExerciseList] = useState({})
     const [addExerciseMode, setAddExerciseMode] = useState(false)
 
+    // Create a state to hold an array of the number of sets logged for each exercise. Initialize to 0 for all exercises
+    const [setsLogged, setSetsLogged] = useState(exercises.map(exercise => 0))
+
     // initialExercises when user clicks add to today's workout in the routines
     useEffect(() => {
         axios.get("http://localhost:4001/exercise", { withCredentials: true })
@@ -33,6 +36,7 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
         }
 
         setExercises([...exercises, newExercise])
+        setSetsLogged([...setsLogged, 0])
     }
 
     const cancelAddExercise = () => {
@@ -42,10 +46,46 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
     const handleRemoveExercise = (exercise) => {
         console.log("Removing exercise")
         setExercises(exercises.filter(e => e.id !== exercise.id))
+        setSetsLogged(setsLogged.filter((s, index) => index !== exercises.findIndex(e => e.id === exercise.id)))
     }
 
     const logWorkout = () => {
-        console.log("Workout logged")
+        // Calculate the score of the workout
+        let score = 0
+        exercises.forEach((exercise, index )=> {
+
+            score += (( Number(setsLogged[index]) / Number(exercise.setsGoal)) * Number(exercise.weight))
+        })
+
+        score = Math.round(score)
+
+        // Create workout in the database with only score and date
+        axios.post("http://localhost:4001/workout", { score: score, date: new Date() }, { withCredentials: true })
+            .then((response) => {
+                console.log("Workout created", response.data)
+
+                // Get the id of the workout that was just created
+                const workoutId = response.data.id.id
+
+                // Create an array of objects with the exercise id and sets completed
+                const exercisesToLog = exercises.map((exercise, index) => ({ exercise_id: exercise.id, sets_completed: setsLogged[index] }))
+
+                // Add the exercises to the workout
+                axios.post(`http://localhost:4001/workout/${workoutId}/exercises`, exercisesToLog, { withCredentials: true })
+                    .then((response) => {
+                        console.log("Exercises added to workout", response.data)
+                        setExercises([])
+                        setSetsLogged([])
+                    })
+                    .catch((error) => {
+                        console.error("Error adding exercises to workout", error)
+                    })
+                
+            })
+            .catch((error) => {
+                console.error("Error creating workout", error)
+            })
+
     }
 
     return (
@@ -66,7 +106,7 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
                     </thead>
                     <tbody>
                         {exercises.map(exercise => (
-                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} />
+                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} setsLogged={setsLogged} setSetsLogged={setSetsLogged} index={exercises.findIndex(e=> e.id === exercise.id)} />
                         ))
                         }
 
