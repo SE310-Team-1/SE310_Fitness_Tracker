@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExerciseLogger.module.css'
+import { MenuItem, Select } from '@mui/material';
 
 const ExerciseAdder = ({exerciseList, addExercise, cancelAddExercise }) => {
     const [selectedExercise, setSelectedExercise] = useState(exerciseList[0])
@@ -9,11 +10,42 @@ const ExerciseAdder = ({exerciseList, addExercise, cancelAddExercise }) => {
     return (
         <tr>
             <td>
-                <select onChange={(e) => setSelectedExercise(exerciseList.find(exercise => exercise.name === e.target.value))}>
-                    {exerciseList.map(exercise => (
-                        <option key={exercise.name} value={exercise.name}>{exercise.name}</option>
+                <Select 
+                    value={selectedExercise.name} 
+                    sx={{
+                        width: "100%",
+                        color: "white", 
+                        border: "1px solid white", 
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'white',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'white',
+                        },
+                        '& .MuiSvgIcon-root': {
+                            color: 'white',
+                        }
+                    }} 
+                    onChange={e => {
+                        setSelectedExercise(exerciseList.find(exercise => exercise.name === e.target.value))
+                    }}
+                >
+                    {exerciseList.map((exercise) => (
+                        <MenuItem 
+                            key={exercise.id} 
+                            value={exercise.name}
+                            sx={{
+                                color: "black",
+                                backgroundColor: "white",
+                                '&:hover': {
+                                    backgroundColor: "#f0f0f0",
+                                }
+                            }}
+                        >
+                            {exercise.name}
+                        </MenuItem>
                     ))}
-                </select>
+                </Select>
             </td>
             <td>
                 {selectedExercise.weight}
