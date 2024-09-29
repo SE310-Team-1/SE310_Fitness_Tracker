@@ -115,7 +115,16 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     };
 
     const handleDeleteRoutine = (routineToDelete) => {
-      setRoutines(routines.filter(routine => routine !== routineToDelete));
+      // Delete the routine in the backend
+      axios.delete(`http://localhost:4001/routine/${routineToDelete.id}`, { withCredentials: true, })
+        .then((response) => {
+          // Delete the routine in the frontend
+          setRoutines(routines.filter(routine => routine !== routineToDelete));
+        })
+        .catch((error) => {
+          handleAuthError(error);
+          console.error("An error occurred while deleting routine:", error);
+        });
     };
 
     const handleEditRoutine = (updatedRoutine, index) => {
