@@ -18,7 +18,7 @@ const ExerciseLogger = ({ exercise, handleRemoveExercise }) => {
                 <td data-label={"Reps"}>{exercise.reps}</td>
                 <td data-label={"Goal"}>{exercise.setsGoal}</td>
                 <td data-label={"Sets"}>{setsLogged}</td>
-                <td><button onClick={handleRemoveExercise} className={`${buttons.button} ${buttons.editButton}`}>Remove</button></td>
+                <td><button onClick={() => handleRemoveExercise(exercise)} className={`${buttons.button} ${buttons.editButton}`}>Remove</button></td>
                 <td><button className={`${buttons.button} ${styles.logSetButton}`} onClick={() => logSet()}>Log Set</button></td>
             </tr>
         </Fragment>

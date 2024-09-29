@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExerciseLogger.module.css'
 
-const ExerciseAdder = ({exerciseList, addExercise }) => {
+const ExerciseAdder = ({exerciseList, addExercise, cancelAddExercise }) => {
     const [selectedExercise, setSelectedExercise] = useState(exerciseList[0])
 
     
@@ -28,7 +28,7 @@ const ExerciseAdder = ({exerciseList, addExercise }) => {
                 0
             </td>
 
-            <td><button className={`${buttons.button} ${buttons.editButton}`}>Edit</button></td>
+            <td><button className={`${buttons.button} ${buttons.editButton}`} onClick={cancelAddExercise}>Remove</button></td>
             <td><button className={`${buttons.button} ${styles.addButton}`} onClick={() => addExercise(selectedExercise)}>Add</button></td>
         </tr>
     )

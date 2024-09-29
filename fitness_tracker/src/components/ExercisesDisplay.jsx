@@ -5,13 +5,12 @@ import styles from '../module_CSS/ExercisesDisplay.module.css'
 import ExerciseAdder from "./ExerciseAdder"
 import axios from "axios"
 
-const ExercisesDisplay = ({ exercises: initialExercises }) => {
+const ExercisesDisplay = ({ exercises, setExercises }) => {
 
     const [exerciseList, setExerciseList] = useState({})
     const [addExerciseMode, setAddExerciseMode] = useState(false)
 
     // initialExercises when user clicks add to today's workout in the routines
-    const [exercises, setExercises] = useState(initialExercises);
     useEffect(() => {
         axios.get("http://localhost:4001/exercise", { withCredentials: true })
             .then((response) => {
@@ -23,12 +22,25 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
 
     }, [])
 
-    const addExercise = () => {
+    const addExercise = (newExercise) => {
         // Let user choose from a list of exercises
-        setAddExerciseMode(true)
+        setAddExerciseMode(false)
+
+        // Check if the exercise is already in the list
+        if (exercises.find(e => e.id === newExercise.id)) {
+            alert("Exercise already added")
+            return
+        }
+
+        setExercises([...exercises, newExercise])
+    }
+
+    const cancelAddExercise = () => {
+        setAddExerciseMode(false)
     }
 
     const handleRemoveExercise = (exercise) => {
+        console.log("Removing exercise")
         setExercises(exercises.filter(e => e.id !== exercise.id))
     }
 
@@ -54,11 +66,11 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
                     </thead>
                     <tbody>
                         {exercises.map(exercise => (
-                                <ExerciseLogger exercise={exercise} />
+                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} />
                         ))
                         }
 
-                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={setExercises} />}
+                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise}/>}
                     </tbody>
                 </table>
 
