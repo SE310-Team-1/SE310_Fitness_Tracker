@@ -33,10 +33,7 @@ const Dashboard = () => {
             </header>
             <GraphDisplay />
 
-            <TabDisplay />
-
-            {/* <TempWorkoutDisplay data={workouts}/> */}
-
+            <TabDisplay  />
         </div>
     );
 }

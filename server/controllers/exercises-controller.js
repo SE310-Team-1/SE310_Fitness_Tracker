@@ -23,6 +23,21 @@ const createExercise = (req, res) => {
         });
 };
 
+// Get all exercises
+const getExercises = (req, res) => {
+    const user_id = req.session.user.user_id;
+
+    knex('exercises')
+        .where('user_id', user_id)
+        .then(exercises => {
+            res.status(200).json(exercises);
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Error retrieving exercises', error: error.message });
+        });
+};
+
+
 // Retrive an exercise by id. To facilitate getting multiple exercises, the id can be a comma separated list of IDs
 const getExercise = (req, res) => {
     const { id } = req.params;
@@ -104,6 +119,7 @@ const deleteExercise = (req, res) => {
 
 export {
     createExercise,
+    getExercises,
     getExercise,
     updateExercise,
     deleteExercise
