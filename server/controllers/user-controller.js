@@ -27,7 +27,7 @@ const signUserUp = async (req, res) => {
     try {
         if (await userService.isUsernameAvailable(username)) {
             const { id: user_id } = await userService.createUser(username, password); 
-            req.session.user = { user_id: user_id }; // Store user info in session
+            req.session.user = { user_id: user_id.id }; // Store user info in session
             res.status(201).json({ message: 'User created successfully', user_id }); 
         } else {
             res.status(409).json({ error: 'User already exists' }); 

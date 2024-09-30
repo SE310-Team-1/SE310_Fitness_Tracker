@@ -2,14 +2,14 @@ import knex from './../db.js';
 
 // Create a new exercise
 const createExercise = (req, res) => {
-    const { name, muscle_group, sets, weight, routine_id } = req.body;
+    const { name, reps, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
     knex('exercises')
         .insert({
             "name": name,
-            "muscle_group": muscle_group,
-            "sets": sets,
+            "reps": reps,
+            "setsGoal": setsGoal,
             "weight": weight,
             "user_id": user_id,
             "routine_id": routine_id 
@@ -22,6 +22,21 @@ const createExercise = (req, res) => {
             res.status(500).json({ message: 'Error creating exercise', error: error.message });
         });
 };
+
+// Get all exercises
+const getExercises = (req, res) => {
+    const user_id = req.session.user.user_id;
+
+    knex('exercises')
+        .where('user_id', user_id)
+        .then(exercises => {
+            res.status(200).json(exercises);
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Error retrieving exercises', error: error.message });
+        });
+};
+
 
 // Retrive an exercise by id. To facilitate getting multiple exercises, the id can be a comma separated list of IDs
 const getExercise = (req, res) => {
@@ -49,15 +64,14 @@ const getExercise = (req, res) => {
 // Update an existing exercise
 const updateExercise = (req, res) => {
     const { id } = req.params;
-    const { name, muscle_group, sets, weight, routine_id } = req.body;
+    const { name, setsGoal, weight, routine_id } = req.body;
     const user_id = req.session.user.user_id;
 
     knex('exercises')
         .where({ id, user_id }) 
         .update({
             "name": name,
-            "muscle_group": muscle_group,
-            "sets": sets,
+            "setsGoal": setsGoal,
             "weight": weight,
             "user_id": user_id,
             "routine_id": routine_id 
@@ -66,7 +80,16 @@ const updateExercise = (req, res) => {
             if (result) {
                 res.status(200).json({ message: 'Exercise updated successfully' });
             } else {
-                res.status(404).json({ message: 'Exercise not found or unauthorized' });
+                // Send back different status code if the exercise was not found compared to if it was unauthorized
+                knex('exercises')
+                    .where('id', id)
+                    .then(exercise => {
+                        if (exercise.length === 0) {
+                            res.status(404).json({ message: 'Exercise not found' });
+                        } else {
+                            res.status(401).json({ message: 'Unauthorized' });
+                        }
+                    });
             }
         })
         .catch(error => {
@@ -96,6 +119,7 @@ const deleteExercise = (req, res) => {
 
 export {
     createExercise,
+    getExercises,
     getExercise,
     updateExercise,
     deleteExercise

@@ -45,23 +45,18 @@ const createWorkout = (req, res) => {
     const {date, score} = req.body
 
     knex('workouts')
-        .insert({
-          'score': score,
-          'date': date ,
-          'user_id' : req.session.user.user_id
-        })
-        //if error occurs then drops insert apon error
-        .returning('id')
-        .then(date => {
-            if (date.length > 0) {
-                res.status(201).json({ message: 'workout added successfully', id:id[0]});
-            } else {
-                res.status(200).json({ message: 'workout already exists, no new entry created' });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
-        });
+    .insert({
+      date: date,
+      score: score,
+      user_id : req.session.user.user_id
+    })
+    .returning('id')
+    .then(id => {
+      res.status(200).json({ message: 'Workout created successfully', id: id[0] });
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'An error occurred while creating a workout', error: error.message });
+    });
 }
 
 //deletes an existing workout
@@ -121,33 +116,29 @@ const addExercises = async (req, res) => {
   const { id } = req.params; // Expecting workoutId in the URL parameters
   const { exercises } = req.body; // Expecting workoutId and list of exerciseIds (with sets completed) in the request body
 
+
   if (!id || !Array.isArray(exercises) || exercises.length === 0) {
     return res.status(400).json({ error: 'Workout ID and a list of exercise IDs (with sets completed) are required.' });
   }
 
-  try {
-    // Map the exerciseIds to the workoutId and prepare the insert data for the join table
-    const workoutExercises = exercises.map(({exercise_id, sets_completed}) => ({
-      workout_id: id,
-      exercise_id: exercise_id,
-      sets_completed: sets_completed,
-      user_id : req.session.user.user_id
-    }));
-    
-    // Insert the workout-exercise relationships into the join table
-    knex('workout_exercises')
-      .insert(workoutExercises)
-      .then(() => {
-        res.status(200).json({ message: 'Exercises successfully added to the workout.' });
-      })
-      .catch(error => {
-        console.error(`Error adding exercises to workout: ${error}`);
-        res.status(500).json({ error: 'An error occurred while adding exercises to the workout.' });
-      });
-  } catch (error) {
-    console.error(`Error adding exercises to workout: ${error}`);
-    res.status(500).json({ error: 'An error occurred while adding exercises to the workout.' });
-  }
+  // Map the exerciseIds to the workoutId and prepare the insert data for the join table
+  const workoutExercises = exercises.map(({exercise_id, sets_completed}) => ({
+    workout_id: id,
+    exercise_id: exercise_id,
+    sets_completed: sets_completed,
+    user_id : req.session.user.user_id
+  }));
+  
+  // Insert the workout-exercise relationships into the join table
+  knex('workout_exercises')
+    .insert(workoutExercises)
+    .then(() => {
+      res.status(200).json({ message: 'Exercises successfully added to the workout.' });
+    })
+    .catch(error => {
+      console.error(`Error adding exercises to workout: ${error}`);
+      res.status(500).json({ error: 'An error occurred while adding exercises to the workout.' });
+    });
 };
 
 const getExercises = async (req, res) => {

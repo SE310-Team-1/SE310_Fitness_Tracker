@@ -12,7 +12,7 @@ router.get('/', routinesController.getRoutines);
 // Get a routine by routine id
 router.get('/:id', routinesController.getRoutine);
 
-// create a new routine with name
+// create a new routine
 router.post('/', routinesController.createRoutine);
 
 //delete a routine by id

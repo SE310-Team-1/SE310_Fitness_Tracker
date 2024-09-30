@@ -1,10 +1,13 @@
 import express from 'express';
-import { createExercise, getExercise, updateExercise, deleteExercise } from '../controllers/exercises-controller.js';
+import { createExercise, getExercises, getExercise, updateExercise, deleteExercise } from '../controllers/exercises-controller.js';
 
 const router = express.Router();
 
 // Create a new exercise
 router.post('/', createExercise);
+
+// Retrieve all exercises
+router.get('/', getExercises);
 
 // Retrive an exercise by id
 router.get('/:id', getExercise);

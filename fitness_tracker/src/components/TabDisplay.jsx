@@ -81,7 +81,7 @@ function TabDisplay() {
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <ExercisesDisplay exercises={todayWorkout} />
+          <ExercisesDisplay exercises={todayWorkout} setExercises={setTodayWorkout} />
         </CustomTabPanel>
       </Box>
     </div>

@@ -44,11 +44,11 @@ knex.schema
       return knex.schema.createTable('exercises', (table) => {
         table.increments('id').primary();
         table.string('name')
-        table.string('muscle_group')
-        table.integer('sets')
+        table.integer('reps')
+        table.integer('setsGoal')
         table.float('weight')
         table.integer('user_id').unsigned().notNullable()
-        table.integer('routine_id').unsigned().notNullable(),
+        table.integer('routine_id').unsigned().notNullable();
         
 
         table.foreign('user_id').references('users.id');
@@ -114,6 +114,8 @@ knex.schema
       return knex.schema.createTable('routines', (table) => {
         table.increments('id').primary();
         table.string('name').notNullable();
+        table.string('muscles');
+        table.date('date').defaultTo(knex.fn.now());
         table.integer('user_id').unsigned().notNullable();
 
         //foreign key relationships
