@@ -138,6 +138,18 @@ This is an example of how to list things you need to use the software and how to
    ```
 6. You can click the link on the terminal or can type http://localhost:3000/ in your own browser
 
+### .env File
+In order for the authentication to work, a .env file containing a SESSION_SECRET field must be placed in the server folder. Please contact us (yois920@aucklanduni.ac.nz) in order to get this .env file.
+
+### Local Database
+The project currently uses a local database to store data. While the database should automatically be created upon running the code, sometimes a bug can occur where this does not happen. 
+
+To fix this, please create a `db` folder in the server folder. Then add a file called `database.sqlite` in it. This file will act as the database, so if you make any changes to the structure of the database, make sure to delete the file and create a fresh one to reset everything.
+
+In short, if you are running into issues, create the file:
+
+`server/db/database.sqlite`
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
