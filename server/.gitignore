@@ -4,3 +4,6 @@
 /node_modules
 /db/database.sqlite
 /db/test_database.sqlite
+
+#Environment Configuration Files
+.env

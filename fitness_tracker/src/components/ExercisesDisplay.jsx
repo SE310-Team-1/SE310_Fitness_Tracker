@@ -51,16 +51,16 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
 
     const logWorkout = () => {
         // Calculate the score of the workout
-        let score = 0
+        let volumeScore = 0
         exercises.forEach((exercise, index )=> {
 
-            score += (( Number(setsLogged[index]) / Number(exercise.setsGoal)) * Number(exercise.weight))
+            volumeScore += (( Number(setsLogged[index]) / Number(exercise.setsGoal)) * Number(exercise.weight) * Number(exercise.reps))
         })
 
-        score = Math.round(score)
+        volumeScore = Math.round(volumeScore)
 
         // Create workout in the database with only score and date
-        axios.post("http://localhost:4001/workout", { score: score, date: new Date() }, { withCredentials: true })
+        axios.post("http://localhost:4001/workout", { score: volumeScore, date: new Date() }, { withCredentials: true })
             .then((response) => {
                 console.log("Workout created", response.data)
 
