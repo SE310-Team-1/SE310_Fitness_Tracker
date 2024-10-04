@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import WorkoutHistoryRow from "./WorkoutHistoryRow";
+import styles from '../module_CSS/WorkoutHistory.module.css';
 
 function WorkoutHistoryDisplay() {
   const [workouts, setWorkouts] = useState([]);
@@ -56,14 +57,14 @@ function WorkoutHistoryDisplay() {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
+    <TableContainer component={Paper} className={styles.container}>
+      <Table className={styles.table}>
+        <TableHead className={styles.tableHeaderBgColor}>
           <TableRow>
-             <TableCell style={{ textAlign: "center", width: '95%' }}>
+            <TableCell className={styles.primaryTextColor} style={{ textAlign: "center", width: '95%' }}>
               <strong>Workout Date</strong>
             </TableCell>
-            <TableCell  style={{ width: '5%' }} />
+            <TableCell className={styles.primaryTextColor} style={{ width: '5%' }} />
           </TableRow>
         </TableHead>
         <TableBody>

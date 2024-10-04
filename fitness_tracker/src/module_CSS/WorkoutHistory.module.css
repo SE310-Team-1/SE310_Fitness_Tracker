@@ -1,0 +1,64 @@
+@import './colours.module.css'; /* Import colors from the same file */
+
+/* Container for the table */
+.container {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: var(--dark-bg-color) !important;
+}
+
+/* Styles for the table itself */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    text-align: left;
+    background-color: var(--table-dark-bg-color) !important;
+}
+
+/* Styles for the table header */
+.tableHeaderBgColor {
+    background-color: var(--table-header-bg-color) !important;
+}
+
+/* Styles for table rows */
+.tableOddRowsColor {
+    background-color: var(--table-odd-rows-color) !important;
+}
+
+.tableEvenRowsColor {
+    background-color: var(--table-even-rows-color) !important;
+}
+
+/* Text colors */
+.primaryTextColor {
+    color: var(--primary-text-color) !important;
+}
+
+.secondaryTextColor {
+    color: var(--secondary-text-color) !important;
+}
+
+/* Borders for the table */
+.table td, .table th {
+    border-bottom: 1px solid var(--table-border-color) !important;
+}
+
+.table tbody tr:last-child {
+    border-bottom: 2px solid var(--table-border-color) !important;
+}
+
+/* Hover effect */
+.table tbody tr:hover {
+    background-color: var(--table-row-hover-bg-color) !important;
+}
+
+/* Icon buttons */
+.iconButton {
+    color: var(--primary-text-color) !important;
+}
+
+/* Ensure icon buttons inherit colors properly */
+.MuiIconButton-root {
+    color: var(--primary-text-color) !important;
+}
