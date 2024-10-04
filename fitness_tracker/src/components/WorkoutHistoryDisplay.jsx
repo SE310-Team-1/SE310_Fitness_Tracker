@@ -10,11 +10,16 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import WorkoutHistoryRow from "./WorkoutHistoryRow";
-import styles from '../module_CSS/WorkoutHistory.module.css';
+import styles from "../module_CSS/WorkoutHistory.module.css";
 
 function WorkoutHistoryDisplay() {
   const [workouts, setWorkouts] = useState([]);
   const [exerciseList, setExerciseList] = useState({});
+
+  // Fetch workouts and its associated exercises on component mount
+  useEffect(() => {
+    fetchWorkouts();
+  }, []);
 
   const fetchExercises = async (workoutId) => {
     try {
@@ -52,19 +57,21 @@ function WorkoutHistoryDisplay() {
     }
   };
 
-  useEffect(() => {
-    fetchWorkouts();
-  }, []);
-
   return (
     <TableContainer component={Paper} className={styles.container}>
       <Table className={styles.table}>
         <TableHead className={styles.tableHeaderBgColor}>
           <TableRow>
-            <TableCell className={styles.tableDate} style={{ textAlign: "center" }}>
+            <TableCell
+              className={styles.tableDate}
+              style={{ textAlign: "center" }}
+            >
               <strong>Workout Date</strong>
             </TableCell>
-            <TableCell className={styles.primaryTextColor} style={{ width: '5%' }} />
+            <TableCell
+              className={styles.primaryTextColor}
+              style={{ width: "5%" }}
+            />
           </TableRow>
         </TableHead>
         <TableBody>
