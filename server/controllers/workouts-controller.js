@@ -116,7 +116,6 @@ const addExercises = async (req, res) => {
   const { id } = req.params; // Expecting workoutId in the URL parameters
   const { exercises } = req.body; // Expecting workoutId and list of exerciseIds (with sets completed) in the request body
 
-
   if (!id || !Array.isArray(exercises) || exercises.length === 0) {
     return res.status(400).json({ error: 'Workout ID and a list of exercise IDs (with sets completed) are required.' });
   }
@@ -153,7 +152,7 @@ const getExercises = async (req, res) => {
       .join('exercises as e', 'e.id', 'we.exercise_id')
       .where('we.workout_id', id)
       .andWhere('we.user_id', req.session.user.user_id) 
-      .select('e.id', 'we.id', 'e.name', 'e.muscle_group', 'e.sets', 'e.weight', 'we.sets_completed');
+      .select('e.id', 'we.id', 'e.name', 'e.reps', 'e.setsGoal', 'e.weight', 'we.sets_completed');
 
     if (exercises.length === 0) {
       return res.status(404).json({ message: 'No exercises found for this workout.' });
