@@ -34,7 +34,7 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
       {/* Workout Date Row (Collapsed View) */}
       <TableRow className={styles.tableOddRowsColor} hover>
         <TableCell className={styles.tableDate} style={{ textAlign: "center" }}>
-          {new Date(workout.date).toLocaleDateString()}
+          {new Date(workout.date).toLocaleString()}
         </TableCell>
         <TableCell className={styles.primaryTextColor} style={{ textAlign: "right", width: '5%' }}>
           <IconButton className={styles.iconButton} aria-label="expand row" size="small" onClick={handleRowClick}>
