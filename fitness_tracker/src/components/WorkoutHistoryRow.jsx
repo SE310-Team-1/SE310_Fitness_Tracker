@@ -33,7 +33,7 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
     <>
       {/* Workout Date Row (Collapsed View) */}
       <TableRow className={styles.tableOddRowsColor} hover>
-        <TableCell className={styles.primaryTextColor} style={{ textAlign: "center" }}>
+        <TableCell className={styles.tableDate} style={{ textAlign: "center" }}>
           {new Date(workout.date).toLocaleDateString()}
         </TableCell>
         <TableCell className={styles.primaryTextColor} style={{ textAlign: "right", width: '5%' }}>
@@ -58,22 +58,22 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
                 <Table size="small" className={styles.table}>
                   <TableHead className={styles.tableHeaderBgColor}>
                     <TableRow>
-                      <TableCell className={styles.primaryTextColor} style={{ width: '20%' }}><strong>Exercise</strong></TableCell>
-                      <TableCell align="center" className={styles.primaryTextColor} style={{ width: '15%' }}><strong>Sets Completed</strong></TableCell>
-                      <TableCell align="center" className={styles.primaryTextColor} style={{ width: '15%' }}><strong>Reps</strong></TableCell>
-                      <TableCell align="center" className={styles.primaryTextColor} style={{ width: '15%' }}><strong>Weight (kg)</strong></TableCell>
-                      <TableCell align="center" className={styles.primaryTextColor} style={{ width: '15%' }}><strong>Score</strong></TableCell>
+                      <TableCell className={styles.tableExerciseData} style={{ width: '18%' }}><strong>Exercise</strong></TableCell>
+                      <TableCell align="center" className={styles.tableExerciseData} style={{ width: '15%' }}><strong>Sets Completed</strong></TableCell>
+                      <TableCell align="center" className={styles.tableExerciseData} style={{ width: '15%' }}><strong>Reps</strong></TableCell>
+                      <TableCell align="center" className={styles.tableExerciseData} style={{ width: '15%' }}><strong>Weight (kg)</strong></TableCell>
+                      <TableCell align="center" className={styles.tableExerciseData} style={{ width: '15%' }}><strong>Score</strong></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {exercises && exercises.length > 0 ? (
                       exercises.map((exercise, index) => (
                         <TableRow key={index} className={ styles.tableOddRowsColor }>
-                          <TableCell className={styles.primaryTextColor}>{exercise.name}</TableCell>
-                          <TableCell align="center" className={styles.primaryTextColor}>{exercise.sets_completed} / {exercise.setsGoal}</TableCell>
-                          <TableCell align="center" className={styles.primaryTextColor}>{exercise.reps}</TableCell>
-                          <TableCell align="center" className={styles.primaryTextColor}>{exercise.weight}</TableCell>
-                          <TableCell align="center" className={styles.primaryTextColor}>{getExerciseScore(exercise)}</TableCell>
+                          <TableCell className={styles.tableExerciseData}>{exercise.name}</TableCell>
+                          <TableCell align="center" className={styles.tableExerciseData}>{exercise.sets_completed} / {exercise.setsGoal}</TableCell>
+                          <TableCell align="center" className={styles.tableExerciseData}>{exercise.reps}</TableCell>
+                          <TableCell align="center" className={styles.tableExerciseData}>{exercise.weight}</TableCell>
+                          <TableCell align="center" className={styles.tableExerciseData}>{getExerciseScore(exercise)}</TableCell>
                         </TableRow>
                       ))
                     ) : (

@@ -61,7 +61,7 @@ function WorkoutHistoryDisplay() {
       <Table className={styles.table}>
         <TableHead className={styles.tableHeaderBgColor}>
           <TableRow>
-            <TableCell className={styles.primaryTextColor} style={{ textAlign: "center", width: '95%' }}>
+            <TableCell className={styles.tableDate} style={{ textAlign: "center" }}>
               <strong>Workout Date</strong>
             </TableCell>
             <TableCell className={styles.primaryTextColor} style={{ width: '5%' }} />
