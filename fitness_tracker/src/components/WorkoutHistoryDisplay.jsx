@@ -60,9 +60,10 @@ function WorkoutHistoryDisplay() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell />
-            <TableCell style={{ textAlign: "center"}}>Workout Date</TableCell>
-            <TableCell style={{ textAlign: "center"}}>Score</TableCell>
+             <TableCell style={{ textAlign: "center", width: '95%' }}>
+              <strong>Workout Date</strong>
+            </TableCell>
+            <TableCell  style={{ width: '5%' }} />
           </TableRow>
         </TableHead>
         <TableBody>

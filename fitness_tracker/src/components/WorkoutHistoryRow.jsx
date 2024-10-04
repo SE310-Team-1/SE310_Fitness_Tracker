@@ -8,6 +8,8 @@ import {
   TableBody,
   TableContainer,
   TableHead,
+  Collapse,
+  Typography,
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
@@ -28,51 +30,49 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
 
   return (
     <>
-      {!showDetails ? (
-        // Workout Overview: Shows Date and Total Score
-        <TableRow>
-          <TableCell padding="none" style={{ width: '5%' }}>
-            <IconButton aria-label="expand row" size="small" onClick={handleRowClick}>
-              {showDetails ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          </TableCell>
-          <TableCell padding="none" style={{ textAlign: "center", width: '70%' }}>
-            {new Date(workout.date).toLocaleDateString()}
-          </TableCell>
-          <TableCell padding="none" style={{ textAlign: "center", width: '25%' }}>
-            {workout.score}
-          </TableCell>
-        </TableRow>
-      ) : (
-        // Exercise Details: Shows Exercise Info instead of Workout Overview
-        <TableRow>
-          <TableCell padding="none" style={{ width: '5%', padding: '0px' }}>
-            <IconButton aria-label="collapse row" size="small" onClick={handleRowClick}>
-              {showDetails ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-            </IconButton>
-          </TableCell>
-          <TableCell colSpan={2}>
-            <Box margin={1}>
+      {/* Workout Date Row (Collapsed View) */}
+      <TableRow>
+        <TableCell style={{ textAlign: "center" }}>
+          {new Date(workout.date).toLocaleDateString()}
+        </TableCell>
+        <TableCell style={{ textAlign: "right", width: '5%' }}>
+          <IconButton aria-label="expand row" size="small" onClick={handleRowClick}>
+            {showDetails ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+
+      {/* Expanded View */}
+      <TableRow>
+        <TableCell colSpan={2} style={{ padding: 0 }}>
+          <Collapse in={showDetails} timeout="auto" unmountOnExit>
+            <Box margin={2}>
+              {/* Total Score Display */}
+              <Typography variant="h6" align="left" style={{ marginBottom: '16px', fontWeight: 'bold' }}>
+                TOTAL SCORE: {workout.score}
+              </Typography>
+
+              {/* Exercise Breakdown */}
               <TableContainer>
-                <Table size="small">
+                <Table size="small" style={{marginBottom:'8px'}}>
                   <TableHead>
                     <TableRow>
-                      <TableCell style={{ width: '35%' }}><strong>Exercise</strong></TableCell>
+                      <TableCell style={{ width: '20%' }}><strong>Exercise</strong></TableCell>
                       <TableCell align="center" style={{ width: '15%' }}><strong>Sets Completed</strong></TableCell>
                       <TableCell align="center" style={{ width: '15%' }}><strong>Reps</strong></TableCell>
                       <TableCell align="center" style={{ width: '15%' }}><strong>Weight (kg)</strong></TableCell>
-                      <TableCell align="center" style={{ width: '20%' }}><strong>Score</strong></TableCell>
+                      <TableCell align="center" style={{ width: '15%' }}><strong>Score</strong></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {exercises && exercises.length > 0 ? (
                       exercises.map((exercise, index) => (
-                        <TableRow key={exercise.id}>
-                          <TableCell style={{ width: '35%' }}>{exercise.name}</TableCell>
-                          <TableCell align="center" style={{ width: '15%' }}>{exercise.sets_completed} / {exercise.setsGoal}</TableCell>
-                          <TableCell align="center" style={{ width: '15%' }}>{exercise.reps}</TableCell>
-                          <TableCell align="center" style={{ width: '15%' }}>{exercise.weight}</TableCell>
-                          <TableCell align="center" style={{ width: '20%' }}> {getExerciseScore(exercise)}</TableCell>
+                        <TableRow key={index}>
+                          <TableCell>{exercise.name}</TableCell>
+                          <TableCell align="center">{exercise.sets_completed} / {exercise.setsGoal}</TableCell>
+                          <TableCell align="center">{exercise.reps}</TableCell>
+                          <TableCell align="center">{exercise.weight}</TableCell>
+                          <TableCell align="center">{getExerciseScore(exercise)}</TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -86,9 +86,9 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
                 </Table>
               </TableContainer>
             </Box>
-          </TableCell>
-        </TableRow>
-      )}
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </>
   );
 };
