@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import RoutinesDisplay from './RoutinesDisplay';
 import ExercisesDisplay from './ExercisesDisplay';
+import WorkoutHistoryDisplay from './WorkoutHistoryDisplay';
 import styles from '../module_CSS/TabDisplay.module.css';
 
 function CustomTabPanel(props) {
@@ -73,6 +74,11 @@ function TabDisplay() {
               label="Today's Workout"
               {...a11yProps(1)}
             />
+             <Tab
+              className={`${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              label="Workout History"
+              {...a11yProps(2)} 
+            />          
           </Tabs>
         </Box>
 
@@ -82,6 +88,10 @@ function TabDisplay() {
 
         <CustomTabPanel value={value} index={1}>
           <ExercisesDisplay exercises={todayWorkout} setExercises={setTodayWorkout} />
+        </CustomTabPanel>
+
+         <CustomTabPanel value={value} index={2}>
+          <WorkoutHistoryDisplay />
         </CustomTabPanel>
       </Box>
     </div>
