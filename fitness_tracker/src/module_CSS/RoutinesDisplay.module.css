@@ -2,14 +2,26 @@
 
 .container {
     /* padding: 20px; */
-    background-color: var(--dark-bg-color);
     color: var(--primary-text-color);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.header h1 {
+.containerLight {
+    /* padding: 20px; */
+    color: #333333;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.heading {
     text-align: center;
     margin-bottom: 20px;
     color: var(--primary-text-color);
+}
+
+.headingLight {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333333;
 }
 
 .button {

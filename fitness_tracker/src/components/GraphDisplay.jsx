@@ -11,7 +11,7 @@ import buttons from '../module_CSS/buttons.module.css'
     NOTE:   Graph data GET calls are made from this class, hence there are no 
             parameters passed to this function.
 */
-function GraphDisplay() {
+function GraphDisplay({ darkmode } ) {
     let endDate = dateToString(new Date());
     let startDate = new Date();
     startDate.setDate(startDate.getDate() - 6);
@@ -19,8 +19,8 @@ function GraphDisplay() {
 
     return (
         <Fragment>
-            <div className={styles.graphContainer}>
-                <GenerateGraph data={data} />
+            <div className={darkmode ? styles.graphContainer : styles.graphContainerLight}>
+                <GenerateGraph data={data} darkmode={darkmode}/>
 
                 <div className={styles.inputContainer}>
                     <input id="dateSelector" type="date" max={endDate} className={styles.inputField} />

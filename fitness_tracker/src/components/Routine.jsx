@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../module_CSS/Routine.module.css';
 
-const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
+const Routine = ({ routine, onSave, onDelete, onAddToToday, darkmode }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [isExercisesVisible, setIsExercisesVisible] = useState(false);
     const [editedRoutine, setEditedRoutine] = useState(routine);
@@ -35,13 +35,13 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
     };
 
     return (
-        <div className={styles.routineCard}>
+        <div className={darkmode ? styles.routineCard : styles.routineCardLight}>
             {isEditing ? (
                 // When editing a routine
                 <>
                     <input
                         type="text"
-                        className={styles.inputField}
+                        className={darkmode ? styles.inputField : styles.inputFieldLight}
                         placeholder="Routine Name"
                         value={editedRoutine.name}
                         onChange={(e) => setEditedRoutine({ ...editedRoutine, name: e.target.value })}
@@ -49,7 +49,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
 
                     <input
                         type="text"
-                        className={styles.inputField}
+                        className={darkmode ? styles.inputField : styles.inputFieldLight}
                         placeholder="Muscle Groups"
                         value={editedRoutine.muscles}
                         onChange={(e) => setEditedRoutine({ ...editedRoutine, muscles: e.target.value })}
@@ -58,12 +58,12 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                     <p className={styles.routineDetails}>Date: {editedRoutine.date}</p>
 
                     {editedRoutine.exercises.map((exercise, index) => (
-                        <div key={index} className={styles.exercise}>
+                        <div key={index} className={darkmode ? styles.exercise : styles.exerciseLight}>
 
                             <div className={styles.inputWithSuffix}>
                                 <input
                                     type="text"
-                                    className={styles.inputField}
+                                    className={darkmode ? styles.inputField : styles.inputFieldLight}
                                     placeholder="Exercise Name"
                                     value={exercise.name}
                                     onChange={(e) => handleExerciseChange(index, 'name', e.target.value)}
@@ -74,7 +74,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                             <div className={styles.inputWithSuffix}>
                                 <input
                                     type="number"
-                                    className={styles.inputField}
+                                    className={darkmode ? styles.inputField : styles.inputFieldLight}
                                     placeholder="Sets"
                                     value={exercise.setsGoal}
                                     onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)}
@@ -86,7 +86,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                             <div className={styles.inputWithSuffix}>
                                 <input
                                     type="number"
-                                    className={styles.inputField}
+                                    className={darkmode ? styles.inputField : styles.inputFieldLight}
                                     placeholder="Reps"
                                     value={exercise.reps}
                                     onChange={(e) => handleExerciseChange(index, 'reps', e.target.value)}
@@ -97,7 +97,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                             <div className={styles.inputWithSuffix}>
                                 <input
                                     type="number"
-                                    className={styles.inputField}
+                                    className={darkmode ? styles.inputField : styles.inputFieldLight}
                                     placeholder="Weight"
                                     value={exercise.weight}
                                     onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)}
@@ -176,7 +176,7 @@ const Routine = ({ routine, onSave, onDelete, onAddToToday }) => {
                         </button>
 
                         <button
-                            className={`${styles.button} ${styles.addToTodayButton}`}
+                                className={darkmode ? `${styles.button} ${styles.addToTodayButton}` : `${styles.buttonlight} ${styles.addToTodayButton}`}
                             onClick={() => onAddToToday(routine)}
                         >
                             Add to Today's Workout

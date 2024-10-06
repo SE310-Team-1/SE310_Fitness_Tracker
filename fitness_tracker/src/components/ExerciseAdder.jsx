@@ -3,7 +3,7 @@ import buttons from '../module_CSS/buttons.module.css';
 import styles from '../module_CSS/ExerciseLogger.module.css';
 import { MenuItem, Select, Tooltip } from '@mui/material';
 
-const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
+const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise, darkmode }) => {
     const [selectedExercise, setSelectedExercise] = useState(exerciseList.length > 0 ? exerciseList[0] : { name: "No exercises added" });
 
     return (
@@ -17,7 +17,8 @@ const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
                             sx={{
                                 width: "100%",
                                 color: "white", 
-                                border: "1px solid white", 
+                                border: darkmode ? "1px solid white" : "2px solid #333", 
+                                transition: "background-color 0.3s ease-in-out, color 0.3s ease-in-out",
                                 '& .MuiOutlinedInput-notchedOutline': {
                                     borderColor: 'white',
                                 },
@@ -25,8 +26,11 @@ const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
                                     borderColor: 'white',
                                 },
                                 '& .MuiSvgIcon-root': {
-                                    color: 'white',
-                                }
+                                    color: darkmode ? 'white' : '#333',
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'transparent',
+                                },
                             }} 
                             readOnly // Disable dropdown functionality when no exercises
                         >
@@ -41,8 +45,9 @@ const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
                         displayEmpty // Placeholder for exercises
                         sx={{
                             width: "100%",
-                            color: "white", 
-                            border: "1px solid white", 
+                            color: darkmode ? 'white' : '#333', 
+                            border: darkmode ? "1px solid white" : "2px solid #333",
+                            transition: "background-color 0.3s ease-in-out, color 0.3s ease-in-out", 
                             '& .MuiOutlinedInput-notchedOutline': {
                                 borderColor: 'white',
                             },
@@ -50,8 +55,11 @@ const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
                                 borderColor: 'white',
                             },
                             '& .MuiSvgIcon-root': {
-                                color: 'white',
-                            }
+                                color: darkmode ? 'white' : '#333',
+                            },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'transparent',
+                            },
                         }} 
                         onChange={e => {
                             setSelectedExercise(exerciseList.find(exercise => exercise.name === e.target.value));
@@ -98,7 +106,7 @@ const ExerciseAdder = ({ exerciseList, addExercise, cancelAddExercise }) => {
             </td>
             <td>
                 <button 
-                    className={`${buttons.button} ${styles.addButton}`} 
+                    className={darkmode ? `${buttons.button} ${styles.addButton}` : `${buttons.buttonLight} ${styles.logSetButton}`} 
                     onClick={() => addExercise(selectedExercise)} 
                     disabled={exerciseList.length === 0 || selectedExercise.name === "No exercises added"}
                 >
