@@ -9,6 +9,20 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease-in-out;
     margin-bottom: 4px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+
+  .modalContainerLight {
+    background-color: #fafafa; /* Dark background for the modal */
+    color: #333333; 
+    padding: 24px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 4px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   
   .modalContainer:hover {
@@ -32,11 +46,36 @@
     border-radius: 4px;
     margin-bottom: 16px;
   }
+
+  .inputFieldLight {
+    width: calc(100% - 60px); /* Adjust width to leave space for suffix */
+    background-color: #dadada;
+    color: #333333;
+    border: none;
+    padding: 10px;
+    padding-right: 40px; /* Add padding on the right to avoid overlapping with suffix */
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
   
   .inputField:focus {
     outline: none;
     border: 1px solid var(--button-bg-color); /* Highlight input on focus with brand color */
   }
+
+  .inputFieldLight:focus {
+    outline: none;
+    border: 1px solid #B0B0B0;
+  }
+
+  .inputField::placeholder {
+    color: var(--placeholder-text-color);
+  }
+
+  .inputFieldLight::placeholder {
+    color: #333;
+  } 
+
   
   .dateDisplay {
     margin-bottom: 16px;
@@ -44,6 +83,14 @@
   
   .exerciseContainer {
     background-color: var(--primary-bg-color);
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .exerciseContainerLight {
+    background-color: #fafafa;
     padding: 8px;
     border-radius: 4px;
     margin-bottom: 8px;
@@ -113,6 +160,10 @@
   .inputWithSuffix {
     position: relative;
   }
+
+  .inputWithSuffixLight {
+    position: relative;
+  } 
   
   .suffix {
     position: absolute;
@@ -121,3 +172,14 @@
     color: #B0B0B0; /* Light gray for the suffix text */
     pointer-events: none;
   }
+
+  .suffixLight {
+    position: absolute;
+    right: 20px; /* Position the suffix inside the input field */
+    top: 20%;
+    pointer-events: none;
+  }
+
+.inputWithSuffixLight .suffix {
+    color: #333;
+}

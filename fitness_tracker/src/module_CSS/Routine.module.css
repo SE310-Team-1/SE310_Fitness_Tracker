@@ -12,12 +12,30 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease-in-out;
   margin-bottom: 4px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.routineCard:hover {
+.routineCardLight {
+  background-color: #fafafa;
+  /* Dark background for the modal */
+  color: #333333;
+  /* Light text color */
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out;
+  margin-bottom: 4px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.routineCard:hover,
+.routineCardLight:hover {
   transform: translateY(-4px);
   /* Subtle lift effect on hover */
 }
+
 
 .routineTitle {
   font-size: 1.5em;
@@ -38,8 +56,21 @@
   color: var(--tertiary-text-color);
 }
 
+.exerciseLight {
+  background-color: #fafafa;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+  color: var(--tertiary-text-color);
+}
+
 .exercise span {
   color: var(--primary-text-color);
+  align-items: center;
+}
+
+.exerciseLight span {
+  color: #333333;
   align-items: center;
 }
 
@@ -80,9 +111,28 @@
   margin-bottom: 16px;
 }
 
+.inputFieldLight {
+  width: calc(100% - 60px);
+  /* Adjust width to leave space for suffix */
+  background-color: #dadada;
+  color: #333333;
+  border: none;
+  padding: 10px;
+  padding-right: 40px;
+  /* Add padding on the right to avoid overlapping with suffix */
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
 .inputField:focus {
   outline: none;
   border: 1px solid var(--button-bg-color);
+  /* Highlight input on focus with brand color */
+}
+
+.inputFieldLight:focus {
+  outline: none;
+  border: 1px solid #B0B0B0;
   /* Highlight input on focus with brand color */
 }
 
@@ -101,7 +151,18 @@
   transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.buttonlight {
+  background-color: #dadada;
+  padding: 8px 16px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover,
+.buttonlight:hover {
   background-color: var(--button-hover-bg-color);
   border: 1px solid;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);

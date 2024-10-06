@@ -3,9 +3,11 @@ import TabDisplay from "../components/TabDisplay";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DashboardSignout from "../components/DashboardSignout";
+import DashboardLightmode from "../components/DashboardLightmode";
 
 const Dashboard = () => {
     const [workouts, setWorkouts] = useState([]);
+    const [darkmode, setDarkmode] = useState(true);
 
     // fetch all workouts from the server
     useEffect(() => {
@@ -25,15 +27,20 @@ const Dashboard = () => {
             });
     }, []);
 
+    const toggleDarkmode = () => {
+        setDarkmode(!darkmode);
+    }
+
     return (  
-        <div className="App">
-            <header className="App-header">
+        <div className={darkmode ? "App" : "App-light"}>
+            <header className={darkmode ? "App-header" : "App-header-light"}>
                 FiTrack
                 <DashboardSignout />
+                <DashboardLightmode toggleDarkmode={toggleDarkmode} darkmode={darkmode}/>
             </header>
-            <GraphDisplay />
+            <GraphDisplay darkmode={darkmode} />
 
-            <TabDisplay />
+            <TabDisplay darkmode={darkmode} />
 
             {/* <TempWorkoutDisplay data={workouts}/> */}
 
