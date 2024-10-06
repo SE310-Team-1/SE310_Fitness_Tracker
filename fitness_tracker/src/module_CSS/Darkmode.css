@@ -1,0 +1,27 @@
+
+.darkMode{
+    position: relative;
+    /* background-color: #121212; */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    margin-left: 1%;
+}
+
+.darkMode:hover{
+    cursor: pointer;
+}
+
+.icon {
+    font-size: 24px;
+    position: absolute;
+    transform: translate(0, -50%);
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Show and hide classes for smooth fade */
+.show {
+    opacity: 1;
+}
+
+.hide {
+    opacity: 0;
+}

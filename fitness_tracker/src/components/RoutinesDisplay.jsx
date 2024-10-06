@@ -3,7 +3,7 @@ import Routine from './Routine';
 import NewRoutineModal from './NewRoutineModal';
 import styles from '../module_CSS/RoutinesDisplay.module.css'
 
-const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
+const RoutinesDisplay = ({ onAddToTodayWorkout, darkmode }) => {
     // data should come from the backend
     const [routines, setRoutines] = useState([
         {
@@ -58,8 +58,8 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
     };
 
     return (
-        <div className={styles.container}>
-            <h1 className={`${styles.h1}`}>Workout Routines</h1>
+      <div className={darkmode ? styles.container : styles.containerLight}>
+        <h1 className={darkmode ? `${styles.heading}` : `${styles.headingLight}`}>Workout Routines</h1>
             {isModalOpen ? 
                 <button 
                 className={`${styles.button} ${styles.cancelButton}`}
@@ -71,11 +71,13 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
             {isModalOpen && 
                 <NewRoutineModal 
                     onSave={handleSaveRoutine} 
-                    onClose={() => setIsModalOpen(false)} 
+                    onClose={() => setIsModalOpen(false)}
+                    darkmode={darkmode} 
                 />
             }
             {routines.map((routine, index) => (
                 <Routine 
+                    darkmode={darkmode}
                     key={index} 
                     routine={routine} 
                     onSave={(updatedRoutine) => handleEditRoutine(updatedRoutine, index)} 

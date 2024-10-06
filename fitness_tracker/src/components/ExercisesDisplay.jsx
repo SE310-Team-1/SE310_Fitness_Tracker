@@ -5,7 +5,7 @@ import ExerciseEditor from "./ExerciseEditor"
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExercisesDisplay.module.css'
 
-const ExercisesDisplay = ({ exercises: initialExercises }) => {
+const ExercisesDisplay = ({ darkmode, exercises: initialExercises }) => {
 
     const [completedSets, setCompletedSets] = useState([])
 
@@ -152,9 +152,9 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
 
     return (
         <Fragment>
-            <div className={styles.container}>
-                <h1 className={styles.h1}>Exercises</h1>
-                <table className={styles.table}>
+            <div className={darkmode ? styles.container : styles.containerLight}>
+                <h1 className={darkmode ? styles.heading : styles.headingLight}>Exercises</h1>
+                <table className={darkmode ? styles.table : styles.tableLight}>
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -171,7 +171,7 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
                             exercise.editMode ?
                                 <ExerciseEditor exercise={exercise} exerciseList={exerciseList} deleteExercise={deleteExerciseById} updateExercise={updateExerciseById} />
                                 :
-                                <ExerciseLogger exercise={exercise} isEditing={isEditing} updateExercise={updateExerciseById} />
+                                <ExerciseLogger exercise={exercise} isEditing={isEditing} updateExercise={updateExerciseById} darkmode={darkmode}/>
                         )
                         )}
                     </tbody>
@@ -179,7 +179,7 @@ const ExercisesDisplay = ({ exercises: initialExercises }) => {
 
                 <div className={styles.buttonContainer}>
                     {!isEditing && <button className={`${buttons.button} ${buttons.addButton}`} onClick={() => addExercise()}>Add Exercise</button>}
-                    {!isEditing && <button className={`${buttons.button} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>}
+                    {!isEditing && <button className={darkmode ? `${buttons.button} ${styles.logWorkoutButton}` : `${buttons.buttonLight} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>}
                 </div>
 
             </div>

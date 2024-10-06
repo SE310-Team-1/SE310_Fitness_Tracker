@@ -4,3 +4,4 @@
 /node_modules
 /db/database.sqlite
 /db/test_database.sqlite
+/.env
