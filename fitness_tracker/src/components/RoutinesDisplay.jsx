@@ -208,7 +208,7 @@ const RoutinesDisplay = ({ onAddToTodayWorkout, darkmode }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={darkmode ? styles.container : styles.containerLight}>
       <h1 className={`${styles.h1}`}>Workout Routines</h1>
       {isModalOpen ? (
         <button
@@ -224,12 +224,14 @@ const RoutinesDisplay = ({ onAddToTodayWorkout, darkmode }) => {
       )}
       {isModalOpen && (
         <NewRoutineModal
+          darkmode={darkmode}
           onSave={handleSaveRoutine}
           onClose={() => setIsModalOpen(false)}
         />
       )}
       {routines.map((routine, index) => (
         <Routine
+          darkmode={darkmode}
           key={index}
           routine={routine}
           onSave={(updatedRoutine) => handleEditRoutine(updatedRoutine, index)}

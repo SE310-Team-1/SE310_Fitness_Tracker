@@ -8,7 +8,6 @@ import RoutinesDisplay from './RoutinesDisplay';
 import ExercisesDisplay from './ExercisesDisplay';
 import WorkoutHistoryDisplay from './WorkoutHistoryDisplay';
 import styles from '../module_CSS/TabDisplay.module.css';
-import { dark } from '@mui/material/styles/createPalette';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -76,7 +75,7 @@ function TabDisplay({ darkmode }) {
               {...a11yProps(1)}
             />
              <Tab
-              className={`${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              className={darkmode ? `${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 2 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
               label="Workout History"
               {...a11yProps(2)} 
             />          
@@ -92,7 +91,7 @@ function TabDisplay({ darkmode }) {
         </CustomTabPanel>
 
          <CustomTabPanel value={value} index={2}>
-          <WorkoutHistoryDisplay />
+          <WorkoutHistoryDisplay darkmode={darkmode} />
         </CustomTabPanel>
       </Box>
     </div>

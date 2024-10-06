@@ -110,7 +110,7 @@ const ExercisesDisplay = ({ exercises, setExercises, darkmode }) => {
                         ))
                         }
 
-                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise}/>}
+                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise} darkmode={darkmode}/>}
                     </tbody>
                 </table>
 

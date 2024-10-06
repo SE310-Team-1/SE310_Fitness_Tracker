@@ -12,7 +12,7 @@ import axios from "axios";
 import WorkoutHistoryRow from "./WorkoutHistoryRow";
 import styles from "../module_CSS/WorkoutHistory.module.css";
 
-function WorkoutHistoryDisplay() {
+function WorkoutHistoryDisplay({ darkmode }) {
   const [workouts, setWorkouts] = useState([]);
   const [exerciseList, setExerciseList] = useState({});
 
@@ -58,18 +58,18 @@ function WorkoutHistoryDisplay() {
   };
 
   return (
-    <TableContainer component={Paper} className={styles.container}>
-      <Table className={styles.table}>
-        <TableHead className={styles.tableHeaderBgColor}>
+    <TableContainer component={Paper} className={darkmode ? styles.container : styles.containerLight}>
+      <Table className={darkmode ? styles.table : styles.tableLight}>
+        <TableHead className={darkmode ? styles.tableHeaderBgColor : styles.tableHeaderBgColorLight}>
           <TableRow>
             <TableCell
-              className={styles.tableDate}
+              className={darkmode ? styles.tableDate : styles.tableDateLight}
               style={{ textAlign: "center" }}
             >
               <strong>Workout Date</strong>
             </TableCell>
             <TableCell
-              className={styles.primaryTextColor}
+              className={darkmode ? styles.primaryTextColor: styles.primaryTextColorLight}
               style={{ width: "5%" }}
             />
           </TableRow>
@@ -77,6 +77,7 @@ function WorkoutHistoryDisplay() {
         <TableBody>
           {workouts.map((workout) => (
             <WorkoutHistoryRow
+              darkmode={darkmode}
               key={workout.id}
               workout={workout}
               exercises={exerciseList[workout.id] || []} // Pass exercises dynamically
