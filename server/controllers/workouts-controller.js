@@ -19,8 +19,8 @@ const workoutsAll = (req, res) => {
     })
 }
 
-// Retrieve one workout by date
-const workoutByDate = (req, res) => {
+// Retrieve one workout by id
+const workoutById = (req, res) => {
   // Get date value from URL
   const id = req.params.id
 
@@ -28,8 +28,8 @@ const workoutByDate = (req, res) => {
   knex
     .select('*') // select all records
     .from('workouts') // from 'workouts' table
-    .where('id', id)
-    .andWhere('user_id' ,req.session.user.user_id) // where date is equal to date
+    .where('id', id) // where id is the specified id
+    .andWhere('user_id' ,req.session.user.user_id) // where user_id is the specified user
     .then(userData => {
       // Send workout extracted from database in response
       res.json(userData)
@@ -42,46 +42,22 @@ const workoutByDate = (req, res) => {
 
 //creates a new workout
 const createWorkout = (req, res) => {
-    const {date} = req.body
+    const {date, score} = req.body
 
     knex('workouts')
-        .insert({
-            'date': date ,
-            'user_id' : req.session.user.user_id
-        })
-        //if error occurs then drops insert apon error
-        .returning('date')
-        .then(date => {
-            if (date.length > 0) {
-                res.status(201).json({ message: 'workout added successfully'});
-            } else {
-                res.status(200).json({ message: 'workout already exists, no new entry created' });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({ message: `An error occurred while creating a new exercises`, error: error.message });
-        });
-}
-
-const setScore = (req, res) => {
-  const { score, workout_id } = req.body;
-
-  knex('workouts')
-    .where('id', workout_id)
-    .andWhere('user_id', req.session.user.user_id)
-    .update({ score })
-    .returning('score') 
-    .then(updatedScore => {
-      if (updatedScore.length > 0) {
-        res.status(201).json({ message: 'Score updated successfully', score: updatedScore[0] });
-      } else {
-        res.status(400).json({ message: 'Error updating score in the setscore function' });
-      }
+    .insert({
+      date: date,
+      score: score,
+      user_id : req.session.user.user_id
     })
-    .catch(err => {
-      res.status(500).json({ message: `There was an error updating the score in the setscore function: ${err}` });
+    .returning('id')
+    .then(id => {
+      res.status(200).json({ message: 'Workout created successfully', id: id[0] });
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'An error occurred while creating a workout', error: error.message });
     });
-};
+}
 
 //deletes an existing workout
 const deleteWorkout = (req, res) => {
@@ -93,7 +69,15 @@ const deleteWorkout = (req, res) => {
     .del()
     .then(result => {
       if (result) {
-        res.status(200).json({ message: 'Workout deleted successfully' });
+        knex('workout_exercises')
+          .where('workout_id', id)
+          .del()
+          .then(() => {
+            res.status(200).json({ message: 'Workout deleted successfully' });
+          })
+          .catch(error => {
+            res.status(500).json({ message: 'An error occurred while deleting exercises', error: error.message });
+          })
       } else {
         res.status(404).json({ message: 'Workout not found' });
       }
@@ -104,16 +88,15 @@ const deleteWorkout = (req, res) => {
 
 }
 
-
 const editWorkout = (req, res) => {
-  let date = req.body.date
-  let newDate = req.body.newDate
+  let id = req.params.id;
+  let { date, score } = req.body;
 
   knex('workouts').where({'date': date})
       .update({
-          'date': newDate
-          },['date'])
-
+          'score': score,
+          'date': date,
+      })
       .then(data => {
           if (data.length > 0) {
               res.status(200).json({ message: 'Workout was edited successfully'});
@@ -128,35 +111,38 @@ const editWorkout = (req, res) => {
       });
 }
  
+// Takes in a list of exercise ids and sets completed and adds them to the workout
 const addExercises = async (req, res) => {
-  const { workoutId, exercise_ids } = req.body; // Expecting workoutId and list of exerciseIds in the request body
+  const { id } = req.params; // Expecting workoutId in the URL parameters
+  const { exercises } = req.body; // Expecting workoutId and list of exerciseIds (with sets completed) in the request body
 
-  if (!workoutId || !Array.isArray(exercise_ids) || exercise_ids.length === 0) {
-    return res.status(400).json({ error: 'Workout ID and a list of exercise IDs are required.' });
+  if (!id || !Array.isArray(exercises) || exercises.length === 0) {
+    return res.status(400).json({ error: 'Workout ID and a list of exercise IDs (with sets completed) are required.' });
   }
 
-  try {
-    // Map the exerciseIds to the workoutId and prepare the insert data for the join table
-    const workoutExercises = exercise_ids.map(exerciseId => ({
-      workout_id: workoutId,
-      exercise_id: exerciseId,
-      user_id : req.session.user.user_id
-    }));
-
-    // Insert the workout-exercise relationships into the join table
-    await knex('workout_exercises').insert(workoutExercises);
-
-    res.status(200).json({ message: 'Exercises successfully added to the workout.' });
-  } catch (error) {
-    console.error(`Error adding exercises to workout: ${error}`);
-    res.status(500).json({ error: 'An error occurred while adding exercises to the workout.' });
-  }
+  // Map the exerciseIds to the workoutId and prepare the insert data for the join table
+  const workoutExercises = exercises.map(({exercise_id, sets_completed}) => ({
+    workout_id: id,
+    exercise_id: exercise_id,
+    sets_completed: sets_completed,
+    user_id : req.session.user.user_id
+  }));
+  
+  // Insert the workout-exercise relationships into the join table
+  knex('workout_exercises')
+    .insert(workoutExercises)
+    .then(() => {
+      res.status(200).json({ message: 'Exercises successfully added to the workout.' });
+    })
+    .catch(error => {
+      console.error(`Error adding exercises to workout: ${error}`);
+      res.status(500).json({ error: 'An error occurred while adding exercises to the workout.' });
+    });
 };
-
 
 const getExercises = async (req, res) => {
   const { id } = req.params; 
-  console.log("id is " + id)
+
   if (!id) {
     return res.status(400).json({ error: 'Workout ID is required.' });
   }
@@ -166,7 +152,7 @@ const getExercises = async (req, res) => {
       .join('exercises as e', 'e.id', 'we.exercise_id')
       .where('we.workout_id', id)
       .andWhere('we.user_id', req.session.user.user_id) 
-      .select('e.id', 'e.name', 'e.muscle_group', 'e.Sets', 'e.weight', 'we.sets_completed');
+      .select('e.id', 'we.id', 'e.name', 'e.reps', 'e.setsGoal', 'e.weight', 'we.sets_completed');
 
     if (exercises.length === 0) {
       return res.status(404).json({ message: 'No exercises found for this workout.' });
@@ -179,18 +165,17 @@ const getExercises = async (req, res) => {
   }
 };
 
-
 const deleteExercises = async (req, res) => {
-  const { workoutId } = req.params; // Expecting workoutId in the URL parameters
+  const { id } = req.params; // Expecting workoutId in the URL parameters
 
-  if (!workoutId) {
+  if (!id) {
     return res.status(400).json({ error: 'Workout ID is required.' });
   }
 
   try {
     // Delete all records in workout_exercises related to the workoutId
     const result = await knex('workout_exercises')
-      .where('workout_id', workoutId)
+      .where('workout_id', id)
       .where('user_id' ,req.session.user.user_id)
       .del();
 
@@ -204,42 +189,42 @@ const deleteExercises = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while deleting exercises.' });
   }
 };
-const deleteExercise = async (req, res) => {
-  const { workoutId, exerciseId } = req.params; // Expecting workoutId and exerciseId in the URL parameters
 
-  if (!workoutId || !exerciseId) {
-    return res.status(400).json({ error: 'Workout ID and Exercise ID are required.' });
+const editExercise = async (req, res) => {
+  const { id, exerciseId } = req.params; // Expecting workput id and exerciseId in the URL parameters
+  const { sets_completed } = req.body; // Expecting sets completed in the request body
+
+  if (!id || !exerciseId || !sets_completed) {
+    return res.status(400).json({ error: 'Workout ID, exercise ID, and sets completed are required.' });
   }
 
   try {
-    // Delete the specific exercise from the workout_exercises table
+    // Update the sets completed for the specified workout and exercise
     const result = await knex('workout_exercises')
-      .where('workout_id', workoutId)
+      .where('workout_id', id)
       .andWhere('exercise_id', exerciseId)
-      .andWhere('user_id', req.session.user.id) // Ensure the user is the owner
-      .del();
+      .andWhere('user_id' ,req.session.user.user_id)
+      .update({ sets_completed });
 
     if (result > 0) {
-      res.status(200).json({ message: 'Exercise deleted successfully.' });
+      res.status(200).json({ message: 'Exercise sets completed updated successfully.' });
     } else {
-      res.status(404).json({ message: 'Exercise not found for this workout.' });
+      res.status(404).json({ message: 'No exercises found for this workout.' });
     }
   } catch (error) {
-    console.error(`Error deleting exercise: ${error}`);
-    res.status(500).json({ error: 'An error occurred while deleting the exercise.' });
+    console.error(`Error updating exercise sets completed: ${error}`);
+    res.status(500).json({ error: 'An error occurred while updating exercise sets completed.' });
   }
-};
-
+}
 
 export {
   workoutsAll,
-  workoutByDate,
+  workoutById,
   createWorkout,
-  getExercises,
   editWorkout,
   deleteWorkout,
   addExercises,
+  getExercises,
   deleteExercises,
-  deleteExercise,
-  setScore
+  editExercise
 }

@@ -1,17 +1,17 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExerciseLogger.module.css'
 
-const ExerciseLogger = ({ exercise, isEditing, updateExercise, darkmode }) => {
+const ExerciseLogger = ({ exercise, handleRemoveExercise, setsLogged, setSetsLogged, index, darkmode }) => {
+    console.log("Sets logged", setsLogged)
 
     const logSet = () => {
-        exercise.setsLogged += 1
-        updateExercise(exercise)
-    }
+        // Increment the number of sets logged for the exercise
+        const newSetsLogged = [...setsLogged]
+        newSetsLogged[index] += 1
 
-    const startEditing = () => {
-        exercise.editMode = true
-        updateExercise(exercise)
+        // Update the setsLogged state
+        setSetsLogged(newSetsLogged)
     }
 
     return (
@@ -21,8 +21,8 @@ const ExerciseLogger = ({ exercise, isEditing, updateExercise, darkmode }) => {
                 <td data-label={"Weight"}>{exercise.weight}</td>
                 <td data-label={"Reps"}>{exercise.reps}</td>
                 <td data-label={"Goal"}>{exercise.setsGoal}</td>
-                <td data-label={"Sets"}>{exercise.setsLogged}</td>
-                <td>{!isEditing && <button className={`${buttons.button} ${buttons.editButton}`} onClick={() => startEditing()}>Edit</button>}</td>
+                <td data-label={"Sets"}>{setsLogged[index]}</td>
+                <td><button onClick={() => handleRemoveExercise(exercise)} className={`${buttons.button} ${buttons.editButton}`}>Remove</button></td>
                 <td><button className={darkmode ? `${buttons.button} ${styles.logSetButton}` : `${buttons.buttonLight} ${styles.logSetButton}`} onClick={() => logSet()}>Log Set</button></td>
             </tr>
         </Fragment>

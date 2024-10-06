@@ -6,10 +6,10 @@ import { dark } from '@mui/material/styles/createPalette.js';
 const NewRoutineModal = ({ onSave, onClose, darkmode }) => {
     const today = new Date();
     const formattedDate = formatDate(today); // 14 Aug 2024
-    var id=0;
+    var id=-1;
 
     const [routine, setRoutine] = useState({
-        id: id++,
+        id: id--,
         name: '',
         date: formattedDate,
         muscles: '',
@@ -23,7 +23,7 @@ const NewRoutineModal = ({ onSave, onClose, darkmode }) => {
     };
 
     const handleAddExercise = () => {
-        setRoutine({ ...routine, exercises: [...routine.exercises, {id: id++, name: '', setsGoal: '', setsLogged:0, reps: '', weight: '' }] });
+        setRoutine({ ...routine, exercises: [...routine.exercises, {id: id--, name: '', setsGoal: '', setsLogged:0, reps: '', weight: '' }] });
     };
 
     const handleDeleteExercise = (index) => {
@@ -49,7 +49,7 @@ const NewRoutineModal = ({ onSave, onClose, darkmode }) => {
                 type="text"
                 className={darkmode ? styles.inputField : styles.inputFieldLight}
                 placeholder="Muscle Groups"
-                value={routine.muscles}
+                value={routine.muscle_group}
                 onChange={(e) => setRoutine({ ...routine, muscles: e.target.value })}
             />
             <p className={styles.dateDisplay}>Date: {routine.date}</p>

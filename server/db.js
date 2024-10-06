@@ -44,11 +44,11 @@ knex.schema
       return knex.schema.createTable('exercises', (table) => {
         table.increments('id').primary();
         table.string('name')
-        table.string('muscle_group')
-        table.integer('Sets')
+        table.integer('reps')
+        table.integer('setsGoal')
         table.float('weight')
         table.integer('user_id').unsigned().notNullable()
-        table.integer('routine_id').unsigned().notNullable(),
+        table.integer('routine_id').unsigned().notNullable();
         
 
         table.foreign('user_id').references('users.id');
@@ -114,7 +114,8 @@ knex.schema
       return knex.schema.createTable('routines', (table) => {
         table.increments('id').primary();
         table.string('name').notNullable();
-        // table.date('date').notNullable();
+        table.string('muscles');
+        table.date('date').defaultTo(knex.fn.now());
         table.integer('user_id').unsigned().notNullable();
 
         //foreign key relationships
@@ -159,7 +160,7 @@ knex.schema
       
     })
       .then(() => {
-        console.log('Table \'workout_routines\' created');
+        console.log('Table \'workout_exercises\' created');
       })
       .catch((error) => {
         console.error(`There was an error creating table: ${error}`);
@@ -167,7 +168,7 @@ knex.schema
   }
 })
 .then(() => {
-  console.log('created workout_routines table');
+  console.log('created workout_exercises table');
 })
 .catch((error) => {
   console.error(`There was an error setting up the database: ${error}`);

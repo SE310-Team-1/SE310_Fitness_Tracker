@@ -1,154 +1,92 @@
-import React, { Fragment, useState, useEffect, useCallback } from "react"
-import { dateToString } from "../utils/dateUtils"
+import React, { Fragment, useState, useEffect} from "react"
 import ExerciseLogger from "./ExerciseLogger"
-import ExerciseEditor from "./ExerciseEditor"
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExercisesDisplay.module.css'
+import ExerciseAdder from "./ExerciseAdder"
+import axios from "axios"
 
-const ExercisesDisplay = ({ darkmode, exercises: initialExercises }) => {
-
-    const [completedSets, setCompletedSets] = useState([])
+const ExercisesDisplay = ({ exercises, setExercises, darkmode }) => {
 
     const [exerciseList, setExerciseList] = useState({})
+    const [addExerciseMode, setAddExerciseMode] = useState(false)
+
+    // Create a state to hold an array of the number of sets logged for each exercise. Initialize to 0 for all exercises
+    const [setsLogged, setSetsLogged] = useState(exercises.map(exercise => 0))
 
     // initialExercises when user clicks add to today's workout in the routines
-    const [exercises, setExercises] = useState(initialExercises);
-    
-    // const [exercises, setExercises] = useState([
-    //     {
-    //         id: 0,
-    //         name: "Lat Raise",
-    //         weight: 20,
-    //         reps: 10,
-    //         setsGoal: 4,
-    //         setsLogged: 2,
-    //         editMode: false
-    //     },
-    //     {
-    //         id: 1,
-    //         name: "Squat",
-    //         weight: 50,
-    //         reps: 10,
-    //         setsGoal: 5,
-    //         setsLogged: 0,
-    //         editMode: false
-    //     }
-    // ])
-
-    const [isEditing, setIsEditing] = useState(false)
-
-    const getExerciseList = async () => {
-        try {
-            const response = await fetch(`http://localhost:4001/exercises/all`);
-            const jsonData = await response.json();
-            console.log(jsonData)
-
-            const loadedExerciseList = {}
-
-            for (var i in jsonData) {
-                const {name, muscle_group} = jsonData[i]
-                if (Object.keys(loadedExerciseList).includes(muscle_group)) {
-                    console.log(`add ${name} to ${muscle_group} exercises`)
-                    loadedExerciseList[muscle_group].push(name)
-                } else {
-                    console.log(`create new muscle group ${muscle_group}`)
-                    loadedExerciseList[muscle_group] = [name]
-                }
-            }
-            console.log(loadedExerciseList)
-            setExerciseList(loadedExerciseList);
-
-        } catch (err) {
-            console.error(err.message)
-        }
-    }
-
-    const deleteExerciseById = useCallback((idToDelete) => {
-
-        setExercises(exercises => exercises.filter(({ id }) => id !== idToDelete));
-
-    }, [])
-
-    const updateExerciseById = useCallback((updatedExercise) => {
-
-        setCompletedSets(completedSets => (
-            [...completedSets, {
-                name: updatedExercise.name,
-                date: dateToString(new Date()),
-                set: updatedExercise.setsLogged,
-                weight: updatedExercise.weight,
-                rep: updatedExercise.reps,
-                score: updatedExercise.weight * updatedExercise.reps
-            }]
-          )
-        );
-      
-        setExercises(exercises => exercises.map(exercise => {
-            if (exercise.id === updatedExercise.id) {
-                return updatedExercise
-            } else {
-                return exercise
-            }
-        }))
-
-        setIsEditing(updatedExercise.editMode)
-
-    }, [])
-
-
-    const addExercise = async () => {
-
-        const newExercise = {
-            id: Math.max(exercises.map(exercise => exercise.id)) + 1,
-            name: "",
-            weight: 10,
-            reps: 10,
-            setsGoal: 5,
-            setsLogged: 0,
-            editMode: true
-        }
-
-        setIsEditing(true)
-
-        const updatedExercises = [...exercises]
-        updatedExercises.push(newExercise)
-        
-        setExercises(exercises => updatedExercises)
-    }
-
-    const logExercise = async (name, date, set, weight, rep, score) => {
-        try {
-            const response = await fetch(`http://localhost:4001/exercises/Log/${name}/${date}/${set}/${weight}/${rep}/${score}`, {
-                method: 'POST'
-            });
-            const jsonData = await response.json();
-            console.log(jsonData)
-        } catch (err) {
-            console.error(err.message)
-        }
-    };
-
-    const logWorkout = async () => {
-
-        for (var i in completedSets) {
-            console.log(completedSets[i])
-            logExercise(
-                completedSets[i].name, 
-                completedSets[i].date, 
-                completedSets[i].set,
-                completedSets[i].weight, 
-                completedSets[i].rep, 
-                completedSets[i].score
-            )
-        }
-
-        setExercises([]);
-    }
-
-
     useEffect(() => {
-        getExerciseList();
-    }, []);
+        axios.get("http://localhost:4001/exercise", { withCredentials: true })
+            .then((response) => {
+                setExerciseList(response.data)
+            })
+            .catch((error) => {
+                console.error("Error fetching exercises", error)
+            })
+
+    }, [])
+
+    const addExercise = (newExercise) => {
+        // Let user choose from a list of exercises
+        setAddExerciseMode(false)
+
+        // Check if the exercise is already in the list
+        if (exercises.find(e => e.id === newExercise.id)) {
+            alert("Exercise already added")
+            return
+        }
+
+        setExercises([...exercises, newExercise])
+        setSetsLogged([...setsLogged, 0])
+    }
+
+    const cancelAddExercise = () => {
+        setAddExerciseMode(false)
+    }
+
+    const handleRemoveExercise = (exercise) => {
+        console.log("Removing exercise")
+        setExercises(exercises.filter(e => e.id !== exercise.id))
+        setSetsLogged(setsLogged.filter((s, index) => index !== exercises.findIndex(e => e.id === exercise.id)))
+    }
+
+    const logWorkout = () => {
+        // Calculate the score of the workout
+        let volumeScore = 0
+        exercises.forEach((exercise, index )=> {
+
+            volumeScore += (( Number(setsLogged[index]) / Number(exercise.setsGoal)) * Number(exercise.weight) * Number(exercise.reps))
+        })
+
+        volumeScore = Math.round(volumeScore)
+
+        // Create workout in the database with only score and date
+        axios.post("http://localhost:4001/workout", { score: volumeScore, date: new Date() }, { withCredentials: true })
+            .then((response) => {
+                console.log("Workout created", response.data)
+
+                // Get the id of the workout that was just created
+                const workoutId = response.data.id.id
+
+                // Create an array of objects with the exercise id and sets completed
+                const exercisesToLog = exercises.map((exercise, index) => ({ exercise_id: exercise.id, sets_completed: setsLogged[index] }))
+
+                // Add the exercises to the workout
+                axios.post(`http://localhost:4001/workout/${workoutId}/exercises`, {exercises:exercisesToLog}, { withCredentials: true })
+                    .then((response) => {
+                        console.log("Exercises added to workout", response.data)
+                        setExercises([])
+                        setSetsLogged([])
+                    })
+                    .catch((error) => {
+                        console.error("Error adding exercises to workout", error)
+                    })
+                
+            })
+            .catch((error) => {
+                console.error("Error creating workout", error)
+            })
+
+    }
 
     return (
         <Fragment>
@@ -168,18 +106,17 @@ const ExercisesDisplay = ({ darkmode, exercises: initialExercises }) => {
                     </thead>
                     <tbody>
                         {exercises.map(exercise => (
-                            exercise.editMode ?
-                                <ExerciseEditor exercise={exercise} exerciseList={exerciseList} deleteExercise={deleteExerciseById} updateExercise={updateExerciseById} />
-                                :
-                                <ExerciseLogger exercise={exercise} isEditing={isEditing} updateExercise={updateExerciseById} darkmode={darkmode}/>
-                        )
-                        )}
+                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} setsLogged={setsLogged} setSetsLogged={setSetsLogged} index={exercises.findIndex(e=> e.id === exercise.id)} darkmode={darkmode}/>
+                        ))
+                        }
+
+                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise}/>}
                     </tbody>
                 </table>
 
                 <div className={styles.buttonContainer}>
-                    {!isEditing && <button className={`${buttons.button} ${buttons.addButton}`} onClick={() => addExercise()}>Add Exercise</button>}
-                    {!isEditing && <button className={darkmode ? `${buttons.button} ${styles.logWorkoutButton}` : `${buttons.buttonLight} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>}
+                    <button className={`${buttons.button} ${buttons.addButton}`} onClick={() => setAddExerciseMode(true)}>Add Exercise</button>
+                    <button className={darkmode ? `${buttons.button} ${styles.logWorkoutButton}` : `${buttons.buttonLight} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>
                 </div>
 
             </div>
@@ -187,4 +124,4 @@ const ExercisesDisplay = ({ darkmode, exercises: initialExercises }) => {
     )
 }
 
-export default ExercisesDisplay
+export default ExercisesDisplay 
