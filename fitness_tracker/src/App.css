@@ -3,12 +3,14 @@
   text-align: center;
   background-color: var(--primary-bg-color);
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  min-height: 100vh;
 }
 
 .App-light {
   text-align: center;
   background-color: #ececec;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  min-height: 100vh;
 }
 
 .App-logo {
