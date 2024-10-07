@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../module_CSS/NewRoutineModal.module.css';
 import { formatDate } from '../utils/dateUtils.js'
+import { dark } from '@mui/material/styles/createPalette.js';
 
-const NewRoutineModal = ({ onSave, onClose }) => {
+const NewRoutineModal = ({ onSave, onClose, darkmode }) => {
     const today = new Date();
     const formattedDate = formatDate(today); // 14 Aug 2024
     var id=-1;
@@ -35,18 +36,18 @@ const NewRoutineModal = ({ onSave, onClose }) => {
     };
 
     return (
-        <div className={styles.modalContainer}>
+        <div className={darkmode ? styles.modalContainer : styles.modalContainerLight} >
             <h2 className={styles.modalTitle}>Create New Routine</h2>
             <input
                 type="text"
-                className={styles.inputField}
+                className={darkmode ? styles.inputField : styles.inputFieldLight}
                 placeholder="Routine Name"
                 value={routine.name}
                 onChange={(e) => setRoutine({ ...routine, name: e.target.value })}
             />
             <input
                 type="text"
-                className={styles.inputField}
+                className={darkmode ? styles.inputField : styles.inputFieldLight}
                 placeholder="Muscle Groups"
                 value={routine.muscle_group}
                 onChange={(e) => setRoutine({ ...routine, muscles: e.target.value })}
@@ -54,19 +55,19 @@ const NewRoutineModal = ({ onSave, onClose }) => {
             <p className={styles.dateDisplay}>Date: {routine.date}</p>
             <h3>Add Exercises</h3>
             {routine.exercises.map((exercise, index) => (
-                <div key={index} className={styles.exerciseContainer}>
+                <div key={index} className={darkmode ? styles.exerciseContainer : styles.exerciseContainerLight}>
                     <input
                         type="text"
-                        className={styles.inputField}
+                        className={darkmode ? styles.inputField : styles.inputFieldLight}
                         placeholder="Exercise Name"
                         value={exercise.name}
                         onChange={(e) => handleExerciseChange(index, 'name', e.target.value)}
                     />
 
-                    <div className={styles.inputWithSuffix}>
+                    <div className={darkmode ? styles.inputWithSuffix : styles.inputWithSuffixLight}>
                         <input
                             type="number"
-                            className={styles.inputField}
+                            className={darkmode ? styles.inputField : styles.inputFieldLight}
                             placeholder="Sets"
                             value={exercise.sets}
                             onChange={(e) => handleExerciseChange(index, 'setsGoal', e.target.value)}
@@ -74,10 +75,10 @@ const NewRoutineModal = ({ onSave, onClose }) => {
                         <span className={styles.suffix}>sets</span>
                     </div>
 
-                    <div className={styles.inputWithSuffix}>
+                    <div className={darkmode ? styles.inputWithSuffix : styles.inputWithSuffixLight}>
                         <input
                             type="number"
-                            className={styles.inputField}
+                            className={darkmode ? styles.inputField : styles.inputFieldLight}
                             placeholder="Reps"
                             value={exercise.reps}
                             onChange={(e) => handleExerciseChange(index, 'reps', e.target.value)}
@@ -85,10 +86,10 @@ const NewRoutineModal = ({ onSave, onClose }) => {
                         <span className={styles.suffix}>reps</span>
                     </div>
 
-                    <div className={styles.inputWithSuffix}>
+                    <div className={darkmode ? styles.inputWithSuffix : styles.inputWithSuffixLight}>
                         <input
                             type="number"
-                            className={styles.inputField}
+                            className={darkmode ? styles.inputField : styles.inputFieldLight}
                             placeholder="Weight"
                             value={exercise.weight}
                             onChange={(e) => handleExerciseChange(index, 'weight', e.target.value)}

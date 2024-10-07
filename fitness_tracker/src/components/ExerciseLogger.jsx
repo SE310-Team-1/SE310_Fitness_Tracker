@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import buttons from '../module_CSS/buttons.module.css'
 import styles from '../module_CSS/ExerciseLogger.module.css'
 
-const ExerciseLogger = ({ exercise, handleRemoveExercise, setsLogged, setSetsLogged, index }) => {
+const ExerciseLogger = ({ exercise, handleRemoveExercise, setsLogged, setSetsLogged, index, darkmode }) => {
     console.log("Sets logged", setsLogged)
 
     const logSet = () => {
@@ -23,7 +23,7 @@ const ExerciseLogger = ({ exercise, handleRemoveExercise, setsLogged, setSetsLog
                 <td data-label={"Goal"}>{exercise.setsGoal}</td>
                 <td data-label={"Sets"}>{setsLogged[index]}</td>
                 <td><button onClick={() => handleRemoveExercise(exercise)} className={`${buttons.button} ${buttons.editButton}`}>Remove</button></td>
-                <td><button className={`${buttons.button} ${styles.logSetButton}`} onClick={() => logSet()}>Log Set</button></td>
+                <td><button className={darkmode ? `${buttons.button} ${styles.logSetButton}` : `${buttons.buttonLight} ${styles.logSetButton}`} onClick={() => logSet()}>Log Set</button></td>
             </tr>
         </Fragment>
     );

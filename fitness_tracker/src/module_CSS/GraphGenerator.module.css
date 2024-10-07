@@ -3,6 +3,13 @@
 .rechartWrapper {
   margin: 0 auto;
   background-color: var(--graph-bg-color);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.rechartWrapperLight {
+  margin: 0 auto;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .rechartWrapper:hover {
@@ -14,11 +21,24 @@
   stroke: #4A4A4A;
 }
 
+.rechartsCartesianGridLight {
+  stroke: #b9b9b9;
+}
+
 .recharts-cartesian-axis-line,
 .recharts-cartesian-axis-tick line {
   stroke: #fff;
 }
 
+.recharts-cartesian-axis-line-light,
+.recharts-cartesian-axis-tick-light line {
+  stroke: #414141;
+}
+
 .recharts-cartesian-axis-tick text {
   fill: #fff;
+}
+
+.recharts-cartesian-axis-tick-light text {
+  fill: #414141;
 }

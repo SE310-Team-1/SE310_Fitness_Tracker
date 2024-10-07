@@ -5,7 +5,7 @@ import styles from '../module_CSS/ExercisesDisplay.module.css'
 import ExerciseAdder from "./ExerciseAdder"
 import axios from "axios"
 
-const ExercisesDisplay = ({ exercises, setExercises }) => {
+const ExercisesDisplay = ({ exercises, setExercises, darkmode }) => {
 
     const [exerciseList, setExerciseList] = useState({})
     const [addExerciseMode, setAddExerciseMode] = useState(false)
@@ -90,9 +90,9 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
 
     return (
         <Fragment>
-            <div className={styles.container}>
-                <h1 className={styles.h1}>Exercises</h1>
-                <table className={styles.table}>
+            <div className={darkmode ? styles.container : styles.containerLight}>
+                <h1 className={darkmode ? styles.heading : styles.headingLight}>Exercises</h1>
+                <table className={darkmode ? styles.table : styles.tableLight}>
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -106,17 +106,17 @@ const ExercisesDisplay = ({ exercises, setExercises }) => {
                     </thead>
                     <tbody>
                         {exercises.map(exercise => (
-                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} setsLogged={setsLogged} setSetsLogged={setSetsLogged} index={exercises.findIndex(e=> e.id === exercise.id)} />
+                                <ExerciseLogger exercise={exercise} handleRemoveExercise={handleRemoveExercise} setsLogged={setsLogged} setSetsLogged={setSetsLogged} index={exercises.findIndex(e=> e.id === exercise.id)} darkmode={darkmode}/>
                         ))
                         }
 
-                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise}/>}
+                        {addExerciseMode && <ExerciseAdder exerciseList={exerciseList} addExercise={addExercise} cancelAddExercise={cancelAddExercise} darkmode={darkmode}/>}
                     </tbody>
                 </table>
 
                 <div className={styles.buttonContainer}>
                     <button className={`${buttons.button} ${buttons.addButton}`} onClick={() => setAddExerciseMode(true)}>Add Exercise</button>
-                    <button className={`${buttons.button} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>
+                    <button className={darkmode ? `${buttons.button} ${styles.logWorkoutButton}` : `${buttons.buttonLight} ${styles.logWorkoutButton}`} onClick={() => logWorkout()}>Log Workout</button>
                 </div>
 
             </div>

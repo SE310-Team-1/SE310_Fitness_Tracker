@@ -13,8 +13,9 @@ import {
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import styles from "../module_CSS/WorkoutHistory.module.css";
+import { dark } from "@mui/material/styles/createPalette";
 
-const WorkoutHistoryRow = ({ workout, exercises }) => {
+const WorkoutHistoryRow = ({ workout, exercises, darkmode }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   // Toggle expanded view containing exercise details
@@ -33,16 +34,16 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
   return (
     <>
       {/* Workout Date Row (Collapsed View) */}
-      <TableRow className={styles.tableOddRowsColor} hover>
-        <TableCell className={styles.tableDate} style={{ textAlign: "center" }}>
+      <TableRow className={darkmode ? styles.tableOddRowsColor : styles.tableOddRowsColorLight} hover>
+        <TableCell className={darkmode ? styles.tableDate : styles.tableDateLight} style={{ textAlign: "center" }}>
           {new Date(workout.date).toLocaleString()}
         </TableCell>
         <TableCell
-          className={styles.primaryTextColor}
+          className={darkmode ? styles.primaryTextColor : styles.primaryTextColorLight}
           style={{ textAlign: "right", width: "5%" }}
         >
           <IconButton
-            className={styles.iconButton}
+            className={darkmode ? styles.iconButton : styles.iconButtonLight}
             aria-label="expand row"
             size="small"
             onClick={handleRowClick}
@@ -53,7 +54,7 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
       </TableRow>
 
       {/* Expanded View */}
-      <TableRow className={styles.tableEvenRowsColor}>
+      <TableRow className={darkmode ? styles.tableEvenRowsColor : styles.tableEvenRowsColorLight}>
         <TableCell colSpan={2} style={{ padding: 0 }}>
           <Collapse in={showDetails} timeout="auto" unmountOnExit>
             <Box margin={2}>
@@ -61,7 +62,7 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
               <Typography
                 variant="h6"
                 align="left"
-                className={styles.primaryTextColor}
+                className={darkmode ? styles.primaryTextColor : styles.primaryTextColorLight}
                 style={{ marginBottom: "16px", fontWeight: "bold" }}
               >
                 TOTAL SCORE: {workout.score}
@@ -69,39 +70,39 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
 
               {/* Exercise Breakdown */}
               <TableContainer>
-                <Table size="small" className={styles.table}>
-                  <TableHead className={styles.tableHeaderBgColor}>
+                <Table size="small" className={darkmode ? styles.table : styles.tableLight}>
+                  <TableHead className={darkmode ? styles.tableHeaderBgColor : styles.tableHeaderBgColorLight}>
                     <TableRow>
                       <TableCell
-                        className={styles.tableExerciseData}
+                        className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                         style={{ width: "18%" }}
                       >
                         <strong>Exercise</strong>
                       </TableCell>
                       <TableCell
                         align="center"
-                        className={styles.tableExerciseData}
+                        className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                         style={{ width: "15%" }}
                       >
                         <strong>Sets Completed</strong>
                       </TableCell>
                       <TableCell
                         align="center"
-                        className={styles.tableExerciseData}
+                        className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                         style={{ width: "15%" }}
                       >
                         <strong>Reps</strong>
                       </TableCell>
                       <TableCell
                         align="center"
-                        className={styles.tableExerciseData}
+                        className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                         style={{ width: "15%" }}
                       >
                         <strong>Weight (kg)</strong>
                       </TableCell>
                       <TableCell
                         align="center"
-                        className={styles.tableExerciseData}
+                        className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                         style={{ width: "15%" }}
                       >
                         <strong>Score</strong>
@@ -113,43 +114,43 @@ const WorkoutHistoryRow = ({ workout, exercises }) => {
                       exercises.map((exercise, index) => (
                         <TableRow
                           key={index}
-                          className={styles.tableOddRowsColor}
+                          className={darkmode ? styles.tableOddRowsColor : styles.tableOddRowsColorLight}
                         >
-                          <TableCell className={styles.tableExerciseData}>
+                          <TableCell className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}>
                             {exercise.name}
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={styles.tableExerciseData}
+                            className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                           >
                             {exercise.sets_completed} / {exercise.setsGoal}
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={styles.tableExerciseData}
+                            className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                           >
                             {exercise.reps}
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={styles.tableExerciseData}
+                            className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                           >
                             {exercise.weight}
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={styles.tableExerciseData}
+                            className={darkmode ? styles.tableExerciseData : styles.tableExerciseDataLight}
                           >
                             {getExerciseScore(exercise)}
                           </TableCell>
                         </TableRow>
                       ))
                     ) : (
-                      <TableRow className={styles.tableOddRowsColor}>
+                        <TableRow className={darkmode ? styles.tableOddRowsColor : styles.tableOddRowsColorLight}>
                         <TableCell
                           colSpan={5}
                           align="center"
-                          className={styles.primaryTextColor}
+                            className={darkmode ? styles.primaryTextColor: styles.primaryTextColorLight}
                         >
                           No exercises found for this workout.
                         </TableCell>
