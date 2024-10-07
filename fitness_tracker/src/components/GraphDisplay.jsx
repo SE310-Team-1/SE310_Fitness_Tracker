@@ -24,12 +24,6 @@ function GraphDisplay() {
 
                 <div className={styles.inputContainer}>
                     <input id="dateSelector" type="date" max={endDate} className={styles.inputField} />
-                    <select id="muscleGroup" className={styles.selectField}>
-                        <option>Muscle Group 1</option>
-                        <option>Muscle Group 2</option>
-                        <option>Muscle Group 3</option>
-                        <option>Muscle Group 4</option>
-                    </select>
                     <select id="periodDropDown" className={styles.selectField}>
                         <option value="7">Week</option>
                         <option value="14">Fortnite</option>
@@ -93,9 +87,6 @@ function UpdateGraph(startDate, endDate, setData) {
 */
 function FetchPeriod(startDate, endDate) {
 
-    /* Temporary get request */
-    console.log(getData('/exercises/score/' + '2022-01-01', 'GET'));
-
     let data = [];
     for (
         let nextDate = startDate;
@@ -105,7 +96,7 @@ function FetchPeriod(startDate, endDate) {
         data.push({
             date: dateToString(nextDate),
             /* Temp score, to be connected to database */
-            score: Math.floor(Math.random() * 2000)
+            score: fetchedScore || Math.floor(Math.random() * 2000)
         });
     }
     return data;
