@@ -24,6 +24,14 @@
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
+.MuiPaper-root .container {
+    background-color: var(--dark-bg-color);
+}
+
+.MuiPaper-root .containerLight {
+    background-color: #fff;
+}
+
 /* Styles for the table itself */
 .table {
     width: 100%;
