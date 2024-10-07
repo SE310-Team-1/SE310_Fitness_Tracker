@@ -85,7 +85,7 @@ function UpdateGraph(startDate, endDate, setData) {
         startDate:  A JavaScript Date object corresponding with the period start date.
         endDate:    A JavaScript Date object corresponding with the period end date.
 */
-function FetchPeriod(startDate, endDate) {
+async function FetchPeriod(startDate, endDate) {
 
     let data = [];
     for (
@@ -93,9 +93,11 @@ function FetchPeriod(startDate, endDate) {
         nextDate <= endDate;
         nextDate.setDate(nextDate.getDate() + 1)
     ) {
+        let fetchedScore = await getData(`/workouts/${dateToString(nextDate)}`, 'GET');
+
         data.push({
             date: dateToString(nextDate),
-            /* Temp score, to be connected to database */
+            // Use the fetched score, or fallback to a random value
             score: fetchedScore || Math.floor(Math.random() * 2000)
         });
     }
