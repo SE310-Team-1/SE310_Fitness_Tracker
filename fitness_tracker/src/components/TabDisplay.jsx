@@ -99,6 +99,10 @@ function TabDisplay() {
          <CustomTabPanel value={value} index={2}>
           <WorkoutHistoryDisplay />
         </CustomTabPanel>
+        
+        <CustomTabPanel value={value} index={3}>
+          <AchievementsDisplay />
+        </CustomTabPanel>
       </Box>
     </div>
   );
