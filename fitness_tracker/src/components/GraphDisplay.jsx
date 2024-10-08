@@ -1,8 +1,9 @@
 import GenerateGraph from "./GraphGenerator";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { dateToString } from "../utils/dateUtils"
 import styles from '../module_CSS/GraphDisplay.module.css'
 import buttons from '../module_CSS/buttons.module.css'
+import axios from 'axios';
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -12,10 +13,20 @@ import buttons from '../module_CSS/buttons.module.css'
             parameters passed to this function.
 */
 function GraphDisplay() {
-    let endDate = dateToString(new Date());
+    let endDate = new Date();
     let startDate = new Date();
-    startDate.setDate(startDate.getDate() - 6);
-    const [data, setData] = useState(FetchPeriod(startDate, new Date()));
+    endDate.setDate(startDate.getDate()-1);
+    startDate.setDate(startDate.getDate()-7);
+    const [data, setData] = useState([]);
+
+    // Fetch data asynchronously after component mounts
+    useEffect(() => {
+        const fetchData = async () => {
+            const fetchedData = await FetchPeriod(startDate, endDate);
+            setData(fetchedData);
+        };
+        fetchData();
+    }, []);
 
     return (
         <Fragment>
@@ -69,11 +80,12 @@ function GetStartDate(endDate, period) {
         endDate:    The JavaScript Date object specifying the display period end date.
         setDate:    The useState setter function linked to the progress graph's data set.
 */
-function UpdateGraph(startDate, endDate, setData) {
-    if (endDate == null || startDate == null || startDate > endDate) {
+async function UpdateGraph(startDate, endDate, setData) {
+    if (endDate == null) {
         alert("Please select a valid date.");
     } else {
-        setData(FetchPeriod(startDate, endDate));
+        const fetchedData = await FetchPeriod(startDate, endDate);
+        setData(fetchedData); 
     }
 }
 
@@ -86,26 +98,30 @@ function UpdateGraph(startDate, endDate, setData) {
         endDate:    A JavaScript Date object corresponding with the period end date.
 */
 async function FetchPeriod(startDate, endDate) {
-
     let data = [];
     for (
         let nextDate = startDate;
         nextDate <= endDate;
         nextDate.setDate(nextDate.getDate() + 1)
     ) {
-        let fetchedScore = await getData(`/workouts/${dateToString(nextDate)}`, 'GET');
+        let fetchedScore = await getScore(`/${dateToString(nextDate)}`);
 
         data.push({
             date: dateToString(nextDate),
-            // Use the fetched score, or fallback to a random value
-            score: fetchedScore || Math.floor(Math.random() * 2000)
+            score: fetchedScore,
         });
     }
     return data;
 }
 
-async function getData(path, method) {
-    return await fetch('http://localhost:4001' + path,  {method: method});
+const getScore = async (date) => {
+    try {
+        const response = await axios.get(`http://localhost:4001/workout${date}`, { withCredentials: true });
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching data from ${date}:`, error);
+        throw error;
+    }
 }
 
 export default GraphDisplay;

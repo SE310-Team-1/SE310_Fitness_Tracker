@@ -217,6 +217,30 @@ const editExercise = async (req, res) => {
   }
 }
 
+const getWorkoutScoreByDate = async (req, res) => {
+  const { date } = req.params;
+
+  if (!date) {
+    return res.status(400).json({ error: 'Date is required.' });
+  }
+
+  try {
+    const workout = await knex('workouts')
+      .where('date', date)
+      .andWhere('user_id', req.session.user.user_id)
+      .first();
+
+    if (!workout) {
+      return res.status(404).json({ message: 'No workout found for this date.' });
+    }
+
+    res.status(200).json({ score: workout.score });
+  } catch (error) {
+    console.error(`Error retrieving workout score: ${error}`);
+    res.status(500).json({ error: 'An error occurred while retrieving workout score.' });
+  }
+}
+
 export {
   workoutsAll,
   workoutById,
@@ -226,5 +250,6 @@ export {
   addExercises,
   getExercises,
   deleteExercises,
-  editExercise
+  editExercise,
+  getWorkoutScoreByDate
 }
