@@ -11,24 +11,26 @@ import axios from 'axios';
 */
 function GraphDisplay() {
     const [data, setData] = useState([]);
-    const [exerciseList, setExerciseList] = useState({});
 
     let endDate = new Date();
     let startDate = new Date();
-    endDate.setDate(startDate.getDate() - 1);
-    startDate.setDate(startDate.getDate() - 7);
+    endDate.setDate(startDate.getDate());
+    startDate.setDate(startDate.getDate() - 6);
 
     // Fetch data asynchronously after component mounts
     useEffect(() => {
-        UpdateGraph(startDate, endDate, setData, exerciseList, setExerciseList);
+        UpdateGraphFromInputs();
     }, []);
 
     // Define UpdateGraphFromInputs inside GraphDisplay
     function UpdateGraphFromInputs() {
         let endDate = document.getElementById("dateSelector").valueAsDate;
+        if (endDate == null) {
+            endDate = new Date();
+        }
         let period = document.getElementById("periodDropDown").value;
         let startDate = GetStartDate(endDate, period);
-        UpdateGraph(startDate, endDate, setData, exerciseList, setExerciseList);
+        UpdateGraph(startDate, endDate, setData);
     }
 
     return (
@@ -65,20 +67,16 @@ function GetStartDate(endDate, period) {
 /* 
     UpdateGraph() updates the graph's data set and re-renders the graph.
 */
-async function UpdateGraph(startDate, endDate, setData, exerciseList, setExerciseList) {
-    if (endDate == null) {
-        alert("Please select a valid date.");
-    } else {
-        const fetchedData = await FetchPeriod(startDate, endDate, exerciseList, setExerciseList);
+async function UpdateGraph(startDate, endDate, setData) {
+        const fetchedData = await FetchPeriod(startDate, endDate);
         setData(fetchedData);
-    }
 }
 
 /* 
     FetchPeriod() returns exercise progress data corresponding with the period between the 
     startDate and endDate parameters (inclusive).
 */
-async function FetchPeriod(startDate, endDate, exerciseList, setExerciseList) {
+async function FetchPeriod(startDate, endDate) {
     let data = [];
 
     for (
