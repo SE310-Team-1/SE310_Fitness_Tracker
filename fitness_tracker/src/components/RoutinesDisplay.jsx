@@ -4,7 +4,7 @@ import NewRoutineModal from "./NewRoutineModal";
 import styles from "../module_CSS/RoutinesDisplay.module.css";
 import axios from "axios";
 
-const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
+const RoutinesDisplay = ({ onAddToTodayWorkout, darkmode }) => {
   const [routines, setRoutines] = useState([]);
 
   /*
@@ -208,7 +208,7 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={darkmode ? styles.container : styles.containerLight}>
       <h1 className={`${styles.h1}`}>Workout Routines</h1>
       {isModalOpen ? (
         <button
@@ -224,12 +224,14 @@ const RoutinesDisplay = ({ onAddToTodayWorkout }) => {
       )}
       {isModalOpen && (
         <NewRoutineModal
+          darkmode={darkmode}
           onSave={handleSaveRoutine}
           onClose={() => setIsModalOpen(false)}
         />
       )}
       {routines.map((routine, index) => (
         <Routine
+          darkmode={darkmode}
           key={index}
           routine={routine}
           onSave={(updatedRoutine) => handleEditRoutine(updatedRoutine, index)}

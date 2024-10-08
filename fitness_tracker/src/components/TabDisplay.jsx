@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import RoutinesDisplay from './RoutinesDisplay';
 import ExercisesDisplay from './ExercisesDisplay';
 import WorkoutHistoryDisplay from './WorkoutHistoryDisplay';
+import AchievementsDisplay from './AchievementsDisplay';
 import styles from '../module_CSS/TabDisplay.module.css';
 
 function CustomTabPanel(props) {
@@ -39,7 +40,7 @@ function a11yProps(index) {
 }
 
 // Todo: need to add swipe for mobile
-function TabDisplay() {
+function TabDisplay({ darkmode }) {
   const [value, setValue] = useState(0);
   const [todayWorkout, setTodayWorkout] = useState([]); // State to hold today's workout, init empty array
 
@@ -54,8 +55,8 @@ function TabDisplay() {
   };
 
   return (
-    <div className={styles.tabContainer}>
-      <Box sx={{ width: '100%', backgroundColor: '#121212' }}>
+    <div className={darkmode ? styles.tabContainer : styles.tabContainerLight}>
+      <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={value}
@@ -65,33 +66,42 @@ function TabDisplay() {
             centered={true}
           >
             <Tab
-              className={`${styles.tabRoot} ${value === 0 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              className={darkmode ? `${styles.tabRoot} ${value === 0 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 0 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
               label="Routines"
               {...a11yProps(0)}
             />
             <Tab
-              className={`${styles.tabRoot} ${value === 1 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              className={darkmode ? `${styles.tabRoot} ${value === 1 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 1 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
               label="Today's Workout"
               {...a11yProps(1)}
             />
              <Tab
-              className={`${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              className={darkmode ? `${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 2 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
               label="Workout History"
               {...a11yProps(2)} 
-            />          
+            /> 
+            <Tab
+              className={darkmode ? `${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 2 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
+              label="Achievements"
+              {...a11yProps(3)} 
+            /> 
           </Tabs>
         </Box>
 
         <CustomTabPanel value={value} index={0}>
-          <RoutinesDisplay onAddToTodayWorkout={handleAddToTodayWorkout} />
+          <RoutinesDisplay onAddToTodayWorkout={handleAddToTodayWorkout} darkmode={darkmode}/>
         </CustomTabPanel>
 
         <CustomTabPanel value={value} index={1}>
-          <ExercisesDisplay exercises={todayWorkout} setExercises={setTodayWorkout} />
+          <ExercisesDisplay exercises={todayWorkout} setExercises={setTodayWorkout} darkmode={darkmode} />
         </CustomTabPanel>
 
          <CustomTabPanel value={value} index={2}>
-          <WorkoutHistoryDisplay />
+          <WorkoutHistoryDisplay darkmode={darkmode} />
+        </CustomTabPanel>
+        
+        <CustomTabPanel value={value} index={3}>
+          <AchievementsDisplay darkmode={darkmode}/>
         </CustomTabPanel>
       </Box>
     </div>

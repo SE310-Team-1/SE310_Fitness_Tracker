@@ -2,6 +2,15 @@
 .App {
   text-align: center;
   background-color: var(--primary-bg-color);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  min-height: 100vh;
+}
+
+.App-light {
+  text-align: center;
+  background-color: #ececec;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -27,7 +36,24 @@
   color: #F00000;
   padding-left: 2%;
   padding-right: 2%;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
+
+.App-header-light {
+  background-color: #ffffff;
+  min-height: 8vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(12px + 2vmin);
+  font-weight: bold;
+  color: #F00000;
+  padding-left: 2%;
+  padding-right: 2%;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
 
 .App-link {
   color: #61dafb;

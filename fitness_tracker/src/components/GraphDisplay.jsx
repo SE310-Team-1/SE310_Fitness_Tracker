@@ -9,7 +9,7 @@ import axios from 'axios';
     GraphDisplay() returns the entire progress graph GUI segment, including the 
     reactive graph.
 */
-function GraphDisplay() {
+function GraphDisplay({ darkmode } ) {
     const [data, setData] = useState([]);
 
     let endDate = new Date();
@@ -35,8 +35,8 @@ function GraphDisplay() {
 
     return (
         <Fragment>
-            <div className={styles.graphContainer}>
-                <GenerateGraph data={data} />
+            <div className={darkmode ? styles.graphContainer : styles.graphContainerLight}>
+                <GenerateGraph data={data} darkmode={darkmode}/>
 
                 <div className={styles.inputContainer}>
                     <input id="dateSelector" type="date" max={endDate} className={styles.inputField} />

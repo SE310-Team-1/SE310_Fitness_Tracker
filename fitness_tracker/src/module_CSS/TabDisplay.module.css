@@ -7,11 +7,23 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tabContainerLight {
+    margin: 0 auto;
+    margin: 16px;
+    margin-bottom: 0px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .tabRoot {
     color: #ffffff;
-    transition: color 0.1s ease;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .selectedTab {
@@ -22,8 +34,16 @@
     color: var(--primary-text-color) !important;
 }
 
+.unselectedTabLight {
+    color: #121212 !important;
+}
+
 .hoverTab:hover {
     color: white !important;
+}
+
+.hoverTabLight:hover {
+    color: #4A4A4A !important;
 }
 
 .tabIndicator {

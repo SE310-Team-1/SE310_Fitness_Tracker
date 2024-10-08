@@ -136,7 +136,7 @@
     color: var(--primary-text-color) !important;
 }
 
-/* MUI Components Typography*/
+/* MUI Components Typography */
 .tableDate {
     font-size: var(--fs-300) !important;
     color: var(--primary-text-color) !important;
@@ -160,7 +160,7 @@
     margin-bottom: 0.8rem !important;
     font-weight: 600 !important;
 }
-  
+
 .tableExerciseData {
     font-size: var(--fs-200);
     color: var(--primary-text-color) !important;
