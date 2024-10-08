@@ -13,7 +13,6 @@ import axios from "axios";
 import styles from "../module_CSS/WorkoutHistory.module.css";
 
 function AchievementsDisplay() {
-  const [workouts, setWorkouts] = useState([]);
   const [totalScore, setTotalScore] = useState(0);
   const [workoutCount, setWorkoutCount] = useState(0);
 
@@ -28,7 +27,6 @@ function AchievementsDisplay() {
         withCredentials: true,
       });
       const workoutsData = response.data;
-      setWorkouts(workoutsData);
 
       // Calculate the total score and other metrics from all workouts
       const total = workoutsData.reduce((sum, workout) => sum + workout.score, 0);
@@ -87,11 +85,11 @@ function AchievementsDisplay() {
     const nextScoreTargets = [100, 1000, 10000, 100000, 1000000];
     const nextWorkoutTargets = [1, 10, 100];
 
-    const nextScoreTarget = nextScoreTargets.find(target => score < target) || nextScoreTargets[nextScoreTargets.length - 1];
-    const nextWorkoutTarget = nextWorkoutTargets.find(target => count < target) || nextWorkoutTargets[nextWorkoutTargets.length - 1];
+    const nextScoreTarget = nextScoreTargets.find(target => score < target) || null;
+    const nextWorkoutTarget = nextWorkoutTargets.find(target => count < target) || null;
 
-    const scoreProgress = ((score / nextScoreTarget) * 100) || 100;
-    const workoutProgress = ((count / nextWorkoutTarget) * 100) || 100;
+    const scoreProgress = nextScoreTarget ? ((score / nextScoreTarget) * 100) || 100 : 100;
+    const workoutProgress = nextWorkoutTarget ? ((count / nextWorkoutTarget) * 100) || 100 : 100;
 
     return { scoreProgress, workoutProgress, nextScoreTarget, nextWorkoutTarget };
   };
@@ -135,32 +133,39 @@ function AchievementsDisplay() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell>
-              <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> {/* Set text color to white */}
-                <span>Next Score Achievement: {nextScoreTarget} points</span>
-                <span>{scoreProgress.toFixed(2)}%</span>
-              </div>
-              <LinearProgress
-                variant="determinate"
-                value={scoreProgress}
-                sx={{ height: 20 }} // Increase vertical size of the progress bar
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> {/* Set text color to white */}
-                <span>Next Workout Achievement: {nextWorkoutTarget} workouts</span>
-                <span>{workoutProgress.toFixed(2)}%</span>
-              </div>
-              <LinearProgress
-                variant="determinate"
-                value={workoutProgress}
-                sx={{ height: 20 }} // Increase vertical size of the progress bar
-              />
-            </TableCell>
-          </TableRow>
+          {/* Only display the score progress if a next score target exists */}
+          {nextScoreTarget && (
+            <TableRow>
+              <TableCell>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> 
+                  <span>Next Score Achievement: {nextScoreTarget} points</span>
+                  <span>{totalScore} / {nextScoreTarget} points</span> {/* Display fraction for score */}
+                </div>
+                <LinearProgress
+                  variant="determinate"
+                  value={scoreProgress}
+                  sx={{ height: 20 }}
+                />
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* Only display the workout progress if a next workout target exists */}
+          {nextWorkoutTarget && (
+            <TableRow>
+              <TableCell>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> 
+                  <span>Next Workout Achievement: {nextWorkoutTarget} workouts</span>
+                  <span>{workoutCount} / {nextWorkoutTarget} workouts</span> {/* Display fraction for workouts */}
+                </div>
+                <LinearProgress
+                  variant="determinate"
+                  value={workoutProgress}
+                  sx={{ height: 20 }}
+                />
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
