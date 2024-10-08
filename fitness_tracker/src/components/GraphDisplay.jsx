@@ -4,6 +4,7 @@ import { dateToString } from "../utils/dateUtils";
 import styles from '../module_CSS/GraphDisplay.module.css';
 import buttons from '../module_CSS/buttons.module.css';
 import axios from 'axios';
+import { Update } from "@mui/icons-material";
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -20,7 +21,7 @@ function GraphDisplay() {
 
     // Fetch data asynchronously after component mounts
     useEffect(() => {
-        // Call to fetchExercises can be modified as needed
+        UpdateGraph(startDate, endDate, setData, exerciseList, setExerciseList);
     }, []);
 
     // Define UpdateGraphFromInputs inside GraphDisplay
