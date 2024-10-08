@@ -34,7 +34,6 @@ router.delete('/:id/exercises' , workoutsController.deleteExercises)
 // Edits the sets completed for a given exercise in a workout
 router.put('/:id/exercises/:exerciseId', workoutsController.editExercise);
 
-
 export default router;
 
 

@@ -3,12 +3,18 @@ import knex from './../db.js';
 
 // Retrieve all workouts
 const workoutsAll = (req, res) => {
-  // Get all workouts from database for the specified user
+  // Get all workouts from database for the specified user, optionally on a given date
   console.log(req.session.user.user_id)
   knex
     .select('*') // select all records
     .from('workouts')
     .where('user_id' , req.session.user.user_id) // from 'workouts' table
+    .modify((queryBuilder) => {
+      if (req.query.date) {
+        const datePattern = `${req.query.date}%`;
+        queryBuilder.where('date', 'like', datePattern);
+      }
+    })
     .then(userData => {
       // Send workouts extracted from database in response
       res.json(userData)
@@ -215,7 +221,7 @@ const editExercise = async (req, res) => {
     console.error(`Error updating exercise sets completed: ${error}`);
     res.status(500).json({ error: 'An error occurred while updating exercise sets completed.' });
   }
-}
+};
 
 export {
   workoutsAll,
