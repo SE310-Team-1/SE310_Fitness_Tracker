@@ -1,0 +1,172 @@
+@import './colours.module.css'; /* Import colors from the same file */
+
+:root {
+    --fs-xl: clamp(2rem, 2vw + 1rem, 4rem);   
+    --fs-600: clamp(1.5rem, 1.8vw + 1rem, 3rem); 
+    --fs-400: clamp(1rem, 1.5vw + 0.8rem, 2rem); 
+    --fs-300: clamp(0.8rem, 1.2vw + 0.6rem, 1.4rem); 
+    --fs-200: clamp(0.7rem, 1vw + 0.5rem, 1.2rem); 
+    --fs-100: clamp(0.6rem, 0.8vw + 0.4rem, 1rem);
+}
+
+/* Container for the table */
+.container {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: var(--dark-bg-color) !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.containerLight {
+    padding: 12px;
+    border-radius: 4px;
+    background-color: #fff !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.MuiPaper-root .container {
+    background-color: var(--dark-bg-color);
+}
+
+.MuiPaper-root .containerLight {
+    background-color: #fff;
+}
+
+/* Styles for the table itself */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    text-align: left;
+    background-color: var(--table-dark-bg-color) !important;
+}
+
+.tableLight {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    text-align: left;
+    background-color: #fff !important;
+}
+
+/* Styles for the table header */
+.tableHeaderBgColor {
+    background-color: var(--table-header-bg-color) !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tableHeaderBgColorLight {
+    background-color: #dadada !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Styles for table rows */
+.tableOddRowsColor {
+    background-color: var(--table-odd-rows-color) !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tableOddRowsColorLight {
+    background-color: #f3f3f3 !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tableEvenRowsColor {
+    background-color: var(--table-even-rows-color) !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.tableEvenRowsColorLight {
+    background-color: #ececec !important;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Text colors */
+.primaryTextColor {
+    color: var(--primary-text-color) !important;
+}
+
+.primaryTextColorLight {
+    color: #333333 !important;
+}
+
+/* Borders for the table */
+.table td, .table th {
+    border-bottom-width: 1px solid !important;
+    border-color: var(--table-border-color) !important;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.tableLight td, .tableLight th {
+    border-bottom-width: 1px solid !important;
+    border-color: #dadada !important;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.table tbody tr:last-child {
+    border-bottom-width: 2px solid !important;
+    border-color: var(--table-border-color) !important;
+}
+
+.tableLight tbody tr:last-child {
+    border-bottom-width: 2px solid !important;
+    border-color: #dadada !important;
+}
+
+/* Hover effect */
+.table tbody tr:hover {
+    background-color: var(--table-row-hover-bg-color) !important;
+}
+
+.tableLight tbody tr:hover {
+    background-color: #e2e2e2be !important;
+}
+
+/* Icon buttons */
+.iconButton {
+    color: var(--primary-text-color) !important;
+}
+
+.iconButtonLight {
+    color: #333333 !important;
+}
+
+/* Ensure icon buttons inherit colors properly */
+.MuiIconButton-root {
+    color: var(--primary-text-color) !important;
+}
+
+/* MUI Components Typography */
+.tableDate {
+    font-size: var(--fs-300) !important;
+    color: var(--primary-text-color) !important;
+}
+
+.tableDateLight {
+    font-size: var(--fs-300) !important;
+    color: #333333 !important;
+}
+
+.tableTotalScore {
+    font-size: var(--fs-300) !important;
+    color: var(--primary-text-color) !important;
+    margin-bottom: 0.8rem !important;
+    font-weight: 600 !important;
+}
+
+.tableTotalScoreLight {
+    font-size: var(--fs-300) !important;
+    color: #333333 !important;
+    margin-bottom: 0.8rem !important;
+    font-weight: 600 !important;
+}
+
+.tableExerciseData {
+    font-size: var(--fs-200);
+    color: var(--primary-text-color) !important;
+}
+
+.tableExerciseDataLight {
+    font-size: var(--fs-200);
+    color: #333333 !important;
+}
