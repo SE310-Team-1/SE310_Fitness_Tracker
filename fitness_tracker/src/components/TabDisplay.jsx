@@ -81,10 +81,10 @@ function TabDisplay({ darkmode }) {
               {...a11yProps(2)} 
             /> 
             <Tab
-              className={`${styles.tabRoot} ${value === 3 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}`}
+              className={darkmode ? `${styles.tabRoot} ${value === 2 ? styles.selectedTab : styles.unselectedTab} ${styles.hoverTab}` : `${styles.tabRootLight} ${value === 2 ? styles.selectedTab : styles.unselectedTabLight} ${styles.hoverTabLight}`}
               label="Achievements"
-              {...a11yProps(3)}
-            />
+              {...a11yProps(3)} 
+            /> 
           </Tabs>
         </Box>
 
@@ -101,7 +101,7 @@ function TabDisplay({ darkmode }) {
         </CustomTabPanel>
         
         <CustomTabPanel value={value} index={3}>
-          <AchievementsDisplay />
+          <AchievementsDisplay darkmode={darkmode}/>
         </CustomTabPanel>
       </Box>
     </div>

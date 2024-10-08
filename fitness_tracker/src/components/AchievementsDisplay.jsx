@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import styles from "../module_CSS/WorkoutHistory.module.css";
 
-function AchievementsDisplay() {
+function AchievementsDisplay({ darkmode }) {
   const [totalScore, setTotalScore] = useState(0);
   const [workoutCount, setWorkoutCount] = useState(0);
 
@@ -65,7 +65,7 @@ function AchievementsDisplay() {
     // Achievements based on workout count
     if (count > 100) {
       achievements.push("Achievement unlocked! You completed 100 workouts!");
-    } 
+    }
     if (count > 10) {
       achievements.push("Achievement unlocked! You completed 10 workouts!");
     }
@@ -97,72 +97,52 @@ function AchievementsDisplay() {
   const { scoreProgress, workoutProgress, nextScoreTarget, nextWorkoutTarget } = calculateNextAchievementProgress(totalScore, workoutCount);
 
   return (
-    <TableContainer component={Paper} className={styles.container}>
-      <Table className={styles.table}>
-        <TableHead className={styles.tableHeaderBgColor}>
+    <TableContainer component={Paper} className={darkmode ? styles.container : styles.containerLight}>
+      <Table className={darkmode ? styles.table : styles.tableLight}>
+        <TableHead className={darkmode ? styles.tableHeaderBgColor : styles.tableHeaderBgColorLight}>
           <TableRow>
-            <TableCell
-              className={styles.tableDate}
-              style={{ textAlign: "left", color: "white" }} // Set text color to white
-            >
+            <TableCell className={darkmode ? styles.tableDate : styles.tableDateLight}
+              style={{ textAlign: "center" }}>
               <strong>Achievements:</strong>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Display achievement messages based on total score and workout count */}
           {getAchievementMessages(totalScore, workoutCount).map((message, index) => (
             <TableRow key={index}>
-              <TableCell
-                className={styles.primaryTextColor}
-                style={{ textAlign: "center", color: "white" }} // Set text color to white
-              >
+              <TableCell className={darkmode ? styles.primaryTextColor : styles.primaryTextColorLight} style={{ textAlign: "center" }}>
                 {message}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableHead className={styles.tableHeaderBgColor}>
+        <TableHead className={darkmode ? styles.tableHeaderBgColor : styles.tableHeaderBgColorLight}>
           <TableRow>
-            <TableCell
-              className={styles.tableDate}
-              style={{ textAlign: "left", color: "white" }} // Set text color to white
-            >
+            <TableCell className={darkmode ? styles.tableDate : styles.tableDateLight} style={{ textAlign: "left" }}>
               <strong>Upcoming Achievements:</strong>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Only display the score progress if a next score target exists */}
           {nextScoreTarget && (
             <TableRow>
               <TableCell>
-                <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> 
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Next Score Achievement: {nextScoreTarget} points</span>
-                  <span>{totalScore} / {nextScoreTarget} points</span> {/* Display fraction for score */}
+                  <span>{totalScore} / {nextScoreTarget} points</span>
                 </div>
-                <LinearProgress
-                  variant="determinate"
-                  value={scoreProgress}
-                  sx={{ height: 20 }}
-                />
+                <LinearProgress variant="determinate" value={scoreProgress} sx={{ height: 20 }} />
               </TableCell>
             </TableRow>
           )}
-
-          {/* Only display the workout progress if a next workout target exists */}
           {nextWorkoutTarget && (
             <TableRow>
               <TableCell>
-                <div style={{ display: "flex", justifyContent: "space-between", color: "white" }}> 
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Next Workout Achievement: {nextWorkoutTarget} workouts</span>
-                  <span>{workoutCount} / {nextWorkoutTarget} workouts</span> {/* Display fraction for workouts */}
+                  <span>{workoutCount} / {nextWorkoutTarget} workouts</span>
                 </div>
-                <LinearProgress
-                  variant="determinate"
-                  value={workoutProgress}
-                  sx={{ height: 20 }}
-                />
+                <LinearProgress variant="determinate" value={workoutProgress} sx={{ height: 20 }} />
               </TableCell>
             </TableRow>
           )}
