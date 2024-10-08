@@ -217,7 +217,7 @@ const editExercise = async (req, res) => {
   }
 }
 
-const getWorkoutScoreByDate = async (req, res) => {
+const getWorkoutByDate = async (req, res) => {
   const { date } = req.params;
 
   if (!date) {
@@ -234,10 +234,10 @@ const getWorkoutScoreByDate = async (req, res) => {
       return res.status(404).json({ message: 'No workout found for this date.' });
     }
 
-    res.status(200).json({ score: workout.score });
+    res.status(200).json({ workout : workout });
   } catch (error) {
-    console.error(`Error retrieving workout score: ${error}`);
-    res.status(500).json({ error: 'An error occurred while retrieving workout score.' });
+    console.error(`Error retrieving workout: ${error}`);
+    res.status(500).json({ error: 'An error occurred while retrieving workout.' });
   }
 }
 
@@ -251,5 +251,5 @@ export {
   getExercises,
   deleteExercises,
   editExercise,
-  getWorkoutScoreByDate
+  getWorkoutByDate
 }
