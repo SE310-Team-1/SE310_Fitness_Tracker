@@ -3,12 +3,18 @@ import knex from './../db.js';
 
 // Retrieve all workouts
 const workoutsAll = (req, res) => {
-  // Get all workouts from database for the specified user
+  // Get all workouts from database for the specified user, optionally on a given date
   console.log(req.session.user.user_id)
   knex
     .select('*') // select all records
     .from('workouts')
     .where('user_id' , req.session.user.user_id) // from 'workouts' table
+    .modify((queryBuilder) => {
+      if (req.query.date) {
+        const datePattern = `${req.query.date}%`;
+        queryBuilder.where('date', 'like', datePattern);
+      }
+    })
     .then(userData => {
       // Send workouts extracted from database in response
       res.json(userData)
@@ -215,31 +221,7 @@ const editExercise = async (req, res) => {
     console.error(`Error updating exercise sets completed: ${error}`);
     res.status(500).json({ error: 'An error occurred while updating exercise sets completed.' });
   }
-}
-
-const getWorkoutByDate = async (req, res) => {
-  const { date } = req.params;
-
-  if (!date) {
-    return res.status(400).json({ error: 'Date is required.' });
-  }
-
-  try {
-    const workout = await knex('workouts')
-      .where('date', date)
-      .andWhere('user_id', req.session.user.user_id)
-      .first();
-
-    if (!workout) {
-      return res.status(404).json({ message: 'No workout found for this date.' });
-    }
-
-    res.status(200).json({ workout : workout });
-  } catch (error) {
-    console.error(`Error retrieving workout: ${error}`);
-    res.status(500).json({ error: 'An error occurred while retrieving workout.' });
-  }
-}
+};
 
 export {
   workoutsAll,
@@ -250,6 +232,5 @@ export {
   addExercises,
   getExercises,
   deleteExercises,
-  editExercise,
-  getWorkoutByDate
+  editExercise
 }

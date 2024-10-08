@@ -4,7 +4,6 @@ import { dateToString } from "../utils/dateUtils";
 import styles from '../module_CSS/GraphDisplay.module.css';
 import buttons from '../module_CSS/buttons.module.css';
 import axios from 'axios';
-import { Update } from "@mui/icons-material";
 
 /* 
     GraphDisplay() returns the entire progress graph GUI segment, including the 
@@ -13,11 +12,11 @@ import { Update } from "@mui/icons-material";
 function GraphDisplay() {
     const [data, setData] = useState([]);
     const [exerciseList, setExerciseList] = useState({});
-    
+
     let endDate = new Date();
     let startDate = new Date();
-    endDate.setDate(startDate.getDate()-1);
-    startDate.setDate(startDate.getDate()-7);
+    endDate.setDate(startDate.getDate() - 1);
+    startDate.setDate(startDate.getDate() - 7);
 
     // Fetch data asynchronously after component mounts
     useEffect(() => {
@@ -71,7 +70,7 @@ async function UpdateGraph(startDate, endDate, setData, exerciseList, setExercis
         alert("Please select a valid date.");
     } else {
         const fetchedData = await FetchPeriod(startDate, endDate, exerciseList, setExerciseList);
-        setData(fetchedData); 
+        setData(fetchedData);
     }
 }
 
@@ -88,28 +87,26 @@ async function FetchPeriod(startDate, endDate, exerciseList, setExerciseList) {
         nextDate.setDate(nextDate.getDate() + 1)
     ) {
         try {
-            const response = await axios.get(`http://localhost:4001/workout/${nextDate}`, { withCredentials: true });
+            const url = `http://localhost:4001/workout?date=` + dateToString(nextDate);
+            console.log(url)
+            const response = await axios.get(url, { withCredentials: true });
             const workout = response.data;
 
             if (workout != null) {
-                const workoutId = workout.id;
+                const workoutTotal = workout.reduce((total, workout) => {
+                    return total + workout.score;
+                }, 0);
 
-                // Fetch the exercises for this workout
-                if (!exerciseList[workoutId]) {
-                    await fetchExercises(workoutId, setExerciseList);
-                }
-                const exercises = exerciseList[workoutId] || []; // Default to empty array
+                console.log('Total score: ', workoutTotal);
 
-                // Calculate the total score for the workout
-                let workoutsTotal = 0;
-                exercises.forEach((exercise) => {
-                    workoutsTotal += parseFloat(getExerciseScore(exercise)); // Sum the scores
-                });
-
-                // Add the workout data with total score to the graph data
                 data.push({
                     date: dateToString(nextDate),
-                    score: workoutsTotal,
+                    score: workoutTotal,
+                })
+            } else {
+                data.push({
+                    date: dateToString(nextDate),
+                    score: 0,
                 });
             }
         } catch (error) {
@@ -118,35 +115,5 @@ async function FetchPeriod(startDate, endDate, exerciseList, setExerciseList) {
     }
     return data;
 }
-
-/* 
-    Fetches exercises for a given workout ID and updates the exercise list.
-*/
-const fetchExercises = async (workoutId, setExerciseList) => {
-    try {
-        const response = await axios.get(
-            `http://localhost:4001/workout/${workoutId}/exercises`,
-            { withCredentials: true }
-        );
-        const exercisesData = response.data;
-        setExerciseList((prevState) => ({
-            ...prevState,
-            [workoutId]: exercisesData, // Map exercises by workout ID
-        }));
-    } catch (error) {
-        console.error(
-            `Error fetching exercises for workout ${workoutId}:`,
-            error
-        );
-    }
-};
-
-const getExerciseScore = (exercise) => {
-    return (
-        (exercise.sets_completed / exercise.setsGoal) *
-        exercise.reps *
-        exercise.weight
-    ).toFixed(2);
-};
 
 export default GraphDisplay;
