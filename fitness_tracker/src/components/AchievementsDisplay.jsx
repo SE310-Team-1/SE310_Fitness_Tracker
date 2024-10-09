@@ -127,7 +127,7 @@ function AchievementsDisplay({ darkmode }) {
           {nextScoreTarget && (
             <TableRow>
               <TableCell>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", color: darkmode ? "#fff" : "#000"}}>
                   <span>Next Score Achievement: {nextScoreTarget} points</span>
                   <span>{totalScore} / {nextScoreTarget} points</span>
                 </div>
@@ -138,7 +138,7 @@ function AchievementsDisplay({ darkmode }) {
           {nextWorkoutTarget && (
             <TableRow>
               <TableCell>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", color: darkmode ? "#fff" : "#000"}}>
                   <span>Next Workout Achievement: {nextWorkoutTarget} workouts</span>
                   <span>{workoutCount} / {nextWorkoutTarget} workouts</span>
                 </div>
